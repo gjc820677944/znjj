@@ -1,10 +1,6 @@
 <?php
 
-namespace app\common\model\admin;
-
-use think\Request;
-use think\Model;
-use think\Db;
+namespace app\common\model\user;
 
 class UserModel extends Model
 {
@@ -38,8 +34,7 @@ class UserModel extends Model
             $data['reg_type']=1;                        //注册类型
             $data['status']=1;                          //登录状态
             $data['token']=settoken();                  //token
-
-           $info= DB::name('user')->insert($data);  //注册用户
+           $info= UserModel::insert($data);  //注册用户
             if ($info!==false){
                 return $data['token'];
             }else{

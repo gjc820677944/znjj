@@ -1,6 +1,6 @@
 <?php
 namespace app\api\controller\user;
-use app\common\model\admin\UserModel;
+use app\common\model\user\UserModel;
 use app\api\controller\Father;
 class User extends  Father
 {
