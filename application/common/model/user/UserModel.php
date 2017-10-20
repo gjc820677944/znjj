@@ -1,7 +1,8 @@
 <?php
-
 namespace app\common\model\user;
-
+use think\Model;
+use think\Request;
+use think\Db;
 class UserModel extends Model
 {
     protected $name = "User";
@@ -45,7 +46,7 @@ class UserModel extends Model
             $data['last_login_time']=time();           //最后一次登录时间
             $data['token']=settoken();                  //token
 
-            $info= DB::name('user')->where("username='".$username."'")->update($data);  //用户登录
+            $info= UserModel::where("username='".$username."'")->update($data);  //用户登录
             if ($info!==false){
                 return $data['token'];
             }else{
