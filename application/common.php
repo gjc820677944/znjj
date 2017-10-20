@@ -10,3 +10,21 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+function api_return_json($code = 0, $data = null)
+{
+    header("Access-Control-Allow-Origin: http://localhost:8080");
+    header("Access-Control-Allow-Credentials:true");
+    if($code === 0){
+        $msg = '请求成功';
+    }
+    else{
+        $msg = $data;
+        $data = null;
+    }
+    $result = [
+        'code' => $code,
+        'data' => $data,
+        'msg' => $msg,
+    ];
+    exit(json_encode($result));
+}
