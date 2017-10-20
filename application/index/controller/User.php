@@ -3,8 +3,10 @@ namespace app\index\controller;
 
 class Index
 {
-    public function index()
+    public function register()
     {
-        echo 1;exit;
+  		
+
+
     }
 }

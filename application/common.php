@@ -33,3 +33,21 @@ function api_return_json($code = 0, $data = null)
     ];
     exit(json_encode($result));
 }
+
+/**
+ * @return string
+ * 生成token
+ */
+ function settoken()
+{
+    $str = md5(uniqid(md5(microtime(true)),true));  //生成一个不会重复的字符串
+    $str = sha1($str);  //加密
+    return $str;
+}
+
+function getToken() {
+        $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
+        $_token = empty($_token) ? input("post.token") : $_token;
+        $_token = empty($_token) ? "" : $_token;
+        return $_token;
+}
