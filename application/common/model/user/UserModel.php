@@ -24,7 +24,7 @@ class UserModel extends Model
     public function Login($mobile){
         $request = Request::instance();
         $ip=$request->ip();
-        $info=UserModel::where("username='".$mobile."'")->find();
+        $info=UserModel::where("mobile='".$mobile."'")->find();
         if (empty($info)){
             $data['username']=$mobile;                //用户名
             $data['mobile']=$mobile;                  //手机号
