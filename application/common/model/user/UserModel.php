@@ -57,10 +57,14 @@ class UserModel extends Model
     //修改手机号
     public function updateMobile($used_mobile,$new_mobile)
     {
-        $info=Db::name('User')->where("mobile='".$used_mobile."'")->find();
-        if (empty($info))
-        {
+        $info=UserModel::where("mobile='".$used_mobile."'")->find();
+        if (empty($info)){
             echo api_return_json(1,'手机号码不存在');
+        }
+
+        $info=UserModel::where("mobile='".$new_mobile."'")->find();
+        if (!empty($info)){
+            echo api_return_json(1,'要修改的手机号码已存在');
         }
 
         $data['mobile']=$new_mobile;
