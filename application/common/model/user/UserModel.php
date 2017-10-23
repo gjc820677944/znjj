@@ -49,9 +49,10 @@ class UserModel extends Model
             $data['token']=settoken();                  //token
 
             $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
+            $username=UserModel::where("mobile='".$mobile."'")->find();  //用户登录
             if ($info!==false){
                 $arr['token']=$data['token'];
-                $arr['username']=$info['username']===null?'':$info['username'];
+                $arr['username']=$username['username']==null?'':$username['username'];
                 return $arr;
             }else{
                 return 0;
