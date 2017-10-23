@@ -52,3 +52,4 @@ function getToken() {
         $_token = empty($_token) ? "" : $_token;
         return $_token;
 }
+

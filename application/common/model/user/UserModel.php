@@ -1,5 +1,6 @@
 <?php
 namespace app\common\model\user;
+use app\api\controller\user\User;
 use think\Model;
 use think\Request;
 use think\Db;
@@ -78,10 +79,17 @@ class UserModel extends Model
     }
 
     //编辑用信息
-    public function exitUserName($token,$username){
-
+    public function editUserName($token,$username)
+    {
         $data['username']=$username;
         return UserModel::where("token='".$token."'")->update($data);
+    }
+
+
+    //获取用户信息
+    public function  getUserInfo($token)
+    {
+        return UserModel::where("token='".$token."'")->field("user_id,username,mobile,ifnull(email,'') as email,avatar,token")->find();
     }
 
 

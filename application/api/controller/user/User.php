@@ -2,6 +2,7 @@
 namespace app\api\controller\user;
 use app\common\model\user\UserModel;
 use app\api\controller\Father;
+use think\Request;
 class User extends  Father
 {
     /**
@@ -68,7 +69,7 @@ class User extends  Father
     }
 
     //编辑用户姓名
-    function exitUserName()
+    function editUserName()
     {
         $user=new UserModel();
         $token=getToken();
@@ -80,7 +81,7 @@ class User extends  Father
             echo api_return_json(1,"用户名不能为空");
         }
 
-        $info=$user->exitUserName($token,$username);
+        $info=$user->editUserName($token,$username);
         if($info===false){
             echo api_return_json(1,"修改失败");
         }else{
@@ -88,5 +89,51 @@ class User extends  Father
         }
     }
 
+    //获取用户信息
+    public function getUserInfo()
+    {
+        $user=new UserModel();
+        $token=getToken();
+        if (empty($token)){
+            echo api_return_json(1,"token不能为空");
+        }
+
+        $info=$user->getUserInfo($token);
+        if (empty($info)){
+            echo api_return_json(1,"没有获取到数据");
+        }else{
+            echo api_return_json(0,$info);
+        }
+    }
+
+
+    //图片上传
+//    function upPic(Request $request)
+//    {
+//        $user=new UserModel();
+//        $file=$request->file('pic');
+//        if (true!==$this->validate(['image'=>$file],['image'=>'require|image']))
+//        {
+//            $this->error('请选择图像文件');
+//        }
+//        $image=Image::open($file);
+//
+//        $token=getToken();
+//        if (empty($token)){
+//            echo api_return_json(1,"token不能为空");
+//        }
+//
+//        $info=$file->validate(['ext'=>'jpg,png,jpeg'])->move(ROOT_PATH.'public'.DS.'uploads');
+//        if ($info){
+//            $info=$user->upPic($info->getRealPath(),$token);
+//            if ($info===false){
+//                echo api_return_json(1,"上传失败");
+//            }else{
+//                echo api_return_json(0);
+//            }
+//        }else{
+//            echo api_return_json(1,$file->getError());
+//        }
+//    }
 
 }
