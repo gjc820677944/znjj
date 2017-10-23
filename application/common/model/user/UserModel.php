@@ -19,15 +19,14 @@ class UserModel extends Model
 //        'debug'		=>		true,			//数据库调试模式
 //    ];
 
-    //用户登录
-    public function Login($username){
+    //用户登录$注册
+    public function Login($mobile){
         $request = Request::instance();
         $ip=$request->ip();
-
-        $info=Db::name('user')->where("username='".$username."'")->find();
+        $info=UserModel::where("username='".$mobile."'")->find();
         if (empty($info)){
-            $data['username']=$username;                //用户名
-            $data['mobile']=$username;                  //手机号
+            $data['username']=$mobile;                //用户名
+            $data['mobile']=$mobile;                  //手机号
             $data['last_login_ip']=$ip;            //最后一次登录IP
             $data['last_login_time']=time();           //最后一次登录时间
             $data['reg_ip']=$ip;                        //注册IP
@@ -42,18 +41,36 @@ class UserModel extends Model
                 return 0;
             }
         }else{
-            $data['last_login_ip']=$ip;            //最后一次登录IP
+            $data['last_login_ip']=$ip;                 //最后一次登录IP
             $data['last_login_time']=time();           //最后一次登录时间
             $data['token']=settoken();                  //token
 
-            $info= UserModel::where("username='".$username."'")->update($data);  //用户登录
+            $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
             if ($info!==false){
                 return $data['token'];
             }else{
                 return 0;
             }
         }
+    }
 
+    //修改手机号
+    public function updateMobile($used_mobile,$new_mobile)
+    {
+        $info=Db::name('User')->where("mobile='".$used_mobile."'")->find();
+        if (empty($info))
+        {
+            echo api_return_json(1,'手机号码不存在');
+        }
+
+        $data['mobile']=$new_mobile;
+        $data['username']=$new_mobile;
+        $info=UserModel::where("mobile='".$used_mobile."'")->update($data);
+        if ($info!=false){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 
 }
