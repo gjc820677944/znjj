@@ -63,7 +63,7 @@ class User extends  Father
         if ($info===false) {
             echo api_return_json(1,"修改失败");
         }else{
-            echo api_return_json(0,"修改成功");
+            echo api_return_json(0);
         }
     }
 
@@ -84,7 +84,7 @@ class User extends  Father
         if($info===false){
             echo api_return_json(1,"修改失败");
         }else{
-            echo api_return_json(0,"编辑成功");
+            echo api_return_json(0);
         }
     }
 
