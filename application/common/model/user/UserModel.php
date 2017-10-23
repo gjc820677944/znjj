@@ -93,4 +93,11 @@ class UserModel extends Model
     }
 
 
+    //退出登录
+    public function logout($token)
+    {
+        $data['token']='';
+        return UserModel::where("token='".$token."'")->update($data);
+    }
+
 }

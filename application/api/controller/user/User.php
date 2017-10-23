@@ -106,6 +106,24 @@ class User extends  Father
         }
     }
 
+    //退出登录
+    public function logout()
+    {
+        $user=new UserModel();
+        $token=getToken();
+
+        if (empty($token)){
+            echo api_return_json(1,"token不能为空");
+        }
+
+        $info=$user->logout($token);
+        if ($info===false){
+            echo api_return_json(1,"操作失败");
+        }else{
+            echo api_return_json(0);
+        }
+
+    }
 
     //图片上传
 //    function upPic(Request $request)
