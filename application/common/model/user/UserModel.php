@@ -36,7 +36,9 @@ class UserModel extends Model
             $data['token']=settoken();                  //token
            $info= UserModel::insert($data);  //注册用户
             if ($info!==false){
-                return $data['token'];
+                $arr['token']=$data['token'];
+                $arr['username']=$info['username']===null?'':$info['username'];
+                return $arr;
             }else{
                 return 0;
             }
@@ -47,7 +49,9 @@ class UserModel extends Model
 
             $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
             if ($info!==false){
-                return $data['token'];
+                $arr['token']=$data['token'];
+                $arr['username']=$info['username']===null?'':$info['username'];
+                return $arr;
             }else{
                 return 0;
             }
@@ -69,12 +73,16 @@ class UserModel extends Model
 
         $data['mobile']=$new_mobile;
         $data['username']=$new_mobile;
-        $info=UserModel::where("mobile='".$used_mobile."'")->update($data);
-        if ($info!=false){
-            return 1;
-        }else{
-            return 0;
-        }
+        return UserModel::where("mobile='".$used_mobile."'")->update($data);
+
     }
+
+    //编辑用信息
+    public function exitUserName($token,$username){
+
+        $data['username']=$username;
+        return UserModel::where("token='".$token."'")->update($data);
+    }
+
 
 }

@@ -60,12 +60,32 @@ class User extends  Father
 //        }
 
         $info=$user->updateMobile($used_mobile,$new_mobile);
-        if ($info===0) {
+        if ($info===false) {
             echo api_return_json(1,"修改失败");
         }else{
             echo api_return_json(0,"修改成功");
         }
+    }
 
+    //编辑用户姓名
+    function exitUserName()
+    {
+        $user=new UserModel();
+        $token=getToken();
+        $username=input('username');
+        if (empty($token)){
+            echo api_return_json(1,"token不能为空");
+        }
+        if ($username==''){
+            echo api_return_json(1,"用户名不能为空");
+        }
+
+        $info=$user->exitUserName($token,$username);
+        if($info===false){
+            echo api_return_json(1,"修改失败");
+        }else{
+            echo api_return_json(0,"编辑成功");
+        }
     }
 
 

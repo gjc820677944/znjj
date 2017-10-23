@@ -48,6 +48,7 @@ function api_return_json($code = 0, $data = null)
 function getToken() {
         $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
         $_token = empty($_token) ? input("post.token") : $_token;
+        $_token = empty($_token) ? input("get.token") : $_token;
         $_token = empty($_token) ? "" : $_token;
         return $_token;
 }
