@@ -35,17 +35,6 @@ function api_return_json($code = 0, $data = null)
     exit(json_encode($result));
 }
 
-/**
- * @return string
- * 生成token
- */
- function settoken()
-{
-    $str = md5(uniqid(md5(microtime(true)),true));  //生成一个不会重复的字符串
-    $str = sha1($str);  //加密
-    return $str;
-}
-
 /*
    *功能：php完美实现下载远程图片保存到本地
    *参数：文件url,保存文件目录,保存文件名称，使用的下载方式

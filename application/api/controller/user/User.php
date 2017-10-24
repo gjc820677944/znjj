@@ -72,7 +72,7 @@ class User extends  Father
     function editUserName()
     {
         $user=new UserModel();
-        $token=getToken();
+        $token=UserModel::getToken();
         $username=input('username');
         if (empty($token)){
             echo api_return_json(1,"token不能为空");
@@ -93,7 +93,7 @@ class User extends  Father
     public function getUserInfo()
     {
         $user=new UserModel();
-        $token=getToken();
+        $token=UserModel::getToken();
         if (empty($token)){
             echo api_return_json(1,"token不能为空");
         }
@@ -110,7 +110,7 @@ class User extends  Father
     public function logout()
     {
         $user=new UserModel();
-        $token=getToken();
+        $token=UserModel::getToken();
 
         if (empty($token)){
             echo api_return_json(1,"token不能为空");

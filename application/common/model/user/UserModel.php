@@ -34,7 +34,7 @@ class UserModel extends Model
             $data['reg_time']=time();                   //注册时间
             $data['reg_type']=1;                        //注册类型
             $data['status']=1;                          //登录状态
-            $data['token']=settoken();                  //token
+            $data['token']=UserModel::settoken();                  //token
             $info= UserModel::insertGetId($data);  //注册用户
             UserLogsModel::addLog($info,1,$ip,time(),"");
             if ($info!=false){
@@ -47,7 +47,7 @@ class UserModel extends Model
         }else{
             $data['last_login_ip']=$ip;                 //最后一次登录IP
             $data['last_login_time']=time();           //最后一次登录时间
-            $data['token']=settoken();                  //token
+            $data['token']=UserModel::settoken();                  //token
 
             $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
             $username=UserModel::where("mobile='".$mobile."'")->find();  //用户登录
@@ -106,7 +106,6 @@ class UserModel extends Model
     //保存微信信息
     function saveWeixinInfo($avatar,$wx_openid,$wx_unionid,$nickname)
     {
-
         $request = Request::instance();
         $ip=$request->ip();
 
@@ -122,7 +121,7 @@ class UserModel extends Model
             $u_data['reg_type']=1;                        //注册类型
             $u_data['status']=1;                          //登录状态
             $u_data['avatar']=$avatar['save_path'];       //头像
-            $u_data['token']=settoken();                  //token
+            $u_data['token']=UserModel::settoken();                  //token
 
 
             $data['wx_openid']=$wx_openid;
@@ -131,7 +130,7 @@ class UserModel extends Model
             Db::startTrans();
             try{
                $user_id= UserModel::insertGetId($u_data);    //添加用户
-                addLog($user_id,1,$ip,time(),"");
+                UserLogsModel::addLog($user_id,1,$ip,time(),"");
                 $data['user_id']=$user_id;
                 Db::name('user_weixin')->insert($data);
                 Db::commit();
@@ -150,7 +149,7 @@ class UserModel extends Model
                 ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
                 ->join('user u','u.user_id=uw.user_id','left')
                 ->find();
-            addLog($data['user_id'],1,$ip,time(),"");
+            UserLogsModel::addLog($data['user_id'],1,$ip,time(),"");
             return $data;
         }
     }
@@ -165,6 +164,17 @@ class UserModel extends Model
         $_token = empty($_token) ? input("get.token") : $_token;
         $_token = empty($_token) ? "" : $_token;
         return $_token;
+    }
+
+    /**
+     * @return string
+     * 生成token
+     */
+    public static function settoken()
+    {
+        $str = md5(uniqid(md5(microtime(true)),true));  //生成一个不会重复的字符串
+        $str = sha1($str);  //加密
+        return $str;
     }
 
 }
