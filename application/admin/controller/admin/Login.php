@@ -2,13 +2,15 @@
 
 namespace app\admin\controller\admin;
 
-use app\admin\controller\Base;
+use think\Controller;
 
-class Login extends Base
+class Login extends Controller
 {
     public function index(){
-        dump(123);
-        return $this->fetch("index");
+        $data = [
+            'post_url' => url('check'),
+        ];
+        return $this->fetch("index", $data);
     }
 
     public function check(){
