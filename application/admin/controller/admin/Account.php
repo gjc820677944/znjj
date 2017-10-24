@@ -61,7 +61,8 @@ class Account extends Base
     public function save()
     {
         $input = $this->request->post();
-        $result = ValidateHelper::execValidate('Admin', 'create', 'create');
+        unset($input['ad_id']);
+        $result = ValidateHelper::execValidate('Admin', 'create', $input);
         if($result !== true){
             return $this->error($result);
         }
@@ -80,7 +81,7 @@ class Account extends Base
             $this->success("创建成功");
         }
         else{
-            $this->error("创建失败");
+            $this->error("创建失败，请重新尝试");
         }
     }
 
@@ -100,7 +101,26 @@ class Account extends Base
 
     public function update()
     {
+        $input = $this->request->post();
+        $result = ValidateHelper::execValidate('Admin', 'update', $input);
+        if($result !== true){
+            return $this->error($result);
+        }
 
+        $file = Request::instance()->file('avatar'); //获取上传的头像
+        if(!empty($file)){
+            $input['avatar'] = FileHelper::helper()->saveUploadFile($file->getInfo());
+        }
+        else{
+            $input['avatar'] = '';
+        }
+        $result = AdminModel::update($input);
+        if($result){
+            $this->success("更新成功");
+        }
+        else{
+            $this->error("更新失败，请重新尝试");
+        }
     }
 
     public function delete($id)
