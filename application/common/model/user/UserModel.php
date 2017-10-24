@@ -35,8 +35,9 @@ class UserModel extends Model
             $data['reg_type']=1;                        //注册类型
             $data['status']=1;                          //登录状态
             $data['token']=settoken();                  //token
-           $info= UserModel::insert($data);  //注册用户
-            if ($info!==false){
+           $info= UserModel::insertGetId($data);  //注册用户
+            addLog($info,1,$ip,time(),"");
+            if ($info!=false){
                 $arr['token']=$data['token'];
                 $arr['username']=$info['username']===null?'':$info['username'];
                 return $arr;
@@ -50,6 +51,7 @@ class UserModel extends Model
 
             $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
             $username=UserModel::where("mobile='".$mobile."'")->find();  //用户登录
+            addLog($username['user_id'],1,$ip,time(),"");
             if ($info!==false){
                 $arr['token']=$data['token'];
                 $arr['username']=$username['username']==null?'':$username['username'];
@@ -99,6 +101,56 @@ class UserModel extends Model
     {
         $data['token']='';
         return UserModel::where("token='".$token."'")->update($data);
+    }
+
+    //保存微信信息
+    function saveWeixinInfo($avatar,$wx_openid,$wx_unionid,$nickname)
+    {
+
+        $request = Request::instance();
+        $ip=$request->ip();
+
+        $where['wx_openid']=$wx_openid;
+        $where['wx_unionid']=$wx_unionid;
+        $info=Db::name('user_weixin')->where($where)->find();
+        if (empty($info)){
+            $u_data['username']=json_encode($nickname);                //用户名
+            $u_data['last_login_ip']=$ip;            //最后一次登录IP
+            $u_data['last_login_time']=time();       //最后一次登录时间
+            $u_data['reg_ip']=$ip;                     //注册IP
+            $u_data['reg_time']=time();                   //注册时间
+            $u_data['reg_type']=1;                        //注册类型
+            $u_data['status']=1;                          //登录状态
+            $u_data['avatar']=$avatar['save_path'];       //头像
+            $u_data['token']=settoken();                  //token
+
+
+            $data['wx_openid']=$wx_openid;
+            $data['wx_unionid']=$wx_unionid;
+
+            Db::startTrans();
+            try{
+               $user_id= UserModel::insertGetId($u_data);    //添加用户
+
+                $data['user_id']=$user_id;
+                Db::name('user_weixin')->insert($data);
+                Db::commit();
+                return Db::name('user_weixin')->alias('uw')->where($where)
+                            ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
+                            ->join('user u','u.user_id=uw.user_id','left')
+                            ->find();
+            }catch (\Exception $e){
+                Db::rollback();
+                return 0;
+            }
+
+        }else{
+            
+            return Db::name('user_weixin')->alias('uw')->where($where)
+                ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
+                ->join('user u','u.user_id=uw.user_id','left')
+                ->find();
+        }
     }
 
 }
