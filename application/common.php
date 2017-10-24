@@ -45,17 +45,7 @@ function api_return_json($code = 0, $data = null)
     $str = sha1($str);  //加密
     return $str;
 }
-/*
- * 获取token
- */
-function getToken()
-{
-        $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
-        $_token = empty($_token) ? input("post.token") : $_token;
-        $_token = empty($_token) ? input("get.token") : $_token;
-        $_token = empty($_token) ? "" : $_token;
-        return $_token;
-}
+
 /*
    *功能：php完美实现下载远程图片保存到本地
    *参数：文件url,保存文件目录,保存文件名称，使用的下载方式
