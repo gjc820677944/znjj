@@ -126,7 +126,7 @@ class User extends  Father
 
 
     //添加微信数据
-    function getWeixinInfo()
+    function getWeixinInfo() 
     {
         $user=new UserModel();
 //        $access_token=  input("access_token");      //token
