@@ -1,4 +1,5 @@
 <?php
+use think\Db;
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
@@ -106,6 +107,31 @@ function getImage($url,$save_dir='',$filename='',$type=0)
     unset($img,$url);
     return array('file_name'=>$filename,'save_path'=>$save_dir.$filename,'error'=>0);
 }
+
+
+/**
+ * user_id  用户ID
+ * log_type 日志类型
+ * log_ip  用户IP
+ * log_data 日志数据
+ * log_time日志时间
+ */
+function addLog($user_id,$log_type,$log_ip,$log_time,$log_data='')
+{
+    $data['user_id']=$user_id;
+    $data['log_type']=$log_type;
+    $data['log_ip']=$log_ip;
+    $data['log_data']=$log_data;
+    $data['log_time']=$log_time;
+
+    try{
+        Db::name('user_logs')->insert($data);
+    }catch (\Exception $e){
+        echo $e->getMessage();
+    }
+
+}
+
 
 
 
