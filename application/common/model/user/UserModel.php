@@ -131,7 +131,7 @@ class UserModel extends Model
             Db::startTrans();
             try{
                $user_id= UserModel::insertGetId($u_data);    //添加用户
-
+                addLog($user_id,1,$ip,time(),"");
                 $data['user_id']=$user_id;
                 Db::name('user_weixin')->insert($data);
                 Db::commit();
@@ -146,10 +146,12 @@ class UserModel extends Model
 
         }else{
             
-            return Db::name('user_weixin')->alias('uw')->where($where)
+            $data= Db::name('user_weixin')->alias('uw')->where($where)
                 ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
                 ->join('user u','u.user_id=uw.user_id','left')
                 ->find();
+            addLog($data['user_id'],1,$ip,time(),"");
+            return $data;
         }
     }
 
