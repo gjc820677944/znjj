@@ -137,7 +137,7 @@ class User extends  Father
 //        }
 
         //获取用户微信息
-        $token="QXKENKC2yNqpUOXFrDHr1uKIuzbM_YQm-2iXwTiR4g8iX4CQpGlM3skrDhvExjfPloLQYTobtOaVXg8C5dWBPYWIwxE7XCEOItTPkldMSFnviNvCTZ-pkiQABw0kl_g6OWSeADADLH";
+        $token="eMFmfYsbaqAoqbfj8XVPZiJ0z70o_TIYNHf3bkK2TmCToO_2Liy6wA-M0HXaV7dISy1ItP9OcjuO3ApUTjdDzla6UICZgzb4mmWpB-dpxh1lXZWkxUkOFqY_QGJd3uw3JTWiAJAVFI";
         $wx_openid="orryGwi9BZp8GQQMWpvxl-g_KEkI";
         $wx_unionid="";
         $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$token."&openid=".$wx_openid."&lang=zh_CN ";
