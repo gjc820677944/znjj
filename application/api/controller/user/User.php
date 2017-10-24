@@ -129,18 +129,18 @@ class User extends  Father
     function getWeixinInfo() 
     {
         $user=new UserModel();
-//        $access_token=  input("access_token");      //token
-//        $wx_openid   =   input('wx_openid');     //用户微信ID
-//        $wx_unionid  =   input('wx_unionid');   //用户微信联合ID
-//        if ($wx_openid=='' || $wx_unionid=='' || $access_token==''){
-//            echo api_return_json(1,"openid,unionid或access_token不能为空");
-//        }
+        $access_token=  input("access_token");      //token
+        $wx_openid   =   input('wx_openid');     //用户微信ID
+        $wx_unionid  =   input('wx_unionid');   //用户微信联合ID
+        if ($wx_openid=='' || $access_token==''){
+            echo api_return_json(1,"openid或access_token不能为空");
+        }
 
         //获取用户微信息
-        $token="eMFmfYsbaqAoqbfj8XVPZiJ0z70o_TIYNHf3bkK2TmCToO_2Liy6wA-M0HXaV7dISy1ItP9OcjuO3ApUTjdDzla6UICZgzb4mmWpB-dpxh1lXZWkxUkOFqY_QGJd3uw3JTWiAJAVFI";
-        $wx_openid="orryGwi9BZp8GQQMWpvxl-g_KEkI";
-        $wx_unionid="";
-        $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$token."&openid=".$wx_openid."&lang=zh_CN ";
+//        $token="eMFmfYsbaqAoqbfj8XVPZiJ0z70o_TIYNHf3bkK2TmCToO_2Liy6wA-M0HXaV7dISy1ItP9OcjuO3ApUTjdDzla6UICZgzb4mmWpB-dpxh1lXZWkxUkOFqY_QGJd3uw3JTWiAJAVFI";
+//        $wx_openid="orryGwi9BZp8GQQMWpvxl-g_KEkI";
+//        $wx_unionid="";
+        $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$access_token."&openid=".$wx_openid."&lang=zh_CN ";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
