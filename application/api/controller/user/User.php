@@ -122,36 +122,44 @@ class User extends  Father
         }else{
             echo api_return_json(0);
         }
+    }
+
+
+    //添加微信数据
+    function getWeixinInfo()
+    {
+        $user=new UserModel();
+//        $access_token=  input("access_token");      //token
+//        $wx_openid   =   input('wx_openid');     //用户微信ID
+//        $wx_unionid  =   input('wx_unionid');   //用户微信联合ID
+//        if ($wx_openid=='' || $wx_unionid=='' || $access_token==''){
+//            echo api_return_json(1,"openid,unionid或access_token不能为空");
+//        }
+
+        //获取用户微信息
+        $token="QXKENKC2yNqpUOXFrDHr1uKIuzbM_YQm-2iXwTiR4g8iX4CQpGlM3skrDhvExjfPloLQYTobtOaVXg8C5dWBPYWIwxE7XCEOItTPkldMSFnviNvCTZ-pkiQABw0kl_g6OWSeADADLH";
+        $wx_openid="orryGwi9BZp8GQQMWpvxl-g_KEkI";
+        $wx_unionid="";
+        $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$token."&openid=".$wx_openid."&lang=zh_CN ";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        $output=json_decode($output,true);
+        curl_close($ch);
+        //下载微信图片保存到本地
+        $avatar=getImage($output['headimgurl'],"../public/uploads/weixin",time().'.jpg',1);
+        $info=$user->saveWeixinInfo($avatar,$wx_openid,$wx_unionid,$output['nickname']);
+        if ($info===0){
+            echo api_return_json(1,"操作失败");
+        }else{
+            echo api_return_json(0,$info);
+        }
 
     }
 
-    //图片上传
-//    function upPic(Request $request)
-//    {
-//        $user=new UserModel();
-//        $file=$request->file('pic');
-//        if (true!==$this->validate(['image'=>$file],['image'=>'require|image']))
-//        {
-//            $this->error('请选择图像文件');
-//        }
-//        $image=Image::open($file);
-//
-//        $token=getToken();
-//        if (empty($token)){
-//            echo api_return_json(1,"token不能为空");
-//        }
-//
-//        $info=$file->validate(['ext'=>'jpg,png,jpeg'])->move(ROOT_PATH.'public'.DS.'uploads');
-//        if ($info){
-//            $info=$user->upPic($info->getRealPath(),$token);
-//            if ($info===false){
-//                echo api_return_json(1,"上传失败");
-//            }else{
-//                echo api_return_json(0);
-//            }
-//        }else{
-//            echo api_return_json(1,$file->getError());
-//        }
-//    }
 
 }
