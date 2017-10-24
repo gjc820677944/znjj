@@ -75,7 +75,13 @@ class Account extends Base
         }
         $salt = Helper::random(6);
         $input['password'] = AdminModel::makePassword($input['password'], $salt);
-
+        $result = AdminModel::create($input);
+        if($result){
+            $this->success("创建成功");
+        }
+        else{
+            $this->error("创建失败");
+        }
     }
 
 
