@@ -4,6 +4,10 @@ namespace app\admin\controller\admin;
 
 use app\admin\controller\Base;
 use app\common\model\admin\AdminModel;
+use app\common\validate\ValidateHelper;
+use filehelper\FileHelper;
+use helper\Helper;
+use think\Request;
 
 class Account extends Base
 {
@@ -56,6 +60,21 @@ class Account extends Base
 
     public function save()
     {
+        $input = $this->request->post();
+        $result = ValidateHelper::execValidate('Admin', 'create', 'create');
+        if($result !== true){
+            return $this->error($result);
+        }
+
+        $file = Request::instance()->file('avatar'); //获取上传的头像
+        if(!empty($file)){
+            $input['avatar'] = FileHelper::helper()->saveUploadFile($file->getInfo());
+        }
+        else{
+            $input['avatar'] = '';
+        }
+        $salt = Helper::random(6);
+        $input['password'] = AdminModel::makePassword($input['password'], $salt);
 
     }
 
