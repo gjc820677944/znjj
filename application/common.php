@@ -45,17 +45,7 @@ function api_return_json($code = 0, $data = null)
     $str = sha1($str);  //加密
     return $str;
 }
-/*
- * 获取token
- */
-function getToken()
-{
-        $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
-        $_token = empty($_token) ? input("post.token") : $_token;
-        $_token = empty($_token) ? input("get.token") : $_token;
-        $_token = empty($_token) ? "" : $_token;
-        return $_token;
-}
+
 /*
    *功能：php完美实现下载远程图片保存到本地
    *参数：文件url,保存文件目录,保存文件名称，使用的下载方式
@@ -108,29 +98,6 @@ function getImage($url,$save_dir='',$filename='',$type=0)
     return array('file_name'=>$filename,'save_path'=>$save_dir.$filename,'error'=>0);
 }
 
-
-/**
- * user_id  用户ID
- * log_type 日志类型
- * log_ip  用户IP
- * log_data 日志数据
- * log_time日志时间
- */
-function addLog($user_id,$log_type,$log_ip,$log_time,$log_data='')
-{
-    $data['user_id']=$user_id;
-    $data['log_type']=$log_type;
-    $data['log_ip']=$log_ip;
-    $data['log_data']=$log_data;
-    $data['log_time']=$log_time;
-
-    try{
-        Db::name('user_logs')->insert($data);
-    }catch (\Exception $e){
-        echo $e->getMessage();
-    }
-
-}
 
 
 

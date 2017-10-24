@@ -35,8 +35,8 @@ class UserModel extends Model
             $data['reg_type']=1;                        //注册类型
             $data['status']=1;                          //登录状态
             $data['token']=settoken();                  //token
-           $info= UserModel::insertGetId($data);  //注册用户
-            addLog($info,1,$ip,time(),"");
+            $info= UserModel::insertGetId($data);  //注册用户
+            UserLogsModel::addLog($info,1,$ip,time(),"");
             if ($info!=false){
                 $arr['token']=$data['token'];
                 $arr['username']=$info['username']===null?'':$info['username'];
@@ -51,7 +51,7 @@ class UserModel extends Model
 
             $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
             $username=UserModel::where("mobile='".$mobile."'")->find();  //用户登录
-            addLog($username['user_id'],1,$ip,time(),"");
+            UserLogsModel::addLog($username['user_id'],1,$ip,time(),"");
             if ($info!==false){
                 $arr['token']=$data['token'];
                 $arr['username']=$username['username']==null?'':$username['username'];
@@ -153,6 +153,18 @@ class UserModel extends Model
             addLog($data['user_id'],1,$ip,time(),"");
             return $data;
         }
+    }
+
+    /*
+     * 获取token
+     */
+    public static function getToken()
+    {
+        $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
+        $_token = empty($_token) ? input("post.token") : $_token;
+        $_token = empty($_token) ? input("get.token") : $_token;
+        $_token = empty($_token) ? "" : $_token;
+        return $_token;
     }
 
 }
