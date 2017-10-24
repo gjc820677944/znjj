@@ -9,28 +9,24 @@ class Admin extends Validate
 {
     protected $rule = [
         'ad_id' => 'require|gt:0',
-        'ad_name' => 'require|isUnique',
-        'username' => 'require',
+        'ad_account' => 'require|isUnique',
         'password' => 'checkPassword',
-        'mobile' => 'isMobile',
         'email' => 'isEmail',
     ];
     
     protected $message = [
         'ad_id' => '管理员ID必须大于0',
-        'ad_name' => '管理员账号不能为空',
-        'ad_name.isUnique' => '账号已被占用',
-        'username' => '管理员账号不能为空',
+        'ad_account' => '管理员账号不能为空',
+        'ad_account.isUnique' => '该账号已被占用',
         'password' => '密码长度不能小于6位',
-        'mobile' => '手机号格式错误',
         'email' => '邮箱格式错误',
     ];
     
     protected $scene = [
-        'login' => ['username','password'],
-        'create' => ['ad_name', 'password', 'mobile', 'email'],
-        'edit' => ['ad_id', 'ad_name', 'password', 'mobile', 'email'],
-        'personal'=> ['ad_id', 'password', 'mobile', 'email'],
+        'login' => ['ad_account','password'],
+        'create' => ['ad_account', 'password', 'email'],
+        'edit' => ['ad_id', 'ad_account', 'password', 'email'],
+        'personal'=> ['ad_id', 'password', 'email'],
     ];
 
     protected function isMobile($value){
