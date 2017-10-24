@@ -151,7 +151,7 @@ class User extends  Father
         $output=json_decode($output,true);
         curl_close($ch);
         //下载微信图片保存到本地
-        $avatar=getImage($output['headimgurl'],"../public/uploads/weixin",time().'.jpg',1);
+        $avatar=getImage($output['headimgurl'],"./uploads/weixin",time().'.jpg',1);
         $info=$user->saveWeixinInfo($avatar,$wx_openid,$wx_unionid,$output['nickname']);
         if ($info===0){
             echo api_return_json(1,"操作失败");
