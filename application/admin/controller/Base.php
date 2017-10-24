@@ -8,8 +8,9 @@ class Base extends Controller
 {
     protected $request;
 
-    protected function __construct()
+    protected function _initialize()
     {
+        parent::_initialize();
         $this->request = Request::instance();
     }
 }
