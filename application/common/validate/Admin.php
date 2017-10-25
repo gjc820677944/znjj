@@ -12,6 +12,7 @@ class Admin extends Validate
         'ad_account' => 'require|isUnique',
         'password' => 'checkPwd',
         'email' => 'isEmail',
+        'username' => 'require',
     ];
     
     protected $message = [
@@ -20,10 +21,11 @@ class Admin extends Validate
         'ad_account.isUnique' => '管理员账号账号已存在',
         'password' => '密码长度不能小于6位',
         'email' => '邮箱格式错误',
+        'username' => '管理员账号不能为空',
     ];
     
     protected $scene = [
-        'login' => ['ad_account','password'],
+        'login' => ['username','password'=>'require'],
         'create' => ['ad_account', 'password'=>'require|checkPwd', 'email'],
         'edit' => ['ad_id', 'ad_account', 'password', 'email'],
         'personal'=> ['password', 'email'],
