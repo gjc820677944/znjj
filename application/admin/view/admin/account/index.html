@@ -1,6 +1,8 @@
 {extend name="common/base" /}
-{block name="content"}
+{block name="head"}
 
+{/block}
+{block name="content"}
 <section class="content-header">
     <h1>
         管理员列表
@@ -16,12 +18,51 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">Data Table With Full Features</h3>
-                </div>
-                <!-- /.box-header -->
                 <div class="box-body">
-
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td class="text-center">ID</td>
+                                <td class="text-center">账号</td>
+                                <td class="text-center">头像</td>
+                                <td class="text-center">管理员名字</td>
+                                <td class="text-center">邮箱</td>
+                                <td class="text-center">状态</td>
+                                <td class="text-center">最近登录信息</td>
+                                <td class="text-center">创建时间</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist id="vo" name="list"}
+                            <tr>
+                                <td class="text-center">{$vo.id}</td>
+                                <td class="text-center">{$vo.ad_acount}</td>
+                                <td class="text-center">{$vo.avatar}</td>
+                                <td class="text-center">{$vo.ad_name}</td>
+                                <td class="text-center">{$vo.email}</td>
+                                <td class="text-center">
+                                    {if condition="$status eq 1"}
+                                    <span class="text-success">{$vo.status_text}</span>
+                                    {else}
+                                    <span class="text-danger">{$vo.status_text}</span>
+                                    {/if}
+                                </td>
+                                <td class="text-center">
+                                    IP: {$vo.last_login_ip | default="无"}
+                                    {if condition="$vo.last_login_time gt 0"}
+                                    Date: {:date("Y-m-d H:i:s", $vo['last_login_time'])}
+                                    {/if}
+                                </td>
+                                <td class="text-center">创建时间</td>
+                            </tr>
+                            {/volist}
+                        </tbody>
+                    </table>
+                    {if condition="$page neq ''"}
+                    <ul class="pagination">
+                        {$page}
+                    </ul>
+                    {/if}
                 </div>
                 <!-- /.box-body -->
             </div>

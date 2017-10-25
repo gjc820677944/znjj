@@ -9,6 +9,12 @@ class AdminModel extends Model
     protected $name = "admin";
     protected $autoWriteTimestamp = true;
 
+    protected function getStatusTextAttr($val, $data){
+        $status = $data['status'];
+        $texts = [1=>'正常', 4=>'已禁用'];
+        return $texts[$status];
+    }
+
     /**
      * 生成管理员密码
      * @param string $password 密码明文
