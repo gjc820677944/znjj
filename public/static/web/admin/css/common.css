@@ -1,3 +1,18 @@
 @charset "UTF-8";
 
+/*Common*/
 .ml-10{margin-left: 10px !important;}
+.img-read{
+    width: 200px;
+    height: auto;
+    margin: 5px;
+}
+.img-read-min{
+    width: 50px !important;
+    height: 50px !important;
+    margin: 3px;
+}
+
+
+/*Extera*/
+.box .box-body table tr td{vertical-align: middle !important;}
