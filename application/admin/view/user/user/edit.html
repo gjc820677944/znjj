@@ -1,0 +1,66 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        {if condition="$action_name eq 'create'"}
+        添加用户
+        <small>The administrator create</small>
+        {else}
+        更新用户
+        <small>The administrator edit</s
+            {/if}
+    </h1>
+    <ol class="breadcrumb">
+        {include file="admin/breadcrumb"}
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <form role="form" action="">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>头像</label>
+                            <input type="file" name="avatar" placeholder="请选择用户头像">
+                        </div>
+                        <div class="form-group">
+                            <label>用户名字</label>
+                            <input type="text" name="username" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label>手机号</label>
+                            <input type="text" name="mobile" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label>邮箱</label>
+                            <input type="email" name="email" class="form-control" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label>状态</label>
+                            <div class="radio">
+                                <label class="radio-inline">
+                                    <input type="radio" name="status" value="1" <?php echo $data['status'] === 1 ? 'checked' : ''; ?>> 正常
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="status" value="4" <?php echo $data['status'] === 4 ? 'checked' : ''; ?>> 禁用
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">提交</button>
+                        <button type="reset" class="btn btn-primary ml-10">重置</button>
+                        <a class="btn btn-primary ml-10" urn="{$referer_url}">Return</a>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}
