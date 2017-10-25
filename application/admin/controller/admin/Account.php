@@ -13,7 +13,6 @@ class Account extends Base
 {
     public function index()
     {
-
         $input = $this->request->param();
         $model = new AdminModel();
         if(isset($input['keywords']) && $input['keywords'] !== ''){
