@@ -70,6 +70,7 @@ class Db
         if (false === $name) {
             $name = md5(serialize($config));
         }
+
         if (true === $name || !isset(self::$instance[$name])) {
             // 解析连接参数 支持数组和字符串
             $options = self::parseConfig($config);
@@ -86,6 +87,7 @@ class Db
             }
             self::$instance[$name] = new $class($options);
         }
+
         return self::$instance[$name];
     }
     
@@ -129,6 +131,7 @@ class Db
         if (!$info) {
             return [];
         }
+
         $dsn = [
             'type'     => $info['scheme'],
             'username' => isset($info['user']) ? $info['user'] : '',
