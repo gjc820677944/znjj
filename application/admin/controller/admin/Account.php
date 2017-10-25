@@ -28,6 +28,15 @@ class Account extends Base
         $list = $model->paginate(null, false, [
                 'query' => $input,
             ]);
+        foreach ($list as $k=>$v){
+            if($v['avatar'] === ''){
+                $v['avatar'] = AdminModel::getDefaultAvatar();
+            }
+            else{
+                $v['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
+            }
+            $list[$k] = $v;
+        }
         $data = [
             'list' => $list,
             'page' => $list->render(),
@@ -47,7 +56,7 @@ class Account extends Base
             'avatar' => '',
             'ad_name' => '',
             'email' => '',
-            'status' => 0,
+            'status' => 1,
         ];
         $data = [
             'data' => $data,
@@ -60,24 +69,22 @@ class Account extends Base
     public function save()
     {
         $input = $this->request->post();
-        unset($input['ad_id']);
+        $referer_url = $this->request->param('referer_url');
+        unset($input['ad_id']);unset($input['referer_url']);
         $result = ValidateHelper::execValidate('Admin', 'create', $input);
         if($result !== true){
             return $this->error($result);
         }
-
+        //存储上传的图片
         $file = Request::instance()->file('avatar'); //获取上传的头像
         if(!empty($file)){
-            $input['avatar'] = FileHelper::helper()->saveUploadFile($file->getInfo());
+            $input['avatar'] = FileHelper::helper()
+                ->saveUploadFile($file->getInfo(), 'admin/avatar');
         }
-        else{
-            $input['avatar'] = '';
-        }
-        $salt = Helper::random(6);
-        $input['password'] = AdminModel::makePassword($input['password'], $salt);
-        $result = AdminModel::create($input);
+        //保存管理员信息
+        $result = AdminModel::createOrUpdate(0, $input);
         if($result){
-            $this->success("创建成功");
+            $this->success("创建成功", $referer_url);
         }
         else{
             $this->error("创建失败，请重新尝试");
@@ -91,8 +98,10 @@ class Account extends Base
         if(empty($data)){
             $this->error("管理员不存在，请重新选择");
         }
+        $data['avatar'] = FileHelper::helper()->getWebsitePath($data['avatar']);
         $data = [
             'data' => $data,
+            'post_url' => url('update'),
         ];
         return $this->fetch('edit', $data);
     }
@@ -101,29 +110,39 @@ class Account extends Base
     public function update()
     {
         $input = $this->request->post();
-        $result = ValidateHelper::execValidate('Admin', 'update', $input);
+        $referer_url = $this->request->param('referer_url');
+        unset($input['referer_url']);
+        if(empty($input['password'])) unset($input['password']);
+        $result = ValidateHelper::execValidate('Admin', 'edit', $input);
         if($result !== true){
             return $this->error($result);
         }
-
+        //存储上传的图片
         $file = Request::instance()->file('avatar'); //获取上传的头像
         if(!empty($file)){
-            $input['avatar'] = FileHelper::helper()->saveUploadFile($file->getInfo());
+            $input['avatar'] = FileHelper::helper()
+                ->saveUploadFile($file->getInfo(), 'admin/avatar');
         }
-        else{
-            $input['avatar'] = '';
+
+        $ad_id = (int)$input['ad_id'];
+        if($ad_id === ADMINISTRATOR_ID){
+            unset($input['status']); //超级管理员不能修改状态
         }
-        $result = AdminModel::update($input);
+        //更新管理员信息
+        $result = AdminModel::createOrUpdate($ad_id, $input);
         if($result){
-            $this->success("更新成功");
+            $this->success("更新成功", $referer_url);
         }
         else{
             $this->error("更新失败，请重新尝试");
         }
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
+        if($id === ADMINISTRATOR_ID){
+            $this->error("超级管理员无法删除");
+        }
         $result = AdminModel::destroy($id);
         if($result){
             $this->success("删除成功");

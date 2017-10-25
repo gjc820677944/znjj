@@ -49,39 +49,54 @@
                                 <td class="text-center">状态</td>
                                 <td class="text-center">最近登录信息</td>
                                 <td class="text-center">创建时间</td>
+                                <td class="text-center">操作</td>
                             </tr>
                         </thead>
                         <tbody>
                             {volist id="vo" name="list"}
                             <tr>
-                                <td class="text-center">{$vo.id}</td>
-                                <td class="text-center">{$vo.ad_acount}</td>
-                                <td class="text-center">{$vo.avatar}</td>
+                                <td class="text-center">{$vo.ad_id}</td>
+                                <td class="text-center">{$vo.ad_account}</td>
+                                <td class="text-center">
+                                    {if condition="$vo.avatar neq ''"}
+                                    <img src="{$vo.avatar}" class="img-read-min">
+                                    {/if}
+                                </td>
                                 <td class="text-center">{$vo.ad_name}</td>
                                 <td class="text-center">{$vo.email}</td>
                                 <td class="text-center">
-                                    {if condition="$status eq 1"}
+                                    {if condition="$vo.status eq 1"}
                                     <span class="text-success">{$vo.status_text}</span>
                                     {else}
                                     <span class="text-danger">{$vo.status_text}</span>
                                     {/if}
                                 </td>
                                 <td class="text-center">
-                                    IP: {$vo.last_login_ip | default="无"}
-                                    {if condition="$vo.last_login_time gt 0"}
+                                {if condition="$vo.last_login_time gt 0"}
+                                    IP: {$vo.last_login_ip}
                                     Date: {:date("Y-m-d H:i:s", $vo['last_login_time'])}
-                                    {/if}
+                                {else}
+                                    无登录信息
+                                {/if}
                                 </td>
-                                <td class="text-center">创建时间</td>
+                                <td class="text-center">
+                                    {:date("Y-m-d H:i:s", time())}
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary btn-sm" href="{:url('edit', ['id'=>$vo['ad_id']])}">修改</a>
+                                    <a class="btn btn-primary btn-sm ml-10" href="{:url('delete', ['id'=>$vo['ad_id']])}">删除</a>
+                                </td>
                             </tr>
                             {/volist}
                         </tbody>
                     </table>
-                    {if condition="$page neq ''"}
-                    <ul class="pagination">
-                        {$page}
-                    </ul>
-                    {/if}
+                    <div class="text-center">
+                        {if condition="$page neq ''"}
+                        <ul class="pagination">
+                            {$page}
+                        </ul>
+                        {/if}
+                    </div>
                 </div>
                 <!-- /.box-body -->
             </div>
