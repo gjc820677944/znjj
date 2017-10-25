@@ -34,7 +34,7 @@
                         </form>
                     </div>
                     <div class="pull-right">
-                        <a class="btn btn-primary" href="{:url('create')}">添加用户</a>
+                        <a class="btn btn-primary" href="{:url('create','type=1')}">添加用户</a>
                     </div>
                 </div>
                 <div class="box-body">
@@ -50,10 +50,11 @@
                             <td class="text-center">注册IP</td>
                             <td class="text-center">注册时间</td>
                             <td class="text-center">状态</td>
+                            <td class="text-center">操作</td>
                         </tr>
                         </thead>
                         <tbody>
-                        {volist id="vo" name="data['list']"}
+                        {volist id="vo" name="list"}
                         <tr>
                             <td class="text-center">{$vo.user_id}</td>
                             <td class="text-center">{$vo.username}</td>
@@ -77,13 +78,14 @@
                                 禁用
                                 {/if}
                             </td>
+                            <td class="text-center"><a href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>|<a>删除</a></td>
                         </tr>
                         {/volist}
                         </tbody>
                     </table>
-                    {if condition="$data.page neq ''"}
+                    {if condition="$page neq ''"}
                     <ul class="pagination">
-                        {$data.page}
+                        {$page}
                     </ul>
                     {/if}
                 </div>

@@ -2,7 +2,7 @@
 {block name="content"}
 <section class="content-header">
     <h1>
-        {if condition="$action_name eq 'create'"}
+        {if condition="$type==1"}
         添加用户
         <small>The administrator create</small>
         {else}
@@ -19,23 +19,27 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-                <form role="form" action="">
+                <form role="form" action="{:url('UserInfo')}" method="post">
                     <div class="box-body">
+                        <div class="form-group" style="display: none">
+                            <label>用户id</label>
+                            <input type="text" name="user_id" class="form-control" value="{$data.user_id}">
+                        </div>
                         <div class="form-group">
                             <label>头像</label>
-                            <input type="file" name="avatar" placeholder="请选择用户头像">
+                            <input type="file" name="avatar" placeholder="请选择用户头像" value="{$data.avatar}">
                         </div>
                         <div class="form-group">
                             <label>用户名字</label>
-                            <input type="text" name="username" class="form-control" >
+                            <input type="text" name="username" class="form-control" value="{$data.username}">
                         </div>
                         <div class="form-group">
                             <label>手机号</label>
-                            <input type="text" name="mobile" class="form-control" >
+                            <input type="text" name="mobile" class="form-control" value="{$data.mobile}">
                         </div>
                         <div class="form-group">
                             <label>邮箱</label>
-                            <input type="email" name="email" class="form-control" placeholder="Enter email">
+                            <input type="email" name="email" class="form-control" placeholder="Enter email" value="{$data.email}">
                         </div>
                         <div class="form-group">
                             <label>状态</label>
@@ -52,8 +56,8 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary">提交</button>
-                        <button type="reset" class="btn btn-primary ml-10">重置</button>
-                        <a class="btn btn-primary ml-10" urn="{$referer_url}">Return</a>
+                        <!--<button type="reset" class="btn btn-primary ml-10">重置</button>-->
+                        <!--<a class="btn btn-primary ml-10" urn="{$referer_url}">Return</a>-->
                     </div>
                 </form>
             </div>
