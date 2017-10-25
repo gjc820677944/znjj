@@ -84,7 +84,8 @@
                                 </td>
                                 <td class="text-center">
                                     <a class="btn btn-primary btn-sm" href="{:url('edit', ['id'=>$vo['ad_id']])}">修改</a>
-                                    <a class="btn btn-primary btn-sm ml-10" href="{:url('delete', ['id'=>$vo['ad_id']])}">删除</a>
+                                    <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['ad_id']])}', '您确认删除该管理员吗？')">删除</a>
+
                                 </td>
                             </tr>
                             {/volist}
