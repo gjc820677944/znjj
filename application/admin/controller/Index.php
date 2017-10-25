@@ -5,6 +5,6 @@ class Index extends Base
 {
     public function index()
     {
-
+        redirect(url("admin.account/index"));
     }
 }
