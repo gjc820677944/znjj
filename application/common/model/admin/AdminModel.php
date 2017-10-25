@@ -8,6 +8,7 @@ class AdminModel extends Model
 {
     protected $name = "admin";
     protected $autoWriteTimestamp = true;
+    protected $hidden = ['password', 'salt'];
 
     protected function getStatusTextAttr($val, $data){
         $status = $data['status'];
