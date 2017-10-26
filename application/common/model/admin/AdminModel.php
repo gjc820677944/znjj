@@ -86,4 +86,23 @@ class AdminModel extends Model
     public static function getDefaultAvatar(){
         return DEFAULT_AVATAR;
     }
+
+    /**
+     * 根据管理员ID获取登录用户信息
+     * @param int $ad_id
+     * @return object
+     */
+    public static function getLoginUser($ad_id){
+        $admin = AdminModel::get($ad_id);
+        if($admin['avatar'] === ''){
+            $admin['avatar'] = AdminModel::getDefaultAvatar();
+        }
+        else{
+            $admin['avatar'] = FileHelper::helper()->getWebsitePath($admin['avatar']);
+        }
+        if($admin['ad_name'] === ''){
+            $admin['ad_name'] = $admin['ad_account'];
+        }
+        return $admin;
+    }
 }
