@@ -10,7 +10,6 @@ class Edition extends Base
 {
     public function index()
     {
-
         $input = $this->request->param();
         $model = new EditionModel();
         if (isset($input['keywords']) && $input['keywords'] !== '') {
