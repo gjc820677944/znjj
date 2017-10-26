@@ -25,6 +25,10 @@ class User extends Base
             $model->where("status", $status);
         }
         $list = $model->paginate(null);
+        foreach ($list as $k=>$v){
+            $v['avatar'] = "/".$v['avatar'];
+            $list[$k] = $v;
+        }
         $data = [
             'list' => $list,
             'page' => $list->render(),
@@ -55,6 +59,7 @@ class User extends Base
             $data = UserModel::where('user_id=' . $input['user_id'])
                 ->field('user_id,username,mobile,email,status,avatar')
                 ->find();
+            $data['avatar']="/".$data['avatar'];
         }
         $data = [
             'data' => $data,
