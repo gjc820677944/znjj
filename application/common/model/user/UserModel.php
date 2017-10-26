@@ -105,7 +105,7 @@ class UserModel extends Model
     }
 
     //保存微信信息
-    function saveWeixinInfo($avatar,$wx_openid,$wx_unionid,$nickname)
+    function saveWeixinInfo($output,$wx_openid,$wx_unionid,$nickname)
     {
         $request = Request::instance();
         $ip=$request->ip();
@@ -114,6 +114,8 @@ class UserModel extends Model
         $where['wx_unionid']=$wx_unionid;
         $info=Db::name('user_weixin')->where($where)->find();
         if (empty($info)){
+            $avatar=getImage($output['headimgurl'],"uploads/weixin/".date("Ymd"),time().'.jpg',1);
+
             $u_data['username']=json_encode($nickname);                //用户名
             $u_data['last_login_ip']=$ip;            //最后一次登录IP
             $u_data['last_login_time']=time();       //最后一次登录时间
@@ -145,12 +147,11 @@ class UserModel extends Model
             }
 
         }else{
-            
+
             $data= Db::name('user_weixin')->alias('uw')->where($where)
                 ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
                 ->join('user u','u.user_id=uw.user_id','left')
                 ->find();
-            UserLogsModel::addLog($data['user_id'],1,$ip,time(),"");
             return $data;
         }
     }

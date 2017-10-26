@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{extend name="common/base" /}
+        {block name="content"}
+        <section class="content-header">
+            <h1>
+                {if condition="$type==1"}
+                添加版本
+                <small>The administrator create</small>
+                {else}
+                修改版本
+                <small>The administrator edit</s
+                    {/if}
+            </h1>
+            <ol class="breadcrumb">
+                {include file="admin/breadcrumb"}
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <form role="form" action="{:url('editionInfo')}" method="post" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <div class="form-group" style="display: none">
+                                    <label>用户id</label>
+                                    <input type="text" name="edition_id" class="form-control" value="{$data.edition_id}">
+                                </div>
+                                <div class="form-group">
+                                    <label>版本号</label>
+                                    <input type="text" name="edition_number" class="form-control" value="{$data.edition_number}">
+                                </div>
+                                <div class="form-group">
+                                    <label>下载地址</label>
+                                    <input type="text" name="edition_url" class="form-control" value="{$data.edition_url}">
+                                </div>
+                                <div class="form-group">
+                                    <label>系统类型</label>
+                                    <input type="test" name="type" class="form-control" value="{$data.type}">
+                                </div>
+                                <div class="form-group">
+                                    <label>版本备注</label>
+                                    <input type="textarea" name="remarks" class="form-control" value="{$data.remarks}">
+                                </div>
+
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <input type="hidden" name="referer_url" value="{$referer_url}">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                                <button type="reset" class="btn btn-primary ml-10">重置</button>
+                                <a class="btn btn-primary ml-10" href="{$referer_url}">Return</a>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        {/block}</title>
+</head>
+<body>
+
+</body>
+</html>

@@ -3,6 +3,7 @@ namespace app\api\controller\user;
 use app\common\model\user\UserModel;
 use app\api\controller\Father;
 use think\Request;
+use filehelper\FileHelper;
 class User extends  Father
 {
     /**
@@ -124,6 +125,29 @@ class User extends  Father
         }
     }
 
+    //修改用户头像
+    public function updateInfiPic()
+    {
+        $token=input('token');
+        if ($token==''){
+            echo api_return_json(1,"token不能为空");
+        }
+        $file = Request::instance()->file('avatar'); //获取上传的头像
+        $info=UserModel::where("token='".$token."'")->find();
+        if (!empty($file)) {
+            $input['avatar'] = FileHelper::helper()
+                ->saveUploadFile($file->getInfo(), 'user/avatar/' . date("Ymd"));
+            UserModel::rmAvatarByid($info['user_id']);//删除原图片
+        }
+        $data['avatar']= $input['avatar'];
+        $info=UserModel::where("token='".$token."'")->update($data);
+        if ($info==false){
+            echo api_return_json(1,"修改失败");
+        }else{
+            echo api_return_json(0,"修改成功");
+        }
+
+    }
 
     //添加微信数据
     function getWeixinInfo() 
@@ -151,8 +175,7 @@ class User extends  Father
         $output=json_decode($output,true);
         curl_close($ch);
         //下载微信图片保存到本地
-        $avatar=getImage($output['headimgurl'],"./uploads/weixin",time().'.jpg',1);
-        $info=$user->saveWeixinInfo($avatar,$wx_openid,$wx_unionid,$output['nickname']);
+        $info=$user->saveWeixinInfo($output,$wx_openid,$wx_unionid,$output['nickname']);
         if ($info===0){
             echo api_return_json(1,"操作失败");
         }else{
