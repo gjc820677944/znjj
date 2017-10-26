@@ -23,7 +23,7 @@ class User extends Base
             $status = (int)$input['status'];
             $model->where("status", $status);
         }
-        $list = $model->paginate(10);
+        $list = $model->paginate(null);
         $data = [
             'list' => $list,
             'page' => $list->render(),
