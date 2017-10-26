@@ -72,10 +72,7 @@ class Account extends Base
         $input = $this->request->post();
         $referer_url = $this->request->param('referer_url');
         unset($input['ad_id']);unset($input['referer_url']);
-        $result = ValidateHelper::execValidate('Admin', 'create', $input);
-        if($result !== true){
-            return $this->error($result);
-        }
+        $this->execValidate('Admin', 'create', $input);
         //存储上传的图片
         $file = Request::instance()->file('avatar'); //获取上传的头像
         if(!empty($file)){
@@ -114,10 +111,7 @@ class Account extends Base
         $referer_url = $this->request->param('referer_url');
         unset($input['referer_url']);
         if(empty($input['password'])) unset($input['password']);
-        $result = ValidateHelper::execValidate('Admin', 'edit', $input);
-        if($result !== true){
-            return $this->error($result);
-        }
+        $this->execValidate('Admin', 'edit', $input);
         //存储上传的图片
         $file = Request::instance()->file('avatar'); //获取上传的头像
         if(!empty($file)){
