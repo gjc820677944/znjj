@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller\user;
 use app\admin\controller\Base;
+use app\common\model\admin\AdminModel;
 use app\common\model\user\UserModel;
 use think\Request;
 use filehelper\FileHelper;
@@ -23,7 +24,11 @@ class User extends Base
             $status = (int)$input['status'];
             $model->where("status", $status);
         }
-        $list = $model->paginate(10);
+        $list = $model->paginate(null);
+        foreach ($list as $k=>$v){
+            $v['avatar'] = "/".$v['avatar'];
+            $list[$k] = $v;
+        }
         $data = [
             'list' => $list,
             'page' => $list->render(),
@@ -54,6 +59,7 @@ class User extends Base
             $data = UserModel::where('user_id=' . $input['user_id'])
                 ->field('user_id,username,mobile,email,status,avatar')
                 ->find();
+            $data['avatar']="/".$data['avatar'];
         }
         $data = [
             'data' => $data,
@@ -126,7 +132,9 @@ class User extends Base
         if (!empty($file)) {
             $input['avatar'] = FileHelper::helper()
                 ->saveUploadFile($file->getInfo(), 'user/avatar/' . date("Ymd"));
+            UserModel::rmAvatarByid($input['user_id']);//删除原图片
         }
+//        var_dump($input);exit;
         $info=$user->htUpdateUInfo($input);
         if ($info==1){
             $this->error("手机号已存在");
@@ -146,6 +154,7 @@ class User extends Base
         if ($info==false){
             $this->error("删除失败");
         }else{
+            UserModel::rmAvatarByid($user_id);     //删除头像
             $this->success("删除成功");
         }
     }

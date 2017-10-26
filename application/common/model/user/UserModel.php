@@ -1,6 +1,7 @@
 <?php
 namespace app\common\model\user;
 use app\api\controller\user\User;
+use filehelper\FileHelper;
 use think\Model;
 use think\Request;
 use think\Db;
@@ -184,7 +185,7 @@ class UserModel extends Model
         $ip=$request->ip();
         $info=UserModel::where("mobile='".$input['mobile']."'")->find();
         //该手机号已存在
-        if ($input['user_id']!=$info['user_id']){
+        if ($input['user_id']!=$info['user_id'] && !empty($info)){
             return 1;
         }
 
@@ -195,7 +196,16 @@ class UserModel extends Model
             return 2;
         }
     }
-
+    /**
+     * 根据管理员ID删除用户头像
+     * @param int $id 管理员ID
+     */
+    public static function rmAvatarByid($id){
+        $vo = UserModel::field("avatar")->find($id);
+        if($vo && $vo['avatar']){
+            FileHelper::helper()->unlink($vo['avatar']);
+        }
+    }
     //后台添加用户
     public function addHtUserInfo($input)
     {
