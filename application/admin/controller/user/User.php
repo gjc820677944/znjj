@@ -154,7 +154,7 @@ class User extends Base
         if ($info==false){
             $this->error("删除失败");
         }else{
-            AdminModel::rmAvatarByid($user_id);     //删除头像
+            UserModel::rmAvatarByid($user_id);     //删除头像
             $this->success("删除成功");
         }
     }
