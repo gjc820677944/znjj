@@ -150,11 +150,12 @@ class User extends Base
     {
         $input = $this->request->param();
         $user_id=$input['user_id'];
+        UserModel::rmAvatarByid($user_id);     //删除头像
         $info=UserModel::where('user_id='.$user_id)->delete();
         if ($info==false){
             api_return_json(1, "删除失败");
         }else{
-            UserModel::rmAvatarByid($user_id);     //删除头像
+
             api_return_json(0, "删除成功");
         }
     }
