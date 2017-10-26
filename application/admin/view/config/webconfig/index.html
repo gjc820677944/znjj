@@ -18,22 +18,25 @@
             <div class="box">
                 <div class="box-header">
                     <div class="pull-left">
+                        <h3>配置项列表</h3>
                     </div>
                     <div class="pull-right">
-                        <a class="btn btn-primary" href="{$create_url}">添加管理员</a>
+                        <a class="btn btn-primary" href="{$create_url}">添加配置项</a>
                     </div>
                 </div>
                 <form role="form" action="{$post_url}" method="post"">
                 <div class="box-body">
                     {foreach id="vo" name="list"}
                     <div class="form-group">
-                        <label>{$vo.config_name}</label>
-                        <a class="btn btn-sm btn-primary" href="{:url('edit', ['id'=>$vo['id']])}" onclick="return loadDivTagEdit(this)" title="更新">
-                            更新
-                        </a>
-                        <a href="javascript:;" class="btn btn-sm btn-danger" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['id']])}', '您确认删除该配置项吗？')">
-                            删除
-                        </a>
+                        <label>{$vo.conf_name}</label>
+                        <div class="pull-right">
+                            <a class="btn btn-xs btn-primary" href="{:url('edit', ['id'=>$vo['conf_id']])}" title="更新">
+                                更新
+                            </a>
+                            <a href="javascript:;" class="btn btn-xs btn-danger" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['conf_id']])}', '您确认删除该配置项吗？')">
+                                删除
+                            </a>
+                        </div>
                         {if condition="$vo.type eq 'text'"}
                         <input type="text" class="form-control" name="{$vo.conf_key}" value="{$vo.conf_value}">
                         {elseif condition="$vo.type eq 'textarea'"}
