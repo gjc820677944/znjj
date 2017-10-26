@@ -1,0 +1,107 @@
+{extend name="common/base" /}
+{block name="head"}
+<link rel="stylesheet" href="__AdminLTE__/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+{/block}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        管理员操作日志
+        <small>The administrator log</small>
+    </h1>
+    <ol class="breadcrumb">
+        {include file="common/breadcrumb"}
+        <li class="active">日志列表</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="pull-left">
+                    <form class="form-inline" role="form" action="{:url('index')}" method="get">
+                        <div class="form-group">
+                            <label>关键字</label>
+                            <input type="text" class="form-control" name="keywords" placeholder="ID/Account" value="<?php echo !empty($input['keywords']) ? $input['keywords'] : ''; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>时间</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="start_date" name="start_date" value="<?php echo !empty($input['start_date']) ? $input['start_date'] : ''; ?>" placeholder="开始时间">
+                            </div>
+                            <label>-</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="end_date" name="end_date" value="<?php echo !empty($input['end_date']) ? $input['end_date'] : ''; ?>" placeholder="结束时间">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">查询</button>
+                    </form>
+                    </div>
+                    <div class="pull-right">
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td class="text-center">管理员ID</td>
+                                <td class="text-center">管理员账号</td>
+                                <td class="text-center">操作说明</td>
+                                <td class="text-center">操作IP</td>
+                                <td class="text-center">发生时间</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist id="vo" name="list"}
+                            <tr>
+                                <td class="text-center">ID:{$vo.ad_id}</td>
+                                <td class="text-center">{$vo.ad_account}</td>
+                                <td class="text-center">{$vo.log_detail}</td>
+                                <td class="text-center">{$vo.log_ip}</td>
+                                <td class="text-center">
+                                    {:date("Y-m-d H:i:s", $vo['log_time'])}
+                                </td>
+                            </tr>
+                            {/volist}
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        {if condition="$page neq ''"}
+                        <ul class="pagination">
+                            {$page}
+                        </ul>
+                        {/if}
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}
+{block name="foot"}
+<script src="__AdminLTE__/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(function () {
+        //Date picker
+        $('#start_date').datepicker({
+            autoclose: true,
+            format: 'yyyy/mm/dd'
+        })
+        $('#end_date').datepicker({
+            autoclose: true,
+            format: 'yyyy/mm/dd'
+        })
+    });
+</script>
+{/block}

@@ -2,84 +2,45 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
-use think\Request;
+use app\common\model\admin\AdminLogsModel;
 
-class Logs extends Controller
+class Logs extends Base
 {
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index()
-    {
-        //
-    }
+    public function index(){
+        $input = $this->request->param();
+        $model = new AdminLogsModel();
+        if(isset($input['keywords']) && $input['keywords'] !== ''){
+            $keywords = trim($input['keywords']);
+            if(preg_match('/^[0-9]+$/', $keywords)){ //ID数字
+                $model->where("ad_id", (int)$keywords);
+            }
+            else{
+                $model->where("ad_account like '%$keywords%'");
+            }
+        }
 
-    /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create()
-    {
-        //
-    }
+        if(isset($input['start_date']) && $input['start_date'] !== ''){
+            $start_time = strtotime($input['start_date']);
+            $model->where("log_time >= $start_time");
+        }
 
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
-    {
-        //
-    }
+        if(isset($input['end_date']) && $input['end_date'] !== ''){
+            $end_time = strtotime($input['end_date']);
+            $model->where("log_time <= $end_time");
+        }
 
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
-    }
-
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * 删除指定资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function delete($id)
-    {
-        //
+        $list = $model->order("log_id desc")->paginate(null, false, [
+                'query' => $input
+            ]);
+        foreach ($list as $k=>$v){
+            $v['log_detail'] = AdminLogsModel::logDetail($v);
+            $list[$k] = $v;
+        }
+        $data = [
+            'list' => $list,
+            'page' => $list->render(),
+            'input' => $input,
+        ];
+        return $this->fetch('index', $data);
     }
 }
