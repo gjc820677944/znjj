@@ -11,6 +11,8 @@ use think\Db;
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+//define("USER_DEFAULT_AVATAR", "/uploads/admin/avatar/default.png"); //默认头像
+
 /**
  * 定义接口返回数据格式
  * @param int $code 错误码 $code

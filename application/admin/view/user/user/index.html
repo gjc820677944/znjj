@@ -43,6 +43,7 @@
                         <tr>
                             <td class="text-center">ID</td>
                             <td class="text-center">用户名</td>
+                            <td class="text-center">头像</td>
                             <td class="text-center">手机号</td>
                             <td class="text-center">邮箱</td>
                             <td class="text-center">最后一次登录IP</td>
@@ -58,6 +59,11 @@
                         <tr>
                             <td class="text-center">{$vo.user_id}</td>
                             <td class="text-center">{$vo.username}</td>
+                            <td class="text-center">
+                                {if condition="$vo.avatar neq ''"}
+                                <img src="{$vo.avatar}" class="img-read-min">
+                                {/if}
+                            </td>
                             <td class="text-center">{$vo.mobile}</td>
                             <td class="text-center">{$vo.email}</td>
                             <td class="text-center">{$vo.last_login_ip}</td>
