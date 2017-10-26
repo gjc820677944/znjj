@@ -39,11 +39,19 @@
                                 </div>
                                 <div class="form-group">
                                     <label>系统类型</label>
-                                    <input type="test" name="type" class="form-control" value="{$data.type}">
+                                    <!--<input type="test" name="type" class="form-control" value="{$data.type}">-->
+                                    <select name="type" id="select_k1" class="form-control">
+                                        <option value="选择">选择</option>
+                                        <option value="Android" {if condition="$data.type eq 'Android'"} selected = selected {/if}>Android</option>
+                                        <option value="IOS" {if condition="$data.type eq 'IOS'"} selected = selected {/if}>IOS</option>
+
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>版本备注</label>
-                                    <input type="textarea" name="remarks" class="form-control" value="{$data.remarks}">
+                                    <textarea rows="5" name="remarks" class="form-control">{$data.remarks}
+                                        </textarea>
+                                    <!--<input type="textarea"  value="">-->
                                 </div>
 
                             </div>
