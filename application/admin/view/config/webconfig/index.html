@@ -7,7 +7,7 @@
     </h1>
     <ol class="breadcrumb">
         {include file="common/breadcrumb"}
-        <li><a href="{:url('/admin/admin.account/index')}">全局配置</a></li>
+        <li><a href="{:url('config.webconfig/index')}">全局配置</a></li>
         <li class="active"></li>
     </ol>
 </section>
@@ -16,37 +16,43 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
+                <div class="box-header">
+                    <div class="pull-left">
+                    </div>
+                    <div class="pull-right">
+                        <a class="btn btn-primary" href="{$create_url}">添加管理员</a>
+                    </div>
+                </div>
                 <form role="form" action="{$post_url}" method="post"">
-
-                    <div class="box-body">
-                        {foreach id="vo" name="list"}
-                        <div class="form-group">
-                            <label>{$vo.config_name}</label>
-                            <a class="btn btn-sm btn-primary" href="{:url('edit', ['id'=>$vo['id']])}" onclick="return loadDivTagEdit(this)" title="更新">
-                                更新
-                            </a>
-                            <a href="javascript:;" class="btn btn-sm btn-danger" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['id']])}', '您确认删除该配置项吗？')">
-                                删除
-                            </a>
-                            {if condition="$vo.type eq 'text'"}
-                            <input type="text" class="form-control" name="{$vo.conf_key}" value="{$vo.conf_value}">
-                            {elseif condition="$vo.type eq 'textarea'"}
-                            <textarea name="{$vo.conf_key}" class="form-control" rows="5">{$vo.conf_value}</textarea>
+                <div class="box-body">
+                    {foreach id="vo" name="list"}
+                    <div class="form-group">
+                        <label>{$vo.config_name}</label>
+                        <a class="btn btn-sm btn-primary" href="{:url('edit', ['id'=>$vo['id']])}" onclick="return loadDivTagEdit(this)" title="更新">
+                            更新
+                        </a>
+                        <a href="javascript:;" class="btn btn-sm btn-danger" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['id']])}', '您确认删除该配置项吗？')">
+                            删除
+                        </a>
+                        {if condition="$vo.type eq 'text'"}
+                        <input type="text" class="form-control" name="{$vo.conf_key}" value="{$vo.conf_value}">
+                        {elseif condition="$vo.type eq 'textarea'"}
+                        <textarea name="{$vo.conf_key}" class="form-control" rows="5">{$vo.conf_value}</textarea>
+                        {/if}
+                        <p class="help-block">
+                            配置键：<span class="text-danger">{$vo.conf_key}</span>
+                            {if condition="$vo.summary neq ''"}
+                            ，配置说明：{$vo.summary}
                             {/if}
-                            <p class="help-block">
-                                配置键：<span class="text-danger">{$vo.conf_key}</span>
-                                {if condition="$vo.summary neq ''"}
-                                ，配置说明：{$vo.summary}
-                                {/if}
-                            </p>
-                        </div>
-                        {/foreach}
+                        </p>
                     </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-primary ml-10">Reset</button>
-                    </div>
+                    {/foreach}
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary ml-10">Reset</button>
+                </div>
                 </form>
             </div>
             <!-- /.box -->
