@@ -1,15 +1,13 @@
 {extend name="common/base" /}
-{block name="head"}<!--head标签内容-->{/block}
 {block name="content"}
 <section class="content-header">
     <h1>
-        Data Tables
-        <small>advanced tables</small>
+        用户管理
+        <small>The administrator list</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Tables</a></li>
-        <li class="active">Data tables</li>
+        {include file="admin/breadcrumb"}
+        <li class="active"></li>
     </ol>
 </section>
 
@@ -18,20 +16,83 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">3213213</h3>
+                    <div class="pull-left">
+                        <form class="form-inline" role="form" action="{:url('index')}" method="get">
+                            <div class="form-group">
+                                <label>关键字</label>
+                                <input type="text" class="form-control" name="keywords" placeholder="账号/名字/邮箱" value="<?php echo !empty($input['keywords']) ? $input['keywords'] : ''; ?>">
+                            </div>
+                            <div class="form-group">
+                                &nbsp;&nbsp;<label>状态</label>
+                                <select class="form-control" name="status">
+                                    <option value="">全部</option>
+                                    <option value="1" <?php echo !empty($input['status']) && (int)$input['status'] === 1 ? 'selected' : ''; ?>>正常</option>
+                                    <option value="2" <?php echo !empty($input['status']) && (int)$input['status'] === 4 ? 'selected' : ''; ?>>已禁用</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">查询</button>
+                        </form>
+                    </div>
+                    <div class="pull-right">
+                        <a class="btn btn-primary" href="{:url('create','type=1')}">添加用户</a>
+                    </div>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
-                    <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+                    <table class="table table-bordered">
                         <thead>
-                        <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Rendering engine</th><th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 370px;">Browser</th><th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 318px;">Platform(s)</th><th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 256px;">Engine version</th><th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 188px;">CSS grade</th></tr>
+                        <tr>
+                            <td class="text-center">ID</td>
+                            <td class="text-center">用户名</td>
+                            <td class="text-center">手机号</td>
+                            <td class="text-center">邮箱</td>
+                            <td class="text-center">最后一次登录IP</td>
+                            <td class="text-center">最后一次登录时间</td>
+                            <td class="text-center">注册IP</td>
+                            <td class="text-center">注册时间</td>
+                            <td class="text-center">状态</td>
+                            <td class="text-center">操作</td>
+                        </tr>
                         </thead>
                         <tbody>
+                        {volist id="vo" name="list"}
+                        <tr>
+                            <td class="text-center">{$vo.user_id}</td>
+                            <td class="text-center">{$vo.username}</td>
+                            <td class="text-center">{$vo.mobile}</td>
+                            <td class="text-center">{$vo.email}</td>
+                            <td class="text-center">{$vo.last_login_ip}</td>
+                            <td class="text-center">
+                                {if condition="$vo.last_login_time gt 0"}
+                                Date: {:date("Y-m-d H:i:s", $vo['last_login_time'])}
+                                {/if}
+                            </td>
+                            <td class="text-center">{$vo.reg_ip}</td>
+                            <td class="text-center">
+                                {if condition="$vo.last_login_time gt 0"}
+                                Date: {:date("Y-m-d H:i:s", $vo['reg_time'])}
+                                {/if}</td>
+                            <td class="text-center">
+                            {if condition="$vo.status === 1"}
+                                正常
+                                {else/}
+                                禁用
+                                {/if}
+                            </td>
+                            <!--<td class="text-center"><a href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>|<a>删除</a></td>-->
+                            <td class="text-center">
+                                <a class="btn btn-primary btn-sm" href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>
+                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('deleteUserInfo', ['user_id'=>$vo.user_id])}', '您确认删除该管理员吗？')">删除</a>
+
+                            </td>
+                        </tr>
+                        {/volist}
                         </tbody>
-                        <tfoot>
-                        <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1">CSS grade</th></tr>
-                        </tfoot>
-                    </table></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0">2</a></li><li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0">3</a></li><li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0">4</a></li><li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0">5</a></li><li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0">6</a></li><li class="paginate_button next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0">Next</a></li></ul></div></div></div></div>
+                    </table>
+                    {if condition="$page neq ''"}
+                    <ul class="pagination">
+                        {$page}
+                    </ul>
+                    {/if}
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -42,4 +103,3 @@
     <!-- /.row -->
 </section>
 {/block}
-{block name="foot"}<!--foot添加内容-->{/block}

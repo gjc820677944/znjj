@@ -177,4 +177,49 @@ class UserModel extends Model
         return $str;
     }
 
+    //后台修改用户
+    public function htUpdateUInfo($input)
+    {
+        $request = Request::instance();
+        $ip=$request->ip();
+        $info=UserModel::where("mobile='".$input['mobile']."'")->find();
+        //该手机号已存在
+        if ($input['user_id']!=$info['user_id']){
+            return 1;
+        }
+
+        $info=UserModel::where('user_id='.$input['user_id'])->Update($input);
+        if ($info==false){
+            return 0;
+        }else{
+            return 2;
+        }
+    }
+
+    //后台添加用户
+    public function addHtUserInfo($input)
+    {
+        $request = Request::instance();
+        $ip=$request->ip();
+
+        $info=UserModel::where("mobile='".$input['mobile']."'")->find();
+        //该手机号已存在
+        if (!empty($info)){
+            return 1;
+        }
+
+        $input['last_login_ip']=$ip;            //最后一次登录IP
+        $input['last_login_time']=time();       //最后一次登录时间
+        $input['reg_ip']=$ip;                     //注册IP
+        $input['reg_time']=time();                   //注册时间
+        $input['reg_type']=1;                        //注册类型
+
+        $info=UserModel::insert($input);
+        if ($info==false){
+            return 0;
+        }else{
+            return 2;
+        }
+    }
+
 }

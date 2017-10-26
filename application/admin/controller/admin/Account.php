@@ -28,6 +28,7 @@ class Account extends Base
         $list = $model->paginate(null, false, [
                 'query' => $input,
             ]);
+//        $list = $model->paginate(10);
         foreach ($list as $k=>$v){
             if($v['avatar'] === ''){
                 $v['avatar'] = AdminModel::getDefaultAvatar();
