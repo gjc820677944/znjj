@@ -36,7 +36,7 @@ class User extends  Father
 
     //登录验证码
     function getv_code()
-    {
+    { 
         $mobile   =   input('mobile');  //手机号
         if ($mobile==''){
             echo api_return_json(1,'手机号不能为空');
