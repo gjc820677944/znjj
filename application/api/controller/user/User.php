@@ -22,16 +22,30 @@ class User extends  Father
             echo api_return_json(1,'请输入正确手机号');
         }
 
-//        if ($v_code=='')
-//        {
-//            echo api_return_json(1,'验证码不能为空');
-//        }
+        if ($v_code!='123456')
+        {
+            echo api_return_json(1,'验证码错误');
+        }
         $info=$user->Login($mobile);
         if ($info!==0){
             echo api_return_json(0,array('token'=>$info));
         }else{
             echo api_return_json(1,'登录失败');
         }
+    }
+
+    //登录验证码
+    function getv_code()
+    {  
+        $mobile   =   input('mobile');  //手机号
+        if ($mobile==''){
+            echo api_return_json(1,'手机号不能为空');
+        }
+        if(!preg_match("/^1[34578]{1}\d{9}$/",$mobile)){
+            echo api_return_json(1,'请输入正确手机号');
+        }
+
+        echo api_return_json(0,"验证码发送成功");
     }
 
     /**
