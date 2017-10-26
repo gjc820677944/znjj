@@ -8,6 +8,7 @@ use think\Request;
 class Base extends Controller
 {
     protected $request;
+    protected $ad_id;
 
     protected function _initialize()
     {
@@ -16,8 +17,10 @@ class Base extends Controller
         if(empty($ad_id)){
             return $this->redirect(url("login/index"));
         }
+        $this->ad_id = $ad_id;
         $log_admin = AdminModel::getLoginUser($ad_id);
         $this->assign("log_admin", $log_admin);
+        
         $this->request = Request::instance();
         $controller_name = $this->request->controller();
         $action_name = $this->request->action();

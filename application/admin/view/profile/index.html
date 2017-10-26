@@ -1,0 +1,57 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        个人信息
+        <small>Personal information</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{:url('/admin/index')}"><i class="fa fa-dashboard"></i> 控制台首页</a></li>
+        <li class="active">个人信息管理</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <form role="form" action="{$post_url}" method="post" enctype="multipart/form-data">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>账号：<span>{$data.ad_account}</span></label>
+                        </div>
+                        <div class="form-group">
+                            <label>头像</label>
+                            <input type="file" name="avatar" placeholder="请选择管理员头像">
+                            {if condition="$data.avatar neq ''"}
+                            <p><img src="{$data.avatar}" class="img-read"></p>
+                            {/if}
+                        </div>
+                        <div class="form-group">
+                            <label>密码</label>
+                            <input type="password" class="form-control" name="password" placeholder="Enter password">
+                            <p class="help-block">为空时表示不修改原密码</p>
+                        </div>
+                        <div class="form-group">
+                            <label>管理员名字</label>
+                            <input type="text" class="form-control" name="ad_name" value="{$data.ad_name}" >
+                        </div>
+                        <div class="form-group">
+                            <label>邮箱</label>
+                            <input type="email" class="form-control" name="email" value="{$data.email}" placeholder="Enter email">
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-primary ml-10">Reset</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}
