@@ -80,7 +80,7 @@
                                 {/if}
                                 </td>
                                 <td class="text-center">
-                                    {:date("Y-m-d H:i:s", time())}
+                                    {:date("Y-m-d H:i:s", $vo['create_time'])}
                                 </td>
                                 <td class="text-center">
                                     <a class="btn btn-primary btn-sm" href="{:url('edit', ['id'=>$vo['ad_id']])}">修改</a>
