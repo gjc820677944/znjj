@@ -146,10 +146,10 @@ class Account extends Base
         }
         $result = AdminModel::destroy($id);
         if($result){
-            $this->success("删除成功");
+            api_return_json(0, "删除成功");
         }
         else{
-            $this->error("删除失败，请重新尝试");
+            api_return_json(101, "删除失败，请重新尝试");
         }
     }
 }
