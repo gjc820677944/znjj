@@ -2,6 +2,7 @@
 namespace app\admin\controller;
 
 use app\common\model\admin\AdminModel;
+use app\common\validate\ValidateHelper;
 use think\Controller;
 use think\Request;
 
@@ -28,5 +29,20 @@ class Base extends Controller
         $this->assign("controller_name", $controller_name);
         $this->assign("action_name", $action_name);
         $this->assign("referer_url",  $http_referer);
+    }
+
+
+    /**
+     * 执行通用验证器操作
+     * @param string $class_name 验证器类名
+     * @param string $scene 验证器场景
+     * @param array $input 输入数据
+     * @return true|string
+     */
+    protected function execValidate($class_name, $scene, $input){
+        $result = ValidateHelper::execValidate($class_name, $scene, $input);
+        if($result !== true){
+            $this->error($result);
+        }
     }
 }

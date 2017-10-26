@@ -3,15 +3,16 @@
 <section class="content-header">
     <h1>
         {if condition="$action_name eq 'create'"}
-            添加管理员
-            <small>The administrator create</small>
+            添加配置项
+            <small>The configuration create</small>
         {else}
-            更新管理员
-            <small>The administrator edit</small>
+            更新配置项
+            <small>The configuration edit</small>
         {/if}
     </h1>
     <ol class="breadcrumb">
-        {include file="admin/breadcrumb"}
+        {include file="common/breadcrumb"}
+        <li><a href="{:url('config.webconfig/index')}">全局配置</a></li>
         <li class="active"></li>
     </ol>
 </section>
@@ -20,55 +21,45 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
-                <form role="form" action="{$post_url}" method="post" enctype="multipart/form-data">
+                <form role="form" action="{$post_url}" method="post">
                 <div class="box-body">
                     <div class="form-group">
-                        <label>账号</label>
-                        <input type="text" class="form-control" name="ad_account" value="{$data.ad_account}" placeholder="Enter account">
+                        <label>配置名称</label>
+                        <input type="text" class="form-control" name="conf_name" value="{$data.conf_name}">
                     </div>
                     <div class="form-group">
-                        <label>头像</label>
-                        <input type="file" name="avatar" placeholder="请选择管理员头像">
-                        {if condition="$data.avatar neq ''"}
-                        <p><img src="{$data.avatar}" class="img-read"></p>
-                        {/if}
+                        <label>配置键</label>
+                        <input type="text" class="form-control" name="conf_key" value="{$data.conf_key}">
+                        <p class="help-block text-danger">注意：配置键在配置项中具有唯一性</p>
                     </div>
                     <div class="form-group">
-                        <label>密码</label>
-                        <input type="password" class="form-control" name="password" placeholder="Enter password">
-                        {if condition="$action_name neq 'create'"}
-                        <p class="help-block">为空时表示不修改原密码</p>
-                        {/if}
+                        <label>配置项文本类型</label>
+                        <select class="form-control" name="type">
+                            {volist id="vo" name="type_texts"}
+                            <option value="{$key}" {if condition="$key eq $data['type']"}selected{/if}>{$vo}</option>
+                            {/volist}
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label>管理员名字</label>
-                        <input type="text" class="form-control" name="ad_name" value="{$data.ad_name}" >
+                        <label>配置值</label>
+                        <input type="text" class="form-control" name="conf_value" value="{$data.conf_value}">
                     </div>
                     <div class="form-group">
-                        <label>邮箱</label>
-                        <input type="email" class="form-control" name="email" value="{$data.email}" placeholder="Enter email">
+                        <label>配置使用说明</label>
+                        <input type="text" class="form-control" name="summary" value="{$data.summary}">
                     </div>
                     <div class="form-group">
-                        <label>状态</label>
-                        <div class="radio">
-                            <label class="radio-inline">
-                                <input type="radio" name="status" value="1" <?php echo $data['status'] === 1 ? 'checked' : ''; ?>> 正常
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="status" value="4" <?php echo $data['status'] === 4 ? 'checked' : ''; ?>> 禁用
-                            </label>
-                        </div>
+                        <label>排序（降序排列）</label>
+                        <input type="text" class="form-control" name="sort_by" value="{$data.sort_by}">
                     </div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    {if condition="$data.ad_id gt 0"}
-                    <input type="hidden" name="ad_id" value="{$data.ad_id}">
+                    {if condition="$data.conf_id gt 0"}
+                    <input type="hidden" name="conf_id" value="{$data.conf_id}">
                     {/if}
-                    <input type="hidden" name="referer_url" value="{$referer_url}">
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="reset" class="btn btn-primary ml-10">Reset</button>
-                    <a class="btn btn-primary ml-10" href="{$referer_url}">Return</a>
                 </div>
                 </form>
             </div>
