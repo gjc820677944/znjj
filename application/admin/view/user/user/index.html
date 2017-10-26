@@ -78,7 +78,12 @@
                                 禁用
                                 {/if}
                             </td>
-                            <td class="text-center"><a href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>|<a>删除</a></td>
+                            <!--<td class="text-center"><a href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>|<a>删除</a></td>-->
+                            <td class="text-center">
+                                <a class="btn btn-primary btn-sm" href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>
+                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('deleteUserInfo', ['user_id'=>$vo.user_id])}', '您确认删除该管理员吗？')">删除</a>
+
+                            </td>
                         </tr>
                         {/volist}
                         </tbody>
