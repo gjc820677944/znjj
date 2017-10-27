@@ -1,0 +1,65 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        模型分类
+        <small>The administrator list</small>
+    </h1>
+    <ol class="breadcrumb">
+        {include file="device/device_point_category/breadcrumb"}
+        <li class="active"></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="pull-left">
+                    </div>
+                    <div class="pull-right">
+                        <a class="btn btn-primary" href="{:url('create')}">添加分类</a>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td class="text-center">ID</td>
+                                <td class="text-center">分类名称</td>
+                                <td class="text-center">排序（降序）</td>
+                                <td class="text-center">创建时间</td>
+                                <td class="text-center">操作</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist id="vo" name="list"}
+                            <tr>
+                                <td class="text-center">{$vo.cate_id}</td>
+                                <td class="text-center">{$vo.cate_name}</td>
+                                <td class="text-center">
+                                    <input type="text" class="text-center w-100" value="{$vo.sort_by}" size="2" onchange="changeAttr({$vo.cate_id}, 'sort_by', this.value, '{:url('changeAttr')}')">
+                                </td>
+                                <td class="text-center">
+                                    {:date("Y-m-d H:i:s", $vo['create_time'])}
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary btn-sm" href="{:url('edit', ['id'=>$vo['cate_id']])}">修改</a>
+                                    <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['cate_id']])}', '您确认删除该分类吗？')">删除</a>
+
+                                </td>
+                            </tr>
+                            {/volist}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}

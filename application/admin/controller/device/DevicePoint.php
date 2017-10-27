@@ -2,10 +2,7 @@
 
 namespace app\admin\controller\device;
 
-use think\Controller;
-use think\Request;
-
-class DevicePoint extends Controller
+class DevicePoint extends Base
 {
     /**
      * 显示资源列表

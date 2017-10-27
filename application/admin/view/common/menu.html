@@ -22,7 +22,10 @@
     </li>
 
     <?php
-        if(in_array($controller_name, ['Admin.device'])){
+        if(in_array($controller_name, [
+                'Device.deviceModel', 'Device.deviceModelCategory',
+                'Device.devicePoint', 'Device.devicePointCategory',
+            ])){
             $active = "active";
         }
         else{
@@ -37,8 +40,18 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+            <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+                <a href="{:url('device.deviceModel/index')}"><i class="fa fa-circle-o"></i> 模型列表</a>
+            </li>
+            <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+                <a href="{:url('device.deviceModelCategory/index')}"><i class="fa fa-circle-o"></i> 模型分类</a>
+            </li>
+            <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+                <a href="{:url('device.devicePoint/index')}"><i class="fa fa-circle-o"></i> 模型功能列表</a>
+            </li>
+            <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+                <a href="{:url('device.devicePointCategory/index')}"><i class="fa fa-circle-o"></i> 模型功能分类</a>
+            </li>
         </ul>
     </li>
 
