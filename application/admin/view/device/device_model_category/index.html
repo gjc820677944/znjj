@@ -2,7 +2,7 @@
 {block name="content"}
 <section class="content-header">
     <h1>
-        功能点分类
+        模型分类
         <small>The category list</small>
     </h1>
     <ol class="breadcrumb">
@@ -28,7 +28,7 @@
                             <tr>
                                 <td class="text-center">ID</td>
                                 <td class="text-center">分类名称</td>
-                                <td class="text-center">功能数量</td>
+                                <td class="text-center">模型数量</td>
                                 <td class="text-center">排序（降序）</td>
                                 <td class="text-center">创建时间</td>
                                 <td class="text-center">操作</td>
@@ -39,7 +39,7 @@
                             <tr>
                                 <td class="text-center">{$vo.cate_id}</td>
                                 <td class="text-center">{$vo.cate_name}</td>
-                                <td class="text-center">{$vo.point_count}</td>
+                                <td class="text-center">{$vo.model_count}</td>
                                 <td class="text-center">
                                     <input type="text" class="text-center w-100" value="{$vo.sort_by}" size="2" onchange="changeAttr({$vo.cate_id}, 'sort_by', this.value, '{:url('changeAttr')}')">
                                 </td>

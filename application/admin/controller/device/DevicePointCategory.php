@@ -8,7 +8,11 @@ use app\common\model\device\DevicePointCategoryModel;
 class DevicePointCategory extends Base
 {
     public function index(){
-        $list = DevicePointCategoryModel::order("sort_by desc")->select();
+        $list = DevicePointCategoryModel::alias("c")
+            ->field("c.*, count(p.point_id) as point_count")
+            ->join("device_point p", "p.cate_id = c.cate_id", "left")
+            ->group("c.cate_id")
+            ->order("c.sort_by desc, c.cate_id asc")->select();
         $data = [
             'list' => $list
         ];
