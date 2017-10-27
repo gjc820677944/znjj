@@ -1,0 +1,52 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        {if condition="$action_name eq 'create'"}
+            添加功能点分类
+            <small>The category create</small>
+        {else}
+            更新功能点分类
+            <small>The category edit</small>
+        {/if}
+    </h1>
+    <ol class="breadcrumb">
+        {include file="device/device_point_category/breadcrumb"}
+        <li class="active"></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <form role="form" action="{$post_url}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>分类名称</label>
+                        <input type="text" class="form-control" name="cate_name" value="{$data.cate_name}" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>排序（降序排列）</label>
+                        <input type="text" class="form-control" name="sort_by" value="{$data.sort_by}" >
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    {if condition="$data.cate_id gt 0"}
+                    <input type="hidden" name="cate_id" value="{$data.cate_id}">
+                    {/if}
+                    <input type="hidden" name="referer_url" value="{$referer_url}">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary ml-10">Reset</button>
+                    <a class="btn btn-primary ml-10" href="{$referer_url}">Return</a>
+                </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}

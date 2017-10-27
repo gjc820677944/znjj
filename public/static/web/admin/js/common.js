@@ -32,3 +32,30 @@ function ajaxConfirm(url, msg){
     });
     return false;
 }
+
+/**
+ * 更新单条数据的属性
+ * @param int id 数据ID
+ * @param string field 更新的字段
+ * @param string val 更新后的值
+ * @param string url url
+ */
+function changeAttr(id, field, val, url) {
+    var data = "id="+id+"&field="+field+"&val="+val;
+    $.ajax({
+        type: 'get',
+        url: url,
+        data: data,
+        cache: false,
+        async: false,
+        dataType: 'json',
+        success: function(result){
+            var code = result.code;
+            var msg = result.msg;
+            var data = result.data;
+            if(code>0){
+                layer.alert(msg);
+            }
+        }
+    });
+}
