@@ -17,7 +17,7 @@ class Edition extends Base
             $model->where("edition_number like '%$keywords%'");
         }
 
-        $list = $model->paginate(null);
+        $list = $model->order('edition_number desc')->paginate(null);
 
         $data = [
             'list' => $list,

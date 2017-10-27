@@ -74,7 +74,7 @@
                             </td>
                             <td class="text-center">{$vo.reg_ip}</td>
                             <td class="text-center">
-                                {if condition="$vo.last_login_time gt 0"}
+                                {if condition="$vo.reg_time gt 0"}
                                 Date: {:date("Y-m-d H:i:s", $vo['reg_time'])}
                                 {/if}</td>
                             <td class="text-center">
