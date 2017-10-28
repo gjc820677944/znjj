@@ -2,36 +2,44 @@
 
 namespace app\admin\controller\device;
 
+use app\admin\controller\Base;
+use app\common\model\device\DeviceModelCategoryModel;
+use app\common\model\device\DeviceModelModel;
+
 class DeviceModel extends Base
 {
     public function index()
     {
         $input = $this->request->param();
-        $model = new DevicePointModel();
+        $model = new DeviceModelModel();
         if(isset($input['keywords']) && $input['keywords'] !== ''){
             $keywords = $input['keywords'];
-            $model->where("p.point_name like '%$keywords%'");
+            $where = "(m.model_name like '%$keywords%' ".
+                    "or m.model_number like '%$keywords%' ".
+                    "or m.product_prefix like '%$keywords%' ".
+                ")";
+            $model->where($where);
         }
-        if(isset($input['tag']) && $input['tag'] !== ''){
-            $tag = $input['tag'];
-            $model->where("p.tag", $tag);
+        if(isset($input['protocol']) && $input['protocol'] !== ''){
+            $protocol = (int)$input['protocol'];
+            $model->where("m.protocol", $protocol);
         }
         if(isset($input['cate_id']) && $input['cate_id'] !== ''){
             $cate_id = (int)$input['cate_id'];
-            $model->where("p.cate_id", $cate_id);
+            $model->where("m.cate_id", $cate_id);
         }
         if(isset($input['status']) && $input['status'] !== ''){
             $status = (int)$input['status'];
-            $model->where("p.status", $status);
+            $model->where("m.status", $status);
         }
-        $list = $model->alias("p")->field("p.*, c.cate_name")
-            ->join("device_point_category c", "c.cate_id = p.cate_id", "left")
+        $list = $model->alias("m")->field("m.*, c.cate_name")
+            ->join("device_model_category c", "c.cate_id = m.cate_id", "left")
             ->paginate(null, false, ['query' => $input]);
         $data = [
             'list' => $list,
             'page' => $list->render(),
             'input' => $input,
-            'cate_list' => DevicePointCategoryModel::lists(),
+            'cate_list' => DeviceModelCategoryModel::lists(),
             'create_url' => url('create'),
         ];
         return $this->fetch('index', $data);
@@ -41,18 +49,20 @@ class DeviceModel extends Base
     public function create()
     {
         $data = [
-            'point_id' => 0,
-            'point_name' => '',
-            'tag' => '',
+            'model_id' => 0,
+            'model_name' => '',
+            'model_number' => '',
+            'product_prefix' => '',
             'summary' => '',
-            'point_class' => '',
-            'sort_by' => 0,
-            'status' => 1,
+            'protocol' => 1,
             'cate_id' => 0,
+            'is_gateway' => 0,
+            'status' => 1,
         ];
         $data = [
             'data' => $data,
-            'cate_list' => DevicePointCategoryModel::lists(),
+            'cate_list' => DeviceModelCategoryModel::lists(),
+            'protocol_texts' => DeviceModelModel::$protocol_texts,
             'post_url' => url('save'),
         ];
         return $this->fetch('edit', $data);
@@ -63,10 +73,10 @@ class DeviceModel extends Base
     {
         $input = $this->request->post();
         $referer_url = $this->request->param('referer_url');
-        unset($input['point_id']);unset($input['referer_url']);
-        $this->execValidate('DevicePoint', 'create', $input);
+        unset($input['model_id']);unset($input['referer_url']);
+        $this->execValidate('DeviceModel', 'create', $input);
         //保存管理员信息
-        $result = DevicePointModel::create($input);
+        $result = DeviceModelModel::create($input);
         if($result){
             $this->success("创建成功", $referer_url);
         }
@@ -78,13 +88,14 @@ class DeviceModel extends Base
 
     public function edit($id)
     {
-        $data = DevicePointModel::get($id);
+        $data = DeviceModelModel::get($id);
         if(empty($data)){
-            $this->error("功能点不存在，请重新选择");
+            $this->error("模型不存在，请重新选择");
         }
         $data = [
             'data' => $data,
-            'cate_list' => DevicePointCategoryModel::lists(),
+            'cate_list' => DeviceModelCategoryModel::lists(),
+            'protocol_texts' => DeviceModelModel::$protocol_texts,
             'post_url' => url('update'),
         ];
         return $this->fetch('edit', $data);
@@ -96,11 +107,10 @@ class DeviceModel extends Base
         $input = $this->request->post();
         $referer_url = $this->request->param('referer_url');
         unset($input['referer_url']);
-        if(empty($input['password'])) unset($input['password']);
-        $this->execValidate('DevicePoint', 'edit', $input);
+        $this->execValidate('DeviceModel', 'edit', $input);
 
         //更新功能点信息
-        $result = DevicePointModel::update($input);
+        $result = DeviceModelModel::update($input);
         if($result){
             $this->success("更新成功", $referer_url);
         }
@@ -111,7 +121,7 @@ class DeviceModel extends Base
 
     public function delete(int $id)
     {
-        $result = DevicePointModel::destroy($id);
+        $result = DeviceModelModel::destroy($id);
         if($result){
             api_return_json(0, "删除成功");
         }
@@ -129,10 +139,10 @@ class DeviceModel extends Base
         $field = trim($input['field']);
         $val = trim($input['val']);
         $data = [
-            'point_id' => $id,
+            'model_id' => $id,
             $field => $val,
         ];
-        DevicePointModel::update($data);
+        DeviceModelModel::update($data);
         api_return_json(0);
     }
 }

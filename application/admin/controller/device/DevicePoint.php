@@ -100,7 +100,6 @@ class DevicePoint extends Base
         $input = $this->request->post();
         $referer_url = $this->request->param('referer_url');
         unset($input['referer_url']);
-        if(empty($input['password'])) unset($input['password']);
         $this->execValidate('DevicePoint', 'edit', $input);
 
         //更新功能点信息
