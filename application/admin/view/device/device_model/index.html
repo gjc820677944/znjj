@@ -51,6 +51,7 @@
                             <tr>
                                 <td class="text-center">ID</td>
                                 <td class="text-center">模型名称</td>
+                                <td class="text-center">图标</td>
                                 <td class="text-center">模型编号</td>
                                 <td class="text-center">产品编号前缀</td>
                                 <td class="text-center" width="20%">简介</td>
@@ -67,6 +68,11 @@
                             <tr>
                                 <td class="text-center">{$vo.model_id}</td>
                                 <td class="text-center">{$vo.model_name}</td>
+                                <td class="text-center">
+                                    {if condition="$vo.model_cover neq ''"}
+                                    <img src="{$vo.model_cover}" class="img-read-min">
+                                    {/if}
+                                </td>
                                 <td class="text-center">{$vo.model_number}</td>
                                 <td class="text-center">{$vo.product_prefix}</td>
                                 <td>

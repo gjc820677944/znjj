@@ -5,6 +5,8 @@ namespace app\admin\controller\device;
 use app\admin\controller\Base;
 use app\common\model\device\DeviceModelCategoryModel;
 use app\common\model\device\DeviceModelModel;
+use filehelper\FileHelper;
+use think\Request;
 
 class DeviceModel extends Base
 {
@@ -35,6 +37,10 @@ class DeviceModel extends Base
         $list = $model->alias("m")->field("m.*, c.cate_name")
             ->join("device_model_category c", "c.cate_id = m.cate_id", "left")
             ->paginate(null, false, ['query' => $input]);
+        foreach ($list as $k=>$v){
+            $v['model_cover'] = FileHelper::helper()->getWebsitePath($v['model_cover']);
+            $list[$k] = $v;
+        }
         $data = [
             'list' => $list,
             'page' => $list->render(),
@@ -51,6 +57,7 @@ class DeviceModel extends Base
         $data = [
             'model_id' => 0,
             'model_name' => '',
+            'model_cover' => '',
             'model_number' => '',
             'product_prefix' => '',
             'summary' => '',
@@ -75,6 +82,14 @@ class DeviceModel extends Base
         $referer_url = $this->request->param('referer_url');
         unset($input['model_id']);unset($input['referer_url']);
         $this->execValidate('DeviceModel', 'create', $input);
+
+        //存储上传的图片
+        $file = Request::instance()->file('model_cover'); //获取上传的头像
+        if(!empty($file)){
+            $input['model_cover'] = FileHelper::helper()
+                ->saveUploadFile($file->getInfo(), 'device/model');
+        }
+
         //保存管理员信息
         $result = DeviceModelModel::create($input);
         if($result){
@@ -92,6 +107,7 @@ class DeviceModel extends Base
         if(empty($data)){
             $this->error("模型不存在，请重新选择");
         }
+        $data['model_cover'] = FileHelper::helper()->getWebsitePath($data['model_cover']);
         $data = [
             'data' => $data,
             'cate_list' => DeviceModelCategoryModel::lists(),
@@ -108,6 +124,13 @@ class DeviceModel extends Base
         $referer_url = $this->request->param('referer_url');
         unset($input['referer_url']);
         $this->execValidate('DeviceModel', 'edit', $input);
+
+        //存储上传的图片
+        $file = Request::instance()->file('model_cover'); //获取上传的头像
+        if(!empty($file)){
+            $input['model_cover'] = FileHelper::helper()
+                ->saveUploadFile($file->getInfo(), 'device/model');
+        }
 
         //更新功能点信息
         $result = DeviceModelModel::update($input);
