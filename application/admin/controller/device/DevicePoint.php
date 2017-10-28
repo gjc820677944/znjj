@@ -30,7 +30,7 @@ class DevicePoint extends Base
         }
         $list = $model->alias("p")->field("p.*, c.cate_name")
             ->join("device_point_category c", "c.cate_id = p.cate_id", "left")
-            ->paginate(null, false, ['query' => $input]);
+            ->order("point_id asc")->paginate(null, false, ['query' => $input]);
         $data = [
             'list' => $list,
             'page' => $list->render(),

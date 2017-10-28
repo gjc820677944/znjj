@@ -5,7 +5,7 @@
         模型列表
     </h1>
     <ol class="breadcrumb">
-        {include file="device/device_model_category/breadcrumb"}
+        {include file="device/device_model/breadcrumb"}
         <li class="active"></li>
     </ol>
 </section>
@@ -91,6 +91,7 @@
                                 </td>
                                 <td class="text-center">
                                     <a class="btn btn-primary btn-sm" href="{:url('edit', ['id'=>$vo['model_id']])}">修改</a>
+                                    <a class="btn btn-warning btn-sm" href="{:url('device.deviceModelPoint/index', ['model_id'=>$vo['model_id']])}">功能点</a>
                                     <a href="javascript:;" class="btn btn-sm btn-danger" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['cate_id']])}', '您确认删除该分类吗？')">删除</a>
 
                                 </td>
@@ -98,6 +99,13 @@
                             {/volist}
                         </tbody>
                     </table>
+                    <div class="text-center">
+                        {if condition="$page neq ''"}
+                        <ul class="pagination">
+                            {$page}
+                        </ul>
+                        {/if}
+                    </div>
                 </div>
                 <!-- /.box-body -->
             </div>
