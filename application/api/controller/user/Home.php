@@ -73,6 +73,7 @@ class Home extends Base
             else{
                 $v['is_creater'] = false;
             }
+            $v['tags'] = HomeDeviceProductModel::getTags($v['home_id']);
             $list[$k] = $v;
         }
         api_return_json(0, $list);
@@ -98,6 +99,7 @@ class Home extends Base
         else{
             $home['is_creater'] = false;
         }
+        $home['tags'] = HomeDeviceProductModel::getTags($home['home_id']);
 
         $field = "l.leaguer_id, lu.username l.leaguer_name, l.remark, l.create_time";
         $leaguers = HomeLeaguerModel::alias("l")->field($field)->select();
