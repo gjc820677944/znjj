@@ -52,4 +52,28 @@ class DeviceModelModel extends Model
             FileHelper::helper()->unlink($vo['model_cover']);
         }
     }
+
+    /**
+     * 根据设备编号，获取设备的模型ID
+     * @param int 查询条件
+     * @return int 为0时表示未查询到相关的模型ID
+     */
+    public static function getIdBySN($serial_number, $where = null){
+        $model = new DeviceModelModel();
+        if($where !== null){
+            $model->where($where);
+        }
+        $product_prefixs = $model->column("product_prefix"); //获取符合条件的产品编号前缀
+
+        $model_id = 0;
+        foreach ($product_prefixs as $product_prefix) {
+            $length = strlen($product_prefix);
+            if(substr($serial_number, 0, $length) === $product_prefix){
+                $model_id = DeviceModelModel::where("product_prefix", $product_prefix)
+                    ->value("model_id");
+                break;
+            }
+        }
+        return $model_id;
+    }
 }

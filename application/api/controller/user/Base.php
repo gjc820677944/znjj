@@ -15,6 +15,9 @@ class Base extends CommonBase
         parent::__construct();
         $token = UserModel::getToken();
         $user = (new UserModel())->getUserInfo($token);
+        if(empty($user)){
+            api_return_json(11, "用户登录令牌错误");
+        }
         $this->user = $user;
         $this->user_id = $user['user_id'];
     }
