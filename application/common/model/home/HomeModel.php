@@ -53,4 +53,19 @@ class HomeModel extends Model
         }
     }
 
+    /**
+     * 校验用户是不是家庭创建人
+     * @param int $home_id 家庭ID
+     * @param int $user_id 用户ID
+     */
+    public static function checkCreater($home_id, $user_id){
+        $creater_id = HomeModel::where("home_id", $home_id)->value("creater_id");
+        if(creater_id === $user_id){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

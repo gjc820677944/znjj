@@ -114,9 +114,8 @@ class Home extends Base
             api_return_json(321, "房间ID错误");
         }
         $home_id = (int)$input['home_id'];
-        $home = HomeModel::get($home_id);
-        if($home['creater_id'] !== $this->user_id){
-            api_return_json(322, "非家庭创建人，无权限修改家庭信息");
+        if(!HomeModel::checkCreater($home_id, $this->user_id)){
+            api_return_json(333, "非家庭创建人，无权限修改家庭信息");
         }
 
         $data = [
@@ -125,7 +124,6 @@ class Home extends Base
         if(!empty($input['home_name'])){ //家庭名字
             $data['home_name'] = trim($input['home_name']);
         }
-
         if($file = Request::instance()->file('wallpaper')){ //家庭封面
             $data['wallpaper'] = FileHelper::helper()
                 ->saveUploadFile($file->getInfo(), 'home/wallpaper/'.date("Ymd"));
@@ -147,11 +145,8 @@ class Home extends Base
         if(empty($home_id)){
             api_return_json(331, "家庭ID错误");
         }
-        $home = HomeModel::field("creater_id")->find($home_id);
-        if(empty($home)){
-            api_return_json(332, "无法查询到相关家庭");
-        }
-        if($home['creater_id'] !== $this->user_id){
+
+        if(!HomeModel::checkCreater($home_id, $this->user_id)){
             api_return_json(333, "非家庭创建人，无权限修改家庭信息");
         }
         if($leaguer_id === $this->user_id){
