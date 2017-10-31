@@ -37,7 +37,6 @@
                             <td class="text-center">家庭管理员</td>
                             <td class="text-center">家庭名称</td>
                             <td class="text-center">成员数</td>
-                            <td class="text-center">标签</td>
                             <td class="text-center">修改时间</td>
                             <td class="text-center">创建时间</td>
                             <td class="text-center">操作</td>
@@ -50,7 +49,6 @@
                             <td class="text-center">{$vo.c_username}</td>
                             <td class="text-center">{$vo.home_name}</td>
                             <td class="text-center">{$vo.personnel}</td>
-                            <td class="text-center">{$vo.tag}</td>
                             <td class="text-center">
                                 {if condition="$vo.update_time gt 0"}
                                 Date: {:date("Y-m-d H:i:s", $vo['update_time'])}
