@@ -77,7 +77,7 @@ class UserModel extends Model
 
         $info=UserModel::where("mobile='".$new_mobile."'")->find();
         if (!empty($info)){
-            echo api_return_json(1,'要修改的手机号码已存在');
+            echo api_return_json(120,'要修改的手机号码已存在');
         }
 
         $data['mobile']=$new_mobile;
@@ -130,10 +130,8 @@ class UserModel extends Model
             $u_data['avatar']=$avatar['save_path'];       //头像
             $u_data['token']=UserModel::settoken();                  //token
 
-
             $data['wx_openid']=$wx_openid;
             $data['wx_unionid']=$wx_unionid;
-
             Db::startTrans();
             try{
                $user_id= UserModel::insertGetId($u_data);    //添加用户
@@ -169,6 +167,8 @@ class UserModel extends Model
         $_token = empty($_token) ? input("post.token") : $_token;
         $_token = empty($_token) ? input("get.token") : $_token;
         $_token = empty($_token) ? "" : $_token;
+
+
         return $_token;
     }
 
@@ -242,6 +242,10 @@ class UserModel extends Model
    public static function getTokenId()
     {
         $token=UserModel::getToken();
+        if ($token==''){
+            echo api_return_json(106, "token不能为空");
+        }
+
         $user_id=UserModel::where("token='".$token."'")->value('user_id');
         if ($user_id!==null){
             return $user_id;

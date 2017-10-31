@@ -11,7 +11,7 @@ class Father
         if(!empty($token)){
                 $_row = DB::name("user")->where(array("status"=>1,"token"=>$token))->find();
                 if (count($_row)==0) {
-                    echo api_return_json(1,'请重新登录');
+                    echo api_return_json(106,'token不存在');
                     exit;
                 }
         }

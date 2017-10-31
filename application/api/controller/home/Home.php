@@ -16,11 +16,7 @@ class Home extends Father
     {
         $home_id=input('home_id');  //家庭ID
         $mobile=input('mobile');//被邀请人手机号
-        $token=input('token');  //邀请人
-
-        if($token==''){
-            echo api_return_json(1,'token不能为空');
-        }
+        $token=UserModel::getToken();
 
         if ($home_id==''){
             echo api_return_json(1,'家庭ID不能为空');
@@ -72,10 +68,8 @@ class Home extends Father
     //家庭列表
     public function getHomeInfo()
     {
-        $token=input('token');
-        if ($token==''){
-            echo api_return_json(1,'token不能为空');
-        }
+        $token=UserModel::getToken();
+
         try{
             $data=UserModel::where("token='".$token."'")->find();
             $home=HomeModel::where('creater_id='.$data['user_id'])->select();
@@ -128,41 +122,6 @@ class Home extends Father
     }
 
 
-//    //创建家庭
-//    public function createHome()
-//    {
-//        $arr['token']=input('token');
-//        $arr['home_name']=input('home_name');
-//
-//        if ($arr['token']=='' || $arr['home_name']==''){
-//            echo api_return_json(1,"token或家庭名不能为空");
-//        }
-//
-//        $data=UserModel::where("token='".$arr['token']."'")->find();
-//        unset($arr['token']);
-//        $arr['creater_id']=$data['user_id'];
-//        $arr['update_time']=time();
-//        $arr['create_time']=time();
-//
-//       Db::startTrans();
-//        try{
-//            $home_id=HomeModel::insertGetId($arr);
-//            $arr1['home_id']=$home_id;
-//            $arr1['leaguer_id']=$data['user_id'];
-//            $arr1['create_time']=time();
-//            $arr1['auth']='Y,Y';
-//            HomeLeaguerModel::insert($arr1);
-//            Db::commit();
-//        }catch (\Exception $e){
-//            Db::rollback();
-////            echo api_return_json(1,$e->getMessage());
-//            echo api_return_json(1,"创建失败");
-//        }
-//
-//        echo api_return_json(0,"创建成功");
-//
-//
-//    }
 
 
 
