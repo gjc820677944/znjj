@@ -4,11 +4,7 @@ use filehelper\FileHelper;
 use think\Model;
 use think\Request;
 use think\Db;
-class HomeModel extends Model
+class  HomeDeviceProductModel extends Model
 {
-    protected $name = "Home";
-
-
-
-
+    protected $name = "home_device_product";
 }

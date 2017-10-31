@@ -1,6 +1,8 @@
 <?php
 namespace app\common\model\user;
 use app\api\controller\user\User;
+use app\common\model\home\HomeLeaguerInviteModel;
+use app\common\model\home\HomeModel;
 use filehelper\FileHelper;
 use think\Model;
 use think\Request;
@@ -35,9 +37,10 @@ class UserModel extends Model
             $data['reg_time']=time();                   //注册时间
             $data['reg_type']=1;                        //注册类型
             $data['status']=1;                          //登录状态
-            $data['token']=UserModel::settoken();                  //token
-            $info= UserModel::insertGetId($data);  //注册用户
+            $data['token']=UserModel::settoken();       //token
+            $info= UserModel::insertGetId($data);        //注册用户
             UserLogsModel::addLog($info,1,$ip,time(),"");
+
             if ($info!=false){
                 $arr['token']=$data['token'];
                 $arr['username']=$info['username']===null?'':$info['username'];
@@ -56,6 +59,7 @@ class UserModel extends Model
             if ($info!==false){
                 $arr['token']=$data['token'];
                 $arr['username']=$username['username']==null?'':$username['username'];
+                $arr['invite']=HomeLeaguerInviteModel::where('leaguer_id='.$username['user_id'])->select();
                 return $arr;
             }else{
                 return 0;
@@ -231,6 +235,20 @@ class UserModel extends Model
         }else{
             return 2;
         }
+    }
+
+
+    //根据token获取用户ID
+   public static function getTokenId()
+    {
+        $token=UserModel::getToken();
+        $user_id=UserModel::where("token='".$token."'")->value('user_id');
+        if ($user_id!==null){
+            return $user_id;
+        }else{
+            return 0;
+        }
+
     }
 
 }

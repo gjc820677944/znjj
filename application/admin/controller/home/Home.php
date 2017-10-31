@@ -70,12 +70,13 @@ class Home extends Base
         //修改家庭信息
         $data['home_name']=$input['home_name'];
         $data['creater_id']=$input['user_id'];
+        $data['update_time']=time();
         HomeModel::where('home_id='.$input['home_id'])->update($data);
 
         //修改家庭成员信息
         foreach ($input['info'] as $info){
             $arr['remark']=$info['remark'];
-            $arr['auth']=$info['auth'];
+            $arr['auth']=$info['auth1'].",".$info['auth2'];
             HomeLeaguerModel::where('leaguer_id='.$info['user_id']." and home_id=".$input['home_id'])->update($arr);
         }
         $this->success("修改成功",$referer_url);

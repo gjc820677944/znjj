@@ -4,11 +4,8 @@ use filehelper\FileHelper;
 use think\Model;
 use think\Request;
 use think\Db;
-class HomeModel extends Model
+class HomeLeaguerInviteModel extends Model
 {
-    protected $name = "Home";
-
-
-
+    protected $name = "HomeLeaguerInvite";
 
 }
