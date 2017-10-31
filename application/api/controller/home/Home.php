@@ -74,7 +74,7 @@ class Home extends Father
     function ynInvitation()
     {
         $data['home_id'] =input('home_id');//家庭 ID
-        $data['leaguer_id']=input('leaguer_id');//成员ID
+        $data['leaguer_id']=UserModel::getTokenId();//登录人的ID
         $type   = input('type');        //1是同意 2是拒绝
         if ($type==1){
             Db::startTrans();
