@@ -16,6 +16,9 @@ class HomeDeviceProductModel extends Model
     public static function getTags($home_id){
         $tags = HomeDeviceProductModel::where("home_id", $home_id)
             ->column("distinct tag");
+        foreach ($tags as $k=>$v){
+            if($v === '') unset($tags[$k]);
+        }
         return $tags;
     }
 }
