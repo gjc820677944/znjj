@@ -96,8 +96,8 @@ class User extends  Father
             echo api_return_json(112, "用户名格式不正确");
         }
 
-        if(preg_match("/^[0-9a-zA-Z]{3,12}$/",$username)){
-            api_return_json(112, "用户名格式不正确");
+        if(strlen($username)<3 || strlen($username)>11){
+            echo api_return_json(112, "用户名长度3-11");
         }
 
         //判断用户名不重复
