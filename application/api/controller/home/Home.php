@@ -53,6 +53,11 @@ class Home extends Father
             }
         }
 
+        //判断是否邀请过了
+        $if_exist=HomeLeaguerInviteModel::where('home_id='.$home_id." and leaguer_id=".$info['user_id'])->find();
+        if (!empty($if_exist)){
+            echo api_return_json(1,'已经邀请过了');
+        }
         try{
             $data['leaguer_id']=$info['user_id'];
             $data['home_id']=$home_id;
@@ -98,7 +103,6 @@ class Home extends Father
             echo api_return_json(1,$e->getMessage());
         }
         echo api_return_json(0,$data);
-
     }
 
     //给成员分配权限
