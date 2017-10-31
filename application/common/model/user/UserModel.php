@@ -97,6 +97,9 @@ class UserModel extends Model
     //获取用户信息
     public function  getUserInfo($token)
     {
+        if(empty($token)){
+            return null;
+        }
         return UserModel::where("token='".$token."'")->field("user_id,username,mobile,ifnull(email,'') as email,avatar,token")->find();
     }
 
