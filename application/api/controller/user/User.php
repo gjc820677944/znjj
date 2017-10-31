@@ -220,11 +220,12 @@ class User extends  Father
             $value.=mt_rand(0,9);
         }
 
-        $subject="820677944@qq.com";
-        $message="验证码";
-        $addressee=$value;
+        $subject="验证码";
+        $message=$value;
+        $addressee="820677944@qq.com";
 
-        Vendor('PHPMailer.class#phpmailer');
+//        Vendor('PHPMailer.class#phpmailer');
+        include ("../vendor/phpmailer/class.phpmailer.php");
         $mail = new \PHPMailer();           //实例化PHPMailer对象
 
         $mail->IsSMTP();                    // 设定使用SMTP服务
@@ -232,11 +233,11 @@ class User extends  Father
         $mail->SMTPDebug = 0;               // SMTP调试功能 0=关闭 1 = 错误和消息 2 = 消息
         $mail->SMTPAuth = true;             // 启用 SMTP 验证功能
         $mail->SMTPSecure = 'ssl';          // 使用安全协议
-        $mail->Host = "smtp.qq.com"; // SMTP 服务器
+        $mail->Host = "smtp.qq.com";      // SMTP 服务器
         $mail->Port = 465;                  // SMTP服务器的端口号
         $mail->Username = "820677944@qq.com";    // SMTP服务器用户名
         $mail->Password = "olumlwjydtpcbbjj";     // SMTP服务器密码
-        $mail->SetFrom('820677944@qq.com', 'hw');
+        $mail->SetFrom('820677944@qq.com', 'yzm');
         $replyEmail = '';                   //留空则为发件人EMAIL
         $replyName = '';                    //回复名称（留空则为发件人名称）
         $mail->AddReplyTo($replyEmail, $replyName);
