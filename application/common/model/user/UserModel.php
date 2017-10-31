@@ -166,7 +166,6 @@ class UserModel extends Model
         $_token = empty($_token) ? input("get.token") : $_token;
         $_token = empty($_token) ? "" : $_token;
 
-
         return $_token;
     }
 

@@ -55,9 +55,6 @@ class User extends  Father
         $user = new UserModel();
 
         $token = UserModel::getToken();
-        if ($token==''){
-            echo api_return_json(106, 'token不能为空');
-        }
 
         $mobile = input('mobile');     //新手机号
         $v_code = input('v_code');    //验证码
@@ -85,9 +82,6 @@ class User extends  Father
         $token = UserModel::getToken();
         $username = input('username');
 
-        if ($token==''){
-            api_return_json(106, "token不能为空");
-        }
         if ($username == '') {
             echo api_return_json(112, "用户名格式不正确");
         }
@@ -116,9 +110,6 @@ class User extends  Father
         $user = new UserModel();
         $token = UserModel::getToken();
 
-        if ($token==''){
-            api_return_json(106, "token不能为空");
-        }
 
         $info = $user->getUserInfo($token);
         if (empty($info)) {
@@ -150,9 +141,6 @@ class User extends  Father
     public function updateInfiPic()
     {
         $token = UserModel::getToken();
-        if ($token==''){
-            api_return_json(106, "token不能为空");
-        }
 
         $file = Request::instance()->file('avatar'); //获取上传的头像
         $info = UserModel::where("token='" . $token . "'")->find();

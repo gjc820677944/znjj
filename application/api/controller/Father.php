@@ -6,14 +6,26 @@ class Father
 {
     function __construct()
     {
-        //判断管理员是否登录
-        $token=UserModel::getToken();
-        if(!empty($token)){
-                $_row = DB::name("user")->where(array("status"=>1,"token"=>$token))->find();
+        $url=$_SERVER['REQUEST_URI'];
+        $url=explode('/',$url);
+        if ($url[count($url)-1]!='login'){
+            //判断管理员是否登录
+            $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
+            $_token = empty($_token) ? input("post.token") : $_token;
+            $_token = empty($_token) ? input("get.token") : $_token;
+            $_token = empty($_token) ? "" : $_token;
+
+            if ($_token==''){
+                echo api_return_json(106,'token不能为空');
+            }
+
+            if(!empty($_token)){
+                $_row = DB::name("user")->where(array("status"=>1,"token"=>$_token))->find();
                 if (count($_row)==0) {
                     echo api_return_json(106,'token不存在');
                     exit;
                 }
+            }
         }
     }
 }
