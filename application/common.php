@@ -179,7 +179,7 @@ function http($url, $params = [], $method = 'GET', $header = array(), $multi = f
         $mail->Subject = $subject;
         $mail->MsgHTML($message);
         $mail->AddAddress($addressee, 'jw');
-        $info= $mail->Send();
+        return $mail->Send();
 
     }
 

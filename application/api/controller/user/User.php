@@ -225,7 +225,11 @@ class User extends  Father
         $addressee="820677944@qq.com";
 
         Cache::set($email,$value);
-        sendEmail($email,'验证码',$value);
+        if(sendEmail($email,'验证码',$value)){
+            api_return_json(0, "验证码发送成功");
+        }else{
+            api_return_json(1, "验证码发送失败");
+        }
     }
 
     //绑定邮箱
@@ -239,8 +243,16 @@ class User extends  Father
             echo api_return_json(102, "验证码错误");
         }
 
+        //判断邮箱是否存在
+        $info=UserModel::where("email='".$email."'")->find();
+        if (!empty($info)){
+            echo api_return_json(102, "邮箱已存在");
+        }
+
         $data['email']=$email;
         $user_id=UserModel::getTokenId();
+
+
         $info=UserModel::where('user_id='.$user_id)->update($data);
         if ($info!==false){
             Cache::set($email,null);
