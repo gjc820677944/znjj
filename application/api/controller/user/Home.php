@@ -4,7 +4,6 @@ namespace app\api\controller\user;
 
 use app\common\model\device\DeviceModelModel;
 use app\common\model\home\HomeDeviceProductModel;
-use app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\home\HomeLeaguerModel;
 use app\common\model\home\HomeModel;
 use filehelper\FileHelper;
