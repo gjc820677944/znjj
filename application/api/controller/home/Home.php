@@ -34,30 +34,37 @@ class Home extends Father
             echo api_return_json(1,'请输入正确手机号');
         }
 
-        $info=UserModel::where()->find();
+        $info=UserModel::where("mobile='".$mobile."'")->find();
         if (empty($info)){
             echo api_return_json(1,'手机号不存在');
         }
 
         //判断邀请人是否有邀请他人的权限
         $leaguer_id=UserModel::where("token='".$token."'")->find();
-        $auth=HomeLeaguerModel::where('home_id='.$home_id." and leaguer_id=".$leaguer_id)->find();
-        if (!empty($auth)){
-            $auth=explode(',',$auth);
-            if ($auth[1]=='N'){
-                echo api_return_json(1,'没有邀请人的权限');
+
+        $auth=HomeLeaguerModel::where('home_id='.$home_id." and leaguer_id=".$leaguer_id['user_id'])->find();
+
+        //如果是这个家庭的管理员就不用判断权限
+        $admin=HomeModel::where('home_id='.$home_id." and creater_id=".$leaguer_id['user_id'])->find();
+        if (empty($admin)){
+            if (!empty($auth)){
+                $auth=explode(',',$auth);
+                if ($auth[1]=='N'){
+                    echo api_return_json(1,'没有邀请人的权限');
+                }
+            }else{
+                echo api_return_json(1,'获取邀请人权限失败');
             }
-        }else{
-            echo api_return_json(1,'获取邀请人权限失败');
         }
 
-        $data['leaguer_id']=$info['user_id'];
-        $data['home_id']=$home_id;
-        $data['create_time']=time();
-        $info=HomeLeaguerInviteModel::insert($data);
-        if ($info){
-            echo api_return_json(1,'邀请成功');
-        }else{
+        try{
+            $data['leaguer_id']=$info['user_id'];
+            $data['home_id']=$home_id;
+            $data['create_time']=time();
+            $info=HomeLeaguerInviteModel::insert($data);
+
+            echo api_return_json(0,'邀请成功');
+        }catch (\Exception $e){
             echo api_return_json(1,'邀请失败');
         }
     }
