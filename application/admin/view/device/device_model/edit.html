@@ -1,0 +1,103 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        {if condition="$action_name eq 'create'"}
+            添加模型
+        {else}
+            更新模型
+        {/if}
+    </h1>
+    <ol class="breadcrumb">
+        {include file="device/device_model/breadcrumb"}
+        <li class="active"></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <form role="form" action="{$post_url}" method="post" enctype="multipart/form-data">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>模型名称</label>
+                        <input type="text" class="form-control" name="model_name" value="{$data.model_name}" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>图标</label>
+                        <input type="file" name="model_cover" placeholder="请选择模型图标">
+                        {if condition="$data.model_cover neq ''"}
+                        <p><img src="{$data.model_cover}" class="img-read"></p>
+                        {/if}
+                    </div>
+                    <div class="form-group">
+                        <label>模型编号</label>
+                        <input type="text" class="form-control" name="model_number" value="{$data.model_number}" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>产品编号前缀</label>
+                        <input type="text" class="form-control" name="product_prefix" value="{$data.product_prefix}" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>分类</label>
+                        <select class="form-control" name="cate_id">
+                            {volist id="vo" name="cate_list"}
+                            <option value="{$vo.cate_id}" <?php echo $data['cate_id'] === $vo['cate_id'] ? 'selected' : ''; ?>>{$vo.cate_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>简介</label>
+                        <textarea class="form-control" name="summary" rows="3">{$data.summary}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>通讯协议</label>
+                        <select class="form-control" name="protocol">
+                            {volist id="vo" name="protocol_texts"}
+                            <option value="{$key}" <?php echo $data['protocol'] === $key ? 'selected' : ''; ?>>{$vo}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>是否为网关设备</label>
+                        <div class="radio">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_gateway" value="1" <?php echo $data['is_gateway'] === 1 ? 'checked' : ''; ?>> 是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_gateway" value="4" <?php echo $data['is_gateway'] === 0 ? 'checked' : ''; ?>> 否
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>开启状态</label>
+                        <div class="radio">
+                            <label class="radio-inline">
+                                <input type="radio" name="status" value="1" <?php echo $data['status'] === 1 ? 'checked' : ''; ?>> 开启
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="status" value="4" <?php echo $data['status'] === 4 ? 'checked' : ''; ?>> 关闭
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    {if condition="$data.model_id gt 0"}
+                    <input type="hidden" name="model_id" value="{$data.model_id}">
+                    {/if}
+                    <input type="hidden" name="referer_url" value="{$referer_url}">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary ml-10">Reset</button>
+                    <a class="btn btn-primary ml-10" href="{$referer_url}">Return</a>
+                </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}

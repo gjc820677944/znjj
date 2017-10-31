@@ -4,6 +4,7 @@ namespace app\admin\controller\device;
 
 use app\admin\controller\Base;
 use app\common\model\device\DevicePointCategoryModel;
+use app\common\model\device\DevicePointModel;
 
 class DevicePointCategory extends Base
 {
@@ -91,6 +92,10 @@ class DevicePointCategory extends Base
 
     public function delete(int $id)
     {
+        $count = DevicePointModel::where("cate_id", $id)->count();
+        if($count > 0){
+            api_return_json(0, "分类下包含功能点数据，无法删除");
+        }
         $result = DevicePointCategoryModel::destroy($id);
         if($result){
             api_return_json(0, "删除成功");

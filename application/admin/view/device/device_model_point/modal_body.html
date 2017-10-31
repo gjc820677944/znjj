@@ -1,0 +1,86 @@
+<div class="box-header">
+    <form class="form-inline search-form" role="form" method="get">
+    <div class="form-group">
+        <label>关键字</label>
+        <input type="text" class="form-control" name="keywords" placeholder="" value="<?php echo !empty($input['keywords']) ? $input['keywords'] : ''; ?>">
+    </div>
+    <div class="form-group">
+        <label>分类</label>
+        <select class="form-control" name="cate_id">
+            <option value="">全部</option>
+            {volist id="vo" name="cate_list"}
+            <option value="{$vo.cate_id}" <?php echo !empty($input['cate_id']) && (int)$input['cate_id'] === $vo['cate_id'] ? 'selected' : ''; ?>>{$vo.cate_name}</option>
+            {/volist}
+        </select>
+    </div>
+    <button class="btn btn-primary" onclick="return searchBody()" >查询</button>
+    </form>
+</div>
+<div class="box-body">
+    <form class="form-inline checkbox-form" role="form" method="get">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td class="text-center">选择</td>
+                <td class="text-center">ID</td>
+                <td class="text-center">功能点名称</td>
+                <td class="text-center">所属分类</td>
+            </tr>
+        </thead>
+        <tbody>
+            {volist id="vo" name="list"}
+            <tr>
+                <td class="text-center">
+                    <input type="checkbox" name="point_ids[]" value="{$vo.point_id}">
+                </td>
+                <td class="text-center">{$vo.point_id}</td>
+                <td class="text-center">{$vo.point_name}</td>
+                <td class="text-center">{$vo.cate_name}</td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+    </form>
+    <div class="text-center">
+        {if condition="$page neq ''"}
+        <ul class="pagination">
+            {$page}
+        </ul>
+        {/if}
+    </div>
+</div>
+<!-- /.box-body -->
+<script>
+    $(function () {
+        $("#modal-bind-point .search-form button").on('click', function () {
+            var data = $('#modal-bind-point .search-form').serialize();
+            loadBody(body_url, data);
+            return false;
+        });
+        $("#modal-bind-point .pagination a").on('click', function () {
+            var url = $(this).attr('href');
+            if(url !== ''){
+                loadBody(url, '');
+            }
+            return false;
+        });
+        $("#modal-bind-point .modal-footer .btn-submit").on('click', function () {
+            var data = $('#modal-bind-point .checkbox-form').serialize();
+            $.ajax({
+                type: 'POST',
+                url: '{:url("save", ["model_id"=>"$model_id"])}',
+                async: false,
+                data: data,
+                dataType: 'json',
+                success: function (result) {
+                    layer.msg(result.msg);
+                    if(result.code == 0){
+                        location.reload();
+                    }
+
+                }
+            });
+            return false;
+        });
+    });
+</script>

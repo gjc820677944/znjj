@@ -1,0 +1,74 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        {if condition="$action_name eq 'create'"}
+            添加功能点
+        {else}
+            更新功能点
+        {/if}
+    </h1>
+    <ol class="breadcrumb">
+        {include file="device/device_point/breadcrumb"}
+        <li class="active"></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <form role="form" action="{$post_url}" method="post">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>功能点名称</label>
+                        <input type="text" class="form-control" name="point_name" value="{$data.point_name}" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>分类</label>
+                        <select class="form-control" name="cate_id">
+                            <option value="">全部</option>
+                            {volist id="vo" name="cate_list"}
+                            <option value="{$vo.cate_id}" <?php echo $data['cate_id'] === $vo['cate_id'] ? 'selected' : ''; ?>>{$vo.cate_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tag</label>
+                        <input type="text" class="form-control" name="tag" value="{$data.tag}" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>简介</label>
+                        <textarea class="form-control" name="summary" rows="3">{$data.summary}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>开启状态</label>
+                        <div class="radio">
+                            <label class="radio-inline">
+                                <input type="radio" name="status" value="1" <?php echo $data['status'] === 1 ? 'checked' : ''; ?>> 开启
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="status" value="4" <?php echo $data['status'] === 4 ? 'checked' : ''; ?>> 关闭
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    {if condition="$data.point_id gt 0"}
+                    <input type="hidden" name="point_id" value="{$data.point_id}">
+                    {/if}
+                    <input type="hidden" name="referer_url" value="{$referer_url}">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-primary ml-10">Reset</button>
+                    <a class="btn btn-primary ml-10" href="{$referer_url}">Return</a>
+                </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}
