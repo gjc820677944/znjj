@@ -54,19 +54,15 @@ class User extends  Father
     {
         $user = new UserModel();
 
-        $used_mobile = input('used_mobile');    //旧手机号
-        $new_mobile = input('new_mobile');     //新手机号
+        $token = UserModel::getToken();
+        if ($token==''){
+            echo api_return_json(106, 'token不能为空');
+        }
+
+        $mobile = input('mobile');     //新手机号
         $v_code = input('v_code');    //验证码
-        if ($used_mobile == '' || $new_mobile == '') {
-            echo api_return_json(122, '手机号不能为空');
-        }
-        if ($used_mobile == $new_mobile) {
-            echo api_return_json(123, '两个号码不能相同');
-        }
-        if (!preg_match("/^1[34578]{1}\d{9}$/", $used_mobile)) {
-            echo api_return_json(121, '手机号格式不对');
-        }
-        if (!preg_match("/^1[34578]{1}\d{9}$/", $new_mobile)) {
+
+        if (!preg_match("/^1[34578]{1}\d{9}$/", $mobile)) {
             echo api_return_json(121, '手机号格式不对');
         }
 
@@ -74,7 +70,7 @@ class User extends  Father
 //            echo api_return_json(1,'验证码不能为空');
 //        }
 
-        $info = $user->updateMobile($used_mobile, $new_mobile);
+        $info = $user->updateMobile($mobile,$token);
         if ($info === false) {
             echo api_return_json(124, "手机号修改失败，请重新尝试");
         } else {
@@ -101,8 +97,8 @@ class User extends  Father
         }
 
         //判断用户名不重复
-        $info=$user->where("username='".$username."'")->find();
-        if (!empty($info)){
+        $info=$user->where("username='".$username."'")->select();
+        if (count($info)>1){
             api_return_json(112, "用户名已存在");
         }
 
@@ -180,7 +176,7 @@ class User extends  Father
         $user = new UserModel();
         $access_token = input("access_token");      //token
         $wx_openid = input('wx_openid');     //用户微信ID
-        $wx_unionid = input('wx_unionid');   //用户微信联合ID
+        $wx_unionid = input('wx_unionid','');   //用户微信联合ID
         if ($wx_openid == '' || $access_token == '') {
             echo api_return_json(105, "openid或access_token不能为空");
         }

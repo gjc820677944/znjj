@@ -68,21 +68,15 @@ class UserModel extends Model
     }
 
     //修改手机号
-    public function updateMobile($used_mobile,$new_mobile)
+    public function updateMobile($mobile,$token)
     {
-        $info=UserModel::where("mobile='".$used_mobile."'")->find();
-        if (empty($info)){
-            echo api_return_json(1,'手机号码不存在');
-        }
-
-        $info=UserModel::where("mobile='".$new_mobile."'")->find();
+        $info=UserModel::where("mobile='".$mobile."'")->find();
         if (!empty($info)){
             echo api_return_json(120,'要修改的手机号码已存在');
         }
 
-        $data['mobile']=$new_mobile;
-        $data['username']=$new_mobile;
-        return UserModel::where("mobile='".$used_mobile."'")->update($data);
+        $data['mobile']=$mobile;
+        return UserModel::where("token='".$token."'")->update($data);
 
     }
 
@@ -145,6 +139,7 @@ class UserModel extends Model
                             ->find();
             }catch (\Exception $e){
                 Db::rollback();
+                echo $e->getMessage();exit;
                 return 0;
             }
 
