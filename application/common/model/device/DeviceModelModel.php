@@ -64,7 +64,6 @@ class DeviceModelModel extends Model
             $model->where($where);
         }
         $product_prefixs = $model->column("product_prefix"); //获取符合条件的产品编号前缀
-
         $model_id = 0;
         foreach ($product_prefixs as $product_prefix) {
             $length = strlen($product_prefix);

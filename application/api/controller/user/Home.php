@@ -22,7 +22,7 @@ class Home extends Base
         }
         $home_name = trim($input['home_name']);
         $serial_number = trim($input['serial_number']);
-        $where = "is_geteway = 1 and status = 1";
+        $where = "is_gateway = 1 and status = 1";
         $model_id = DeviceModelModel::getIdBySN($serial_number, $where);
         if($model_id <= 0){
             api_return_json(303, "设备编号错误，查询关联模型失败");
@@ -53,6 +53,18 @@ class Home extends Base
             $model->rollback();
             api_return_json(305, "网关创建失败，请重新尝试");
         }
+        //插入家庭成员（创建人）
+        $leaguer_data = [
+            'home_id' => $home->home_id,
+            'leaguer_id' => $this->user_id,
+            'remark' => '',
+            'auth' => HomeLeaguerModel::makeAuth(['Y', 'Y']),
+        ];
+        $leaguer = HomeLeaguerModel::create($leaguer_data);
+        if(empty($leaguer)){
+            $model->rollback();
+            api_return_json(306, "家庭创建人添加失败，请重新尝试");
+        }
         $model->commit();
         api_return_json(0);
     }
@@ -60,7 +72,7 @@ class Home extends Base
     //获取家庭列表
     public function index(){
         $home_ids = HomeLeaguerModel::where("leaguer_id", $this->user_id)->column("home_id");
-        $field = "h.home_id, h.creater_id, hu.username creater_name, hu.wallpaper, hu.create_time";
+        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, h.wallpaper, h.create_time";
         $list = HomeModel::alias("h")->field($field)
             ->join("user hu", "hu.user_id = h.creater_id")
             ->where("h.home_id", "in", $home_ids)->select();
@@ -84,7 +96,7 @@ class Home extends Base
         if($home_id <= 0){
             api_return_json(311, '家庭ID错误');
         }
-        $field = "h.home_id, h.creater_id, hu.username creater_name, hu.wallpaper, hu.create_time";
+        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, hu.wallpaper, hu.create_time";
         $home = HomeModel::alias("h")->field($field)
             ->join("user hu", "hu.user_id = h.creater_id")
             ->where("h.home_id", $home_id)->select();
@@ -152,15 +164,29 @@ class Home extends Base
             api_return_json(334, "新家庭创建人ID不能喝就家庭创建相同");
         }
 
-        $home_leaguer_ids = HomeLeaguerModel::where("home_id")->column('leaguer_id');
+        $home_leaguer_ids = HomeLeaguerModel::where("home_id", $home_id)->column('leaguer_id');
         if(!in_array($leaguer_id, $home_leaguer_ids)){
             api_return_json(335, "新家庭创建人不是家庭成员");
         }
+        $model = new HomeModel();
+        $model->startTrans();
         $result = HomeModel::update(['home_id'=>$home_id, 'creater_id'=>$leaguer_id]);
+        //修改权限
+        HomeLeaguerModel::update([
+            'leaguer_id'=>$leaguer_id,
+            'auth'=>HomeLeaguerModel::makeAuth(['Y', 'Y'])
+        ]);
+        HomeLeaguerModel::update([
+            'leaguer_id'=>$this->user_id,
+            'auth'=>HomeLeaguerModel::makeAuth(['N', 'N'])
+        ]);
+        //修改权限
         if($result){
+            $model->commit();
             api_return_json(0);
         }
         else{
+            $model->rollback();
             api_return_json(324, "更新失败，请重新尝试");
         }
     }
