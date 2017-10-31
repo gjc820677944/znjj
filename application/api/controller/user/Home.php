@@ -72,11 +72,13 @@ class Home extends Base
     //获取家庭列表
     public function index(){
         $home_ids = HomeLeaguerModel::where("leaguer_id", $this->user_id)->column("home_id");
-        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, h.wallpaper, h.create_time";
+        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, ".
+            "hu.avatar creater_avatar, h.wallpaper, h.create_time";
         $list = HomeModel::alias("h")->field($field)
             ->join("user hu", "hu.user_id = h.creater_id")
             ->where("h.home_id", "in", $home_ids)->select();
         foreach ($list as $k=>$v){
+            $v['creater_avatar'] = FileHelper::helper()->getWebsitePath($v['creater_avatar']);
             $v['wallpaper'] = FileHelper::helper()->getWebsitePath($v['wallpaper']);
             if($v['creater_id'] === $this->user_id){ //是否为家庭创建人
                 $v['is_creater'] = true;
@@ -96,13 +98,15 @@ class Home extends Base
         if($home_id <= 0){
             api_return_json(311, '家庭ID错误');
         }
-        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, h.wallpaper, h.create_time";
+        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, ".
+            "hu.avatar creater_avatar, h.wallpaper, h.create_time";
         $home = HomeModel::alias("h")->field($field)
             ->join("user hu", "hu.user_id = h.creater_id")
             ->where("h.home_id", $home_id)->find();
         if(empty($home)){
             api_return_json(312, "无法查询到相关家庭");
         }
+        $home['creater_avatar'] = FileHelper::helper()->getWebsitePath($home['creater_avatar']);
         $home['wallpaper'] = FileHelper::helper()->getWebsitePath($home['wallpaper']);
         if($home['creater_id'] === $this->user_id){ //是否为家庭创建人
             $home['is_creater'] = true;
