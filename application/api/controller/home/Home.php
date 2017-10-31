@@ -53,6 +53,11 @@ class Home extends Father
             }
         }
 
+        //判断是否邀请过了
+        $if_exist=HomeLeaguerInviteModel::where('home_id='.$home_id." and leaguer_id=".$info['user_id'])->find();
+        if (!empty($if_exist)){
+            echo api_return_json(1,'已经邀请过了');
+        }
         try{
             $data['leaguer_id']=$info['user_id'];
             $data['home_id']=$home_id;
@@ -65,61 +70,102 @@ class Home extends Father
         }
     }
 
-    //家庭列表
-    public function getHomeInfo()
+    //同意或邀请
+    function ynInvitation()
     {
-        $token=UserModel::getToken();
-
-        try{
-            $data=UserModel::where("token='".$token."'")->find();
-            $home=HomeModel::where('creater_id='.$data['user_id'])->select();
-            $count=count($home);
-            for ($i=0;$i<$count;$i++){
-                $home[$i]['tag']=HomeDeviceProductModel::where('home_id='.$home[$i]['home_id'])->column('tag');
+        $data['home_id'] =input('home_id');//家庭 ID
+        $data['leaguer_id']=UserModel::getTokenId();//登录人的ID
+        $type   = input('type');        //1是同意 2是拒绝
+        if ($type==1){
+            Db::startTrans();
+            try{
+                $data['create_time']=time();
+                HomeLeaguerModel::insert($data);
+                HomeLeaguerInviteModel::where('home_id='.$data['home_id']." and leaguer_id=".$data['leaguer_id'])->delete();
+            Db::commit();
+                echo api_return_json(0,'加入成功');
+            }catch (\Exception $e){
+                Db::rollback();
+                echo api_return_json(1,$e->getMessage());
             }
-        }catch (\Exception $e){
-            echo api_return_json(1,$e->getMessage());
-        }
-        echo api_return_json(0,$home);
-    }
-//
-    //家庭成员列表
-    public function getHomeMember()
-    {
-        $home_id=input('home_id');
-        if ($home_id==''){
-            echo api_return_json(1,'家庭ID不能为空');
-        }
-        try{
-            $data=HomeLeaguerModel::alias('hl')->where('home_id='.$home_id)->field('hl.*,su.username')
-                ->join('smart_user su','hl.leaguer_id=su.user_id','left')
-                ->select();
-        }catch (\Exception $e){
-            echo api_return_json(1,$e->getMessage());
-        }
-        echo api_return_json(0,$data);
-
-    }
-
-    //给成员分配权限
-    public function allotAuth()
-    {
-        $auth_i           =   input('auth_i');      //邀请人的权限
-        $auth_h           =   input('auth_h');      //是能家居的使用权限
-        $leaguer_id     =   input('leaguer_id');    //成员ID
-
-        if ($auth_i=='' || $leaguer_id==''){
-            echo api_return_json(1,"成员ID或权限不能为空");
-        }
-
-        $data['auth']=$auth_i.",".$auth_h;
-        $info=HomeLeaguerModel::where('leaguer_id='.$leaguer_id)->update($data);
-        if ($info!==false){
-            echo api_return_json(0,"修改成功");
         }else{
-            echo api_return_json(1,"修改失败");
+            try{
+                HomeLeaguerInviteModel::where('home_id='.$data['home_id']." and leaguer_id=".$data['leaguer_id'])->delete();
+                echo api_return_json(0,'操作成功');
+            }catch(\Exception $e){
+                echo api_return_json(1,$e->getMessage());
+            }
         }
     }
+
+    //删除成员
+    function deleteMember()
+    {
+        $data['home_id'] =input('home_id');//家庭 ID
+        $data['leaguer_id']=input('leaguer_id');//成员ID
+
+        $info=HomeLeaguerModel::where("home_id=".$data['home_id']." and leaguer_id=".$data['leaguer_id'])->delete();
+        if ($info!==false){
+            echo api_return_json(0,'操作成功');
+        }else{
+            echo api_return_json(1,'操作失败');
+        }
+    }
+
+//    //家庭列表
+//    public function getHomeInfo()
+//    {
+//        $token=UserModel::getToken();
+//
+//        try{
+//            $data=UserModel::where("token='".$token."'")->find();
+//            $home=HomeModel::where('creater_id='.$data['user_id'])->select();
+//            $count=count($home);
+//            for ($i=0;$i<$count;$i++){
+//                $home[$i]['tag']=HomeDeviceProductModel::where('home_id='.$home[$i]['home_id'])->column('tag');
+//            }
+//        }catch (\Exception $e){
+//            echo api_return_json(1,$e->getMessage());
+//        }
+//        echo api_return_json(0,$home);
+//    }
+//
+//    //家庭成员列表
+//    public function getHomeMember()
+//    {
+//        $home_id=input('home_id');
+//        if ($home_id==''){
+//            echo api_return_json(1,'家庭ID不能为空');
+//        }
+//        try{
+//            $data=HomeLeaguerModel::alias('hl')->where('home_id='.$home_id)->field('hl.*,su.username')
+//                ->join('smart_user su','hl.leaguer_id=su.user_id','left')
+//                ->select();
+//        }catch (\Exception $e){
+//            echo api_return_json(1,$e->getMessage());
+//        }
+//        echo api_return_json(0,$data);
+//    }
+//
+//    //给成员分配权限
+//    public function allotAuth()
+//    {
+//        $auth_i           =   input('auth_i');      //邀请人的权限
+//        $auth_h           =   input('auth_h');      //是能家居的使用权限
+//        $leaguer_id     =   input('leaguer_id');    //成员ID
+//
+//        if ($auth_i=='' || $leaguer_id==''){
+//            echo api_return_json(1,"成员ID或权限不能为空");
+//        }
+//
+//        $data['auth']=$auth_i.",".$auth_h;
+//        $info=HomeLeaguerModel::where('leaguer_id='.$leaguer_id)->update($data);
+//        if ($info!==false){
+//            echo api_return_json(0,"修改成功");
+//        }else{
+//            echo api_return_json(1,"修改失败");
+//        }
+//    }
 
 
 
