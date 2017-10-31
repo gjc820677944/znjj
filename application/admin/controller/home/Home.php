@@ -31,6 +31,7 @@ class Home extends Base
             'input' => $input,
             'create_url' => url('create'),
         ];
+
         return $this->fetch('', $data);
 
     }
