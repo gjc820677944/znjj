@@ -96,10 +96,10 @@ class Home extends Base
         if($home_id <= 0){
             api_return_json(311, '家庭ID错误');
         }
-        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, hu.wallpaper, hu.create_time";
+        $field = "h.home_id, h.home_name, h.creater_id, hu.username creater_name, h.wallpaper, h.create_time";
         $home = HomeModel::alias("h")->field($field)
             ->join("user hu", "hu.user_id = h.creater_id")
-            ->where("h.home_id", $home_id)->select();
+            ->where("h.home_id", $home_id)->find();
         if(empty($home)){
             api_return_json(312, "无法查询到相关家庭");
         }
@@ -112,8 +112,14 @@ class Home extends Base
         }
         $home['tags'] = HomeDeviceProductModel::getTags($home['home_id']);
 
-        $field = "l.leaguer_id, lu.username l.leaguer_name, l.remark, l.create_time";
-        $leaguers = HomeLeaguerModel::alias("l")->field($field)->select();
+        $field = "l.leaguer_id, lu.username leaguer_name, lu.avatar, l.remark, l.create_time";
+        $leaguers = HomeLeaguerModel::alias("l")->field($field)
+            ->join("user lu", "lu.user_id = l.leaguer_id", "left")
+            ->where("home_id", $home_id)->order("create_time desc")->select();
+        foreach ($leaguers as $k=>$v){
+            $v['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
+            $leaguers[$k] = $v;
+        }
         $home['leaguers'] = $leaguers;
         api_return_json(0, $home);
     }
@@ -156,12 +162,15 @@ class Home extends Base
         if(empty($home_id)){
             api_return_json(331, "家庭ID错误");
         }
+        if(empty($leaguer_id)){
+            api_return_json(332, "新创建人ID错误");
+        }
 
         if(!HomeModel::checkCreater($home_id, $this->user_id)){
             api_return_json(333, "非家庭创建人，无权限修改家庭信息");
         }
         if($leaguer_id === $this->user_id){
-            api_return_json(334, "新家庭创建人ID不能喝就家庭创建相同");
+            api_return_json(334, "新创建人ID不能和旧创建人相同");
         }
 
         $home_leaguer_ids = HomeLeaguerModel::where("home_id", $home_id)->column('leaguer_id');
@@ -173,10 +182,12 @@ class Home extends Base
         $result = HomeModel::update(['home_id'=>$home_id, 'creater_id'=>$leaguer_id]);
         //修改权限
         HomeLeaguerModel::update([
+            'home_id'=>$home_id,
             'leaguer_id'=>$leaguer_id,
             'auth'=>HomeLeaguerModel::makeAuth(['Y', 'Y'])
         ]);
         HomeLeaguerModel::update([
+            'home_id'=>$home_id,
             'leaguer_id'=>$this->user_id,
             'auth'=>HomeLeaguerModel::makeAuth(['N', 'N'])
         ]);

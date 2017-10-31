@@ -1,6 +1,7 @@
 <?php
 namespace app\common\model\home;
 
+use filehelper\FileHelper;
 use think\Model;
 
 class HomeModel extends Model
@@ -29,7 +30,7 @@ class HomeModel extends Model
      */
     public static function rmWallpaperByid($id){
         $vo = HomeModel::field("wallpaper")->find($id);
-        if($vo && $vo['avatar']){
+        if($vo && $vo['wallpaper']){
             FileHelper::helper()->unlink($vo['wallpaper']);
         }
     }
@@ -41,14 +42,17 @@ class HomeModel extends Model
      */
     public static function remove(int $home_id){
         $model = new HomeModel();
+        $model->startTrans();
         $res1 = HomeModel::destroy($home_id);
         $res2 = HomeLeaguerModel::where("home_id", $home_id)->delete();
         $res3 = HomeLeaguerInviteModel::where("home_id", $home_id)->delete();
         $res4 = HomeDeviceProductModel::where("home_id", $home_id)->delete();
-        if($res1 && $res2 && $res3 && $res4){
+        if($res1 && $res2){
+            $model->commit();
             return true;
         }
         else{
+            $model->rollback();
             return false;
         }
     }
@@ -60,7 +64,7 @@ class HomeModel extends Model
      */
     public static function checkCreater($home_id, $user_id){
         $creater_id = HomeModel::where("home_id", $home_id)->value("creater_id");
-        if(creater_id === $user_id){
+        if($creater_id === $user_id){
             return true;
         }
         else{

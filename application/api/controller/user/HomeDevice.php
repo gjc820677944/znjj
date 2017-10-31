@@ -10,16 +10,20 @@ class HomeDevice extends Base
 {
     //获取家庭设备列表
     public function index(){
-        $input = (int)$this->requset->param();
+        $input = $this->requset->param();
         if(empty($input['home_id'])){
             api_return_json(361, "家庭ID不能为空");
         }
         $home_id = (int)$input['home_id'];
         $model = new HomeDeviceProductModel();
-        $model->where("home_id", $home_id);
+        $model->where("p.home_id", $home_id);
+        if(isset($input['is_gateway']) && $input['is_gateway'] !== ''){
+            $is_gateway = (int)$input['is_gateway'];
+            $model->where("p.is_gateway", $is_gateway);
+        }
         if(!empty($input['tag'])){
             $tag = trim($input['tag']);
-            $model->where("tag", $tag);
+            $model->where("p.tag", $tag);
         }
         $field = "p.*, m.model_name, m.model_number, m.model_cover, m.protocol";
         $list = $model->alias("p")->field($field)
@@ -48,6 +52,12 @@ class HomeDevice extends Base
         if($model_id <= 0){
             api_return_json(363, "设备编号错误，无法查询到相关设备");
         }
+
+        $count = HomeDeviceProductModel::where("home_id", $home_id)
+            ->where("serial_number", $serial_number)->count();
+        if($count > 0){
+            api_return_json(364, "该编号设备已存在，无法再次绑定");
+        }
         $model_data = DeviceModelModel::field("is_gateway")->find($model_id);
         $data = [
             'home_id' => $home_id,
@@ -61,7 +71,7 @@ class HomeDevice extends Base
             api_return_json(0);
         }
         else{
-            api_return_json(363, "绑定失败，请重新尝试");
+            api_return_json(365, "绑定失败，请重新尝试");
         }
     }
 
@@ -71,19 +81,19 @@ class HomeDevice extends Base
         if(empty($input['product_id'])){
             api_return_json(371, "产品ID不能为空");
         }
-        if(empty($input['tag'])){
-            api_return_json(372, "产品标签不能为空");
-        }
         $data = [
             'product_id' => trim($input['product_id']),
-            'tag' => trim($input['tag']),
         ];
+        if(!empty($data['tag'])){
+            $data['tag'] = trim($input['tag']);
+        }
+
         $result = HomeDeviceProductModel::update($data);
         if($result){
             api_return_json(0);
         }
         else{
-            api_return_json(363, "更新失败，请重新尝试");
+            api_return_json(373, "更新失败，请重新尝试");
         }
     }
 
