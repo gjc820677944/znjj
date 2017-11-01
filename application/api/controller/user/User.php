@@ -165,11 +165,12 @@ class User extends  Father
             echo api_return_json(105, "openid或access_token不能为空");
         }
 
+
         //获取用户微信息
 //        $token="eMFmfYsbaqAoqbfj8XVPZiJ0z70o_TIYNHf3bkK2TmCToO_2Liy6wA-M0HXaV7dISy1ItP9OcjuO3ApUTjdDzla6UICZgzb4mmWpB-dpxh1lXZWkxUkOFqY_QGJd3uw3JTWiAJAVFI";
 //        $wx_openid="orryGwi9BZp8GQQMWpvxl-g_KEkI";
 //        $wx_unionid="";
-        $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $access_token . "&openid=" . $wx_openid . "&lang=zh_CN ";
+        $url = "https://api.weixin.qq.com/sns/userinfo?access_token=" . $access_token . "&openid=" . $wx_openid . "&lang=zh_CN ";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -178,6 +179,7 @@ class User extends  Father
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $output = curl_exec($ch);
         $output = json_decode($output, true);
+        var_dump($output);exit;
         curl_close($ch);
         //下载微信图片保存到本地
         $info = $user->saveWeixinInfo($output, $wx_openid, $wx_unionid, $output['nickname']);

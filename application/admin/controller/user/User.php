@@ -6,7 +6,9 @@ use app\common\model\home\HomeDeviceProductModel;
 use app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\home\HomeLeaguerModel;
 use app\common\model\home\HomeModel;
+use app\common\model\user\UserLogsModel;
 use app\common\model\user\UserModel;
+use app\common\model\user\UserWeixinModel;
 use think\Request;
 use filehelper\FileHelper;
 use think\Db;
@@ -165,10 +167,10 @@ class User extends Base
             HomeLeaguerModel::where('leaguer_id='.$user_id)->delete();
 
             //删除微信关联
-
+            UserWeixinModel::where('user_id='.$user_id)->delete();
 
             //用户日志
-
+            UserLogsModel::where('user_id='.$user_id)->delete();
 
             Db::commit();
             api_return_json(0, "删除成功");
