@@ -59,6 +59,9 @@ class DeviceModelModel extends Model
      * @return int 为0时表示未查询到相关的模型ID
      */
     public static function getIdBySN($serial_number, $where = null){
+        if($serial_number === ''){
+            return 0;
+        }
         $model = new DeviceModelModel();
         if($where !== null){
             $model->where($where);

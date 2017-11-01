@@ -17,16 +17,16 @@ class Home extends Base
         if(!isset($input['home_name']) || $input['home_name'] === ''){
             api_return_json(301, "家庭名字不能为空");
         }
-        if(!isset($input['serial_number']) || $input['serial_number'] === ''){
-            api_return_json(302, "网关设备编号不能为空");
-        }
         $home_name = trim($input['home_name']);
-        $serial_number = trim($input['serial_number']);
+        if(!empty($input['serial_number'])){
+            $serial_number = trim($input['serial_number']);
+        }
+        else{
+            $serial_number = '';
+        }
+
         $where = "is_gateway = 1 and status = 1";
         $model_id = DeviceModelModel::getIdBySN($serial_number, $where);
-        if($model_id <= 0){
-            api_return_json(303, "设备编号错误，查询关联模型失败");
-        }
 
         //添加房间与家庭
         $model = new HomeModel();
@@ -41,14 +41,17 @@ class Home extends Base
             $model->rollback();
             api_return_json(304, "房间创建失败，请重新尝试");
         }
-        //插入网关设备
-        $product_data = [
-            'home_id' => $home->home_id,
-            'serial_number' => $serial_number,
-            'model_id' => $model_id,
-            'is_gateway' => 1,
-        ];
-        $product = HomeDeviceProductModel::create($product_data);
+        if($model_id > 0){
+            //插入网关设备
+            $product_data = [
+                'home_id' => $home->home_id,
+                'serial_number' => $serial_number,
+                'model_id' => $model_id,
+                'is_gateway' => 1,
+            ];
+            $product = HomeDeviceProductModel::create($product_data);
+        }
+
         if(empty($home)){
             $model->rollback();
             api_return_json(305, "网关创建失败，请重新尝试");
