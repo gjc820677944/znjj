@@ -43,7 +43,8 @@ class UserModel extends Model
 
             if ($info!=false){
                 $arr['token']=$data['token'];
-                $arr['username']=$info['username']===null?'':$info['username'];
+                $arr['username']= $data['username'];
+                $arr['invite']=array();
                 return $arr;
             }else{
                 return 0;
