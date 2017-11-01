@@ -179,7 +179,7 @@ class User extends  Father
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $output = curl_exec($ch);
         $output = json_decode($output, true);
-        var_dump($output);exit;
+
         curl_close($ch);
         //下载微信图片保存到本地
         $info = $user->saveWeixinInfo($output, $wx_openid, $wx_unionid, $output['nickname']);
