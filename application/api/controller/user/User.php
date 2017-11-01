@@ -150,7 +150,7 @@ class User extends  Father
         if ($info === false) {
             echo api_return_json(125, "头像修改失败，请重新尝试");
         } else {
-            echo api_return_json(0, "修改成功");
+            echo api_return_json(0,  $data);
         }
     }
 

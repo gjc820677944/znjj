@@ -68,6 +68,7 @@ class User extends Base
                 ->find();
             $data['avatar']="/".$data['avatar'];
         }
+
         $data = [
             'data' => $data,
             'post_url' => url('save'),
