@@ -56,6 +56,11 @@ class UserModel extends Model
 
             $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
             $username=UserModel::where("mobile='".$mobile."'")->find();  //用户登录
+
+            if ($username['status']==4){
+                echo api_return_json(133,'该账号已被禁用');
+            }
+
             UserLogsModel::addLog($username['user_id'],1,$ip,time(),"");
             if ($info!==false){
                 $arr['token']=$data['token'];
@@ -138,12 +143,11 @@ class UserModel extends Model
                 Db::name('user_weixin')->insert($data);
                 Db::commit();
                 return Db::name('user_weixin')->alias('uw')->where($where)
-                            ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
+                            ->field("u.user_id,u.username,u.avatar,u.token")
                             ->join('user u','u.user_id=uw.user_id','left')
                             ->find();
             }catch (\Exception $e){
                 Db::rollback();
-                echo $e->getMessage();exit;
                 return 0;
             }
 
@@ -162,7 +166,8 @@ class UserModel extends Model
      */
     public static function getToken()
     {
-        $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
+        $info = Request::instance()->header();  //获取请求头信息
+        $_token = isset($info['token']) ? $info['token'] : "";
         $_token = empty($_token) ? input("post.token") : $_token;
         $_token = empty($_token) ? input("get.token") : $_token;
         $_token = empty($_token) ? "" : $_token;

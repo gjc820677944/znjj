@@ -9,10 +9,11 @@ class Father
     {
 
         $info = Request::instance()->header();  //获取请求头信息
-
         $url=$_SERVER['REQUEST_URI'];
         $url=explode('/',$url);
-        if ($url[count($url)-1]!='login'){
+
+        $array=array('getWeixinInfo','login');//$url[count($url)-1]
+        if (!in_array($url[count($url)-1],$array)){
             //获取token
             $_token = isset($info['token']) ? $info['token'] : "";
             $_token = empty($_token) ? input("post.token") : $_token;

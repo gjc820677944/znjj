@@ -51,6 +51,7 @@
                             <td class="text-center">注册IP</td>
                             <td class="text-center">注册时间</td>
                             <td class="text-center">状态</td>
+                            <td class="text-center">创建智能家</td>
                             <td class="text-center">操作</td>
                         </tr>
                         </thead>
@@ -84,11 +85,15 @@
                                 禁用
                                 {/if}
                             </td>
+                            <td class="text-center">{$vo.home}</td>
                             <!--<td class="text-center"><a href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>|<a>删除</a></td>-->
                             <td class="text-center">
                                 <a class="btn btn-primary btn-sm" href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>
+                            {if condition="$vo.home > 0"}
+                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="alert('不能删除该用户')">删除</a>
+                                {else/}
                                 <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('deleteUserInfo', ['user_id'=>$vo.user_id])}', '您确认删除该用户吗？')">删除</a>
-
+                            {/if}
                             </td>
                         </tr>
                         {/volist}
