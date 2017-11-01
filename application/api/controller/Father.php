@@ -2,15 +2,19 @@
 namespace app\api\controller;
 use app\common\model\user\UserModel;
 use think\Db;
+use think\Request;
 class Father
 {
     function __construct()
     {
+
+        $info = Request::instance()->header();  //获取请求头信息
+
         $url=$_SERVER['REQUEST_URI'];
         $url=explode('/',$url);
         if ($url[count($url)-1]!='login'){
             //获取token
-            $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
+            $_token = isset($info['token']) ? $info['token'] : "";
             $_token = empty($_token) ? input("post.token") : $_token;
             $_token = empty($_token) ? input("get.token") : $_token;
             $_token = empty($_token) ? "" : $_token;

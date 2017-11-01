@@ -37,9 +37,6 @@ class User extends  Father
     function getv_code()
     {
         $mobile = input('mobile');  //手机号
-        if ($mobile == '') {
-            echo api_return_json(122, '手机号不能为空');
-        }
         if (!preg_match("/^1[34578]{1}\d{9}$/", $mobile)) {
             echo api_return_json(121, '手机号格式不对');
         }
@@ -63,9 +60,9 @@ class User extends  Father
             echo api_return_json(121, '手机号格式不对');
         }
 
-//        if ($v_code==''){
-//            echo api_return_json(1,'验证码不能为空');
-//        }
+        if ($v_code!='123456'){
+            echo api_return_json(102,'验证码错误');
+        }
 
         $info = $user->updateMobile($mobile,$token);
         if ($info === false) {
