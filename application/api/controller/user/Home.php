@@ -41,6 +41,7 @@ class Home extends Base
             $model->rollback();
             api_return_json(304, "房间创建失败，请重新尝试");
         }
+
         if($model_id > 0){
             //插入网关设备
             $product_data = [
@@ -50,12 +51,12 @@ class Home extends Base
                 'is_gateway' => 1,
             ];
             $product = HomeDeviceProductModel::create($product_data);
+            if(empty($product)){
+                $model->rollback();
+                api_return_json(305, "网关创建失败，请重新尝试");
+            }
         }
 
-        if(empty($home)){
-            $model->rollback();
-            api_return_json(305, "网关创建失败，请重新尝试");
-        }
         //插入家庭成员（创建人）
         $leaguer_data = [
             'home_id' => $home->home_id,
