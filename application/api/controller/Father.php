@@ -9,7 +9,7 @@ class Father
         $url=$_SERVER['REQUEST_URI'];
         $url=explode('/',$url);
         if ($url[count($url)-1]!='login'){
-            //判断管理员是否登录
+            //获取token
             $_token = isset($_SERVER["HTTP_TOKENA"]) ? $_SERVER["HTTP_TOKENA"] : "";
             $_token = empty($_token) ? input("post.token") : $_token;
             $_token = empty($_token) ? input("get.token") : $_token;

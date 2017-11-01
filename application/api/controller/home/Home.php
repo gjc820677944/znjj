@@ -35,6 +35,7 @@ class Home extends Father
             echo api_return_json(1,'手机号不存在');
         }
 
+
         //判断邀请人是否有邀请他人的权限
         $leaguer_id=UserModel::where("token='".$token."'")->find();
 
