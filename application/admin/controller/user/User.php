@@ -2,6 +2,10 @@
 namespace app\admin\controller\user;
 use app\admin\controller\Base;
 use app\common\model\admin\AdminModel;
+use app\common\model\home\HomeDeviceProductModel;
+use app\common\model\home\HomeLeaguerInviteModel;
+use app\common\model\home\HomeLeaguerModel;
+use app\common\model\home\HomeModel;
 use app\common\model\user\UserModel;
 use think\Request;
 use filehelper\FileHelper;
@@ -27,6 +31,7 @@ class User extends Base
         $list = $model->paginate(null);
         foreach ($list as $k=>$v){
             $v['avatar'] = "/".$v['avatar'];
+            $v['home']=HomeModel::where('creater_id='.$v['user_id'])->count();
             $list[$k] = $v;
         }
         $data = [
@@ -147,17 +152,32 @@ class User extends Base
 
     //删除用户
     function deleteUserInfo()
-    {
+    {   Db::startTrans();
+
         $input = $this->request->param();
         $user_id=$input['user_id'];
-        UserModel::rmAvatarByid($user_id);     //删除头像
-        $info=UserModel::where('user_id='.$user_id)->delete();
-        if ($info==false){
-            api_return_json(1, "删除失败");
-        }else{
 
+        try{
+            UserModel::rmAvatarByid($user_id);     //删除头像
+            $info=UserModel::where('user_id='.$user_id)->delete();
+
+            //删除被朋友邀请的家的自己
+            HomeLeaguerModel::where('leaguer_id='.$user_id)->delete();
+
+            //删除微信关联
+
+
+            //用户日志
+
+
+            Db::commit();
             api_return_json(0, "删除成功");
+        }catch (\Exception $e){
+            Db::rollback();
+            api_return_json(1, $e->getMessage());
         }
+
+
     }
 }
 

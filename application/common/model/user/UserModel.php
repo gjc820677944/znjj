@@ -56,6 +56,11 @@ class UserModel extends Model
 
             $info= UserModel::where("mobile='".$mobile."'")->update($data);  //用户登录
             $username=UserModel::where("mobile='".$mobile."'")->find();  //用户登录
+
+            if ($username['status']==4){
+                echo api_return_json(133,'该账号已被禁用');
+            }
+
             UserLogsModel::addLog($username['user_id'],1,$ip,time(),"");
             if ($info!==false){
                 $arr['token']=$data['token'];

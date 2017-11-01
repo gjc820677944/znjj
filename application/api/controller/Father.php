@@ -12,7 +12,7 @@ class Father
 
         $url=$_SERVER['REQUEST_URI'];
         $url=explode('/',$url);
-        if ($url[count($url)-1]!='login'){
+        if ($url[count($url)-1]!='login' || $url[count($url)-1]!='getWeixinInfo'){
             //获取token
             $_token = isset($info['token']) ? $info['token'] : "";
             $_token = empty($_token) ? input("post.token") : $_token;
