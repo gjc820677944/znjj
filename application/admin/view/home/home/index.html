@@ -6,7 +6,7 @@
         <small>The administrator list</small>
     </h1>
     <ol class="breadcrumb">
-        {include file="admin/breadcrumb"}
+        {include file="home/home/breadcrumb"}
         <li class="active"></li>
     </ol>
 </section>
@@ -61,7 +61,7 @@
 
                             <td class="text-center">
                                 <a class="btn btn-primary btn-sm" href="{:url('create',array('home_id'=>$vo.home_id))}">修改&详情</a>
-
+                                <a class="btn btn-primary btn-sm" href="{:url('home.homeDeviceProduct/index',array('home_id'=>$vo.home_id))}">设备列表</a>
                             </td>
                         </tr>
                         {/volist}

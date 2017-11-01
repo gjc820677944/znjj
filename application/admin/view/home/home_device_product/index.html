@@ -1,0 +1,116 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        "{$home.home_name}"的家庭设备列表
+    </h1>
+    <ol class="breadcrumb">
+        {include file="home/home_device_product/breadcrumb"}
+        <li class="active"></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="pull-left">
+                        <form class="form-inline" role="form" action="{:url('index')}" method="get">
+                            <div class="form-group">
+                                <label>关键字</label>
+                                <input type="text" class="form-control" name="keywords" placeholder="设备编号" value="<?php echo !empty($input['keywords']) ? $input['keywords'] : ''; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>家庭ID</label>
+                                <input type="text" class="form-control" name="home_id" placeholder="" value="<?php echo !empty($input['home_id']) ? $input['home_id'] : ''; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>模型ID</label>
+                                <input type="text" class="form-control" name="model_id" placeholder="" value="<?php echo !empty($input['model_id']) ? $input['model_id'] : ''; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>网关设备</label>
+                                <select class="form-control" name="is_gateway">
+                                    <option value="">全部</option>
+                                    <option value="1" <?php echo isset($input['is_gateway']) && $input['is_gateway'] !== '' && (int)$input['is_gateway'] === 1 ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="0" <?php echo isset($input['is_gateway']) && $input['is_gateway'] !== '' && (int)$input['is_gateway'] === 0 ? 'selected' : ''; ?>>No</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">查询</button>
+                        </form>
+                    </div>
+                    <div class="pull-right">
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td class="text-center">设备ID</td>
+                                <td class="text-center">设备编号</td>
+                                <td class="text-center">绑定家庭</td>
+                                <td class="text-center">标签</td>
+                                <td class="text-center">关联模型</td>
+                                <td class="text-center">模型图片</td>
+                                <td class="text-center">通讯协议</td>
+                                <td class="text-center">是否为网关设备</td>
+                                <td class="text-center">加入时间</td>
+                                <td class="text-center">操作</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist id="vo" name="list"}
+                            <tr>
+                                <td class="text-center">{$vo.product_id}</td>
+                                <td class="text-center">{$vo.serial_number}</td>
+                                <td class="text-center">
+                                    <a href="{:url('index', ['home_id'=>$vo['home_id']])}">{$vo.home_name}</a>
+                                </td>
+                                <td class="text-center">
+                                    {$vo.tag}
+                                </td>
+                                <td class="text-center">
+                                    <a href="{:url('index', ['model_id'=>$vo['model_id']])}">{$vo.model_name}</a>
+                                </td>
+                                <td>
+                                    {if condition="$vo.model_cover neq ''"}
+                                    <img src="{$vo.model_cover}" class="img-read-min">
+                                    {/if}
+                                </td>
+                                <td class="text-center">{$vo.protocol_name}</td>
+                                <td class="text-center">
+                                    {if condition="$vo.is_gateway eq 1"}
+                                        Yes
+                                    {else}
+                                        No
+                                    {/if}
+                                </td>
+                                <td class="text-center">
+                                    {:date("Y-m-d H:i:s", $vo['create_time'])}
+                                </td>
+                                <td class="text-center">
+                                    <a href="javascript:;" class="btn btn-sm btn-danger" onclick="ajaxConfirm('{:url('delete', ['id'=>$vo['product_id']])}', '您确认删除该分类吗？')">删除</a>
+
+                                </td>
+                            </tr>
+                            {/volist}
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        {if condition="$page neq ''"}
+                        <ul class="pagination">
+                            {$page}
+                        </ul>
+                        {/if}
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+{/block}

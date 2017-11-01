@@ -105,4 +105,11 @@ class AdminModel extends Model
         }
         return $admin;
     }
+
+    /**
+     * 获取当前登录的管理员ID
+     */
+    public static function getLogignAdId(){
+        return (int)session("ad_id");
+    }
 }
