@@ -172,6 +172,9 @@ class User extends Base
             //用户日志
             UserLogsModel::where('user_id='.$user_id)->delete();
 
+            //邀请信息里面的也删掉
+            HomeLeaguerInviteModel::where('leaguer_id'.$user_id)->delete();
+
             Db::commit();
             api_return_json(0, "删除成功");
         }catch (\Exception $e){
