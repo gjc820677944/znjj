@@ -143,12 +143,11 @@ class UserModel extends Model
                 Db::name('user_weixin')->insert($data);
                 Db::commit();
                 return Db::name('user_weixin')->alias('uw')->where($where)
-                            ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
+                            ->field("u.user_id,u.username,u.avatar,u.token")
                             ->join('user u','u.user_id=uw.user_id','left')
                             ->find();
             }catch (\Exception $e){
                 Db::rollback();
-                echo $e->getMessage();exit;
                 return 0;
             }
 
