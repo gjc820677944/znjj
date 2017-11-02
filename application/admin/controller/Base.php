@@ -14,7 +14,7 @@ class Base extends Controller
     protected function _initialize()
     {
         parent::_initialize();
-        $ad_id = session("ad_id");
+        $ad_id = AdminModel::getLogignAdId();
         if(empty($ad_id)){
             return $this->redirect(url("login/index"));
         }

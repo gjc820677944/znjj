@@ -11,9 +11,11 @@ class AdminLogsModel extends Model
 
     public static $type_texts = [
         1 => '登录',
+        2 => '管理员操作',
     ];
     public static $detail_texts = [
-        1 => '管理员{%ad_account%}[id:{%ad_id%}]登录了控制台',
+        1 => '管理员{%ad_account%}[id: {%ad_id%}]登录了控制台',
+        2 => '管理员{%ad_account%}[id: {%ad_id%}]{%operation%}',
     ];
 
     public static function log($ad_id, $log_type, $log_data = null){
@@ -56,6 +58,13 @@ class AdminLogsModel extends Model
         $log = self::mergeLogData($log);
         $log_type = $log['log_type'];
         $template_str = self::$detail_texts[$log_type];
+        if($log_type === 2){
+            $operation_str = AdminOperationLogsModel::logDetail($log);
+            if($operation_str === ''){
+                return '';
+            }
+            $template_str .= $operation_str;
+        }
         $log_detail = self::makeDetail($template_str, $log);
         return $log_detail;
     }
@@ -65,7 +74,7 @@ class AdminLogsModel extends Model
      * @param $template_str
      * @param $data
      */
-    protected static function makeDetail($template_str, $data){
+    public static function makeDetail($template_str, $data){
         preg_match_all('/{%([a-zA-Z0-9_]+)%}/', $template_str, $matchs);
         $keys = $matchs[1];
         if(empty($keys)){

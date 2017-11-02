@@ -115,7 +115,8 @@ class AdminAuth{
                 $user = $this->getUserInfo($uid);
                 $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $r['condition']);
                 //dump($command);//debug
-                @(eval('$condition=(' . $command . ');'));
+                //@(eval('$condition=(' . $command . ');'));
+                $condition = ($command);
                 if ($condition) {
                     $authList[] = $r['rule_name'];
                 }

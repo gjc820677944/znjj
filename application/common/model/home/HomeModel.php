@@ -73,6 +73,39 @@ class HomeModel extends Model
     }
 
 
-
+    /**
+     * 创建家庭
+     * @param int $creater_id 创建人ID
+     * @param string $home_name 房间名称
+     */
+    public static function createHome($creater_id, $home_name){
+        //添加房间与家庭
+        $model = new HomeModel();
+        $model->startTrans();
+        //插入房间
+        $home_data = [
+            'creater_id' => $creater_id,
+            'home_name' => $home_name,
+        ];
+        $home = HomeModel::create($home_data);
+        if(empty($home)){
+            $model->rollback();
+            return false;
+        }
+        //插入家庭成员（创建人）
+        $leaguer_data = [
+            'home_id' => $home->home_id,
+            'leaguer_id' => $creater_id,
+            'remark' => '',
+            'auth' => HomeLeaguerModel::makeAuth(['Y', 'Y']),
+        ];
+        $leaguer = HomeLeaguerModel::create($leaguer_data);
+        if(empty($leaguer)){
+            $model->rollback();
+            return false;
+        }
+        $model->commit();
+        return true;
+    }
 
 }

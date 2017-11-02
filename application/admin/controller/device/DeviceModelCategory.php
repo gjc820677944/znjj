@@ -3,6 +3,7 @@
 namespace app\admin\controller\device;
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\device\DeviceModelCategoryModel;
 use app\common\model\device\DeviceModelModel;
 
@@ -46,6 +47,10 @@ class DeviceModelCategory extends Base
         //保存分类信息
         $result = DeviceModelCategoryModel::create($input);
         if($result){
+            AdminOperationLogsModel::log(
+                'create',
+                ['cate_id'=>$result->cate_id]
+            );
             $this->success("创建成功", $referer_url);
         }
         else{
@@ -83,6 +88,10 @@ class DeviceModelCategory extends Base
         //更新分类信息
         $result = DeviceModelCategoryModel::update($input);
         if($result){
+            AdminOperationLogsModel::log(
+                'update',
+                ['cate_id'=>$result->cate_id]
+            );
             $this->success("更新成功", $referer_url);
         }
         else{
@@ -99,6 +108,10 @@ class DeviceModelCategory extends Base
 
         $result = DeviceModelCategoryModel::destroy($id);
         if($result){
+            AdminOperationLogsModel::log(
+                'delete',
+                ['cate_id'=>$id]
+            );
             api_return_json(0, "删除成功");
         }
         else{

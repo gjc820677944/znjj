@@ -29,16 +29,8 @@ class Home extends Base
         $model_id = DeviceModelModel::getIdBySN($serial_number, $where);
 
         //添加房间与家庭
-        $model = new HomeModel();
-        $model->startTrans();
-        //插入房间
-        $home_data = [
-            'creater_id' => $this->user_id,
-            'home_name' => $home_name,
-        ];
-        $home = HomeModel::create($home_data);
-        if(empty($home)){
-            $model->rollback();
+        $result = HomeModel::createHome($this->user_id, $home_name);
+        if(!$result){
             api_return_json(304, "房间创建失败，请重新尝试");
         }
 
@@ -51,25 +43,7 @@ class Home extends Base
                 'is_gateway' => 1,
             ];
             $product = HomeDeviceProductModel::create($product_data);
-            if(empty($product)){
-                $model->rollback();
-                api_return_json(305, "网关创建失败，请重新尝试");
-            }
         }
-
-        //插入家庭成员（创建人）
-        $leaguer_data = [
-            'home_id' => $home->home_id,
-            'leaguer_id' => $this->user_id,
-            'remark' => '',
-            'auth' => HomeLeaguerModel::makeAuth(['Y', 'Y']),
-        ];
-        $leaguer = HomeLeaguerModel::create($leaguer_data);
-        if(empty($leaguer)){
-            $model->rollback();
-            api_return_json(306, "家庭创建人添加失败，请重新尝试");
-        }
-        $model->commit();
         api_return_json(0);
     }
 
