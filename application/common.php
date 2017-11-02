@@ -158,31 +158,89 @@ function http($url, $params = [], $method = 'GET', $header = array(), $multi = f
  * @param $subject标题
  * @param $message消息主题
  */
-    function sendEmail($addressee,$subject,$message)
-    {
-        include ("../vendor/phpmailer/class.phpmailer.php");
-        $mail = new \PHPMailer();           //实例化PHPMailer对象
+function sendEmail($addressee,$subject,$message)
+{
+    include ("../vendor/phpmailer/class.phpmailer.php");
+    $mail = new \PHPMailer();           //实例化PHPMailer对象
 
-        $mail->IsSMTP();                    // 设定使用SMTP服务
-        $mail->CharSet ="UTF-8";    //编码s
-        $mail->SMTPDebug = 0;               // SMTP调试功能 0=关闭 1 = 错误和消息 2 = 消息
-        $mail->SMTPAuth = true;             // 启用 SMTP 验证功能
-        $mail->SMTPSecure = 'ssl';          // 使用安全协议
-        $mail->Host = "smtp.qq.com";      // SMTP 服务器
-        $mail->Port = 465;                  // SMTP服务器的端口号
-        $mail->Username = "820677944@qq.com";    // SMTP服务器用户名
-        $mail->Password = "olumlwjydtpcbbjj";     // SMTP服务器密码
-        $mail->SetFrom('820677944@qq.com', 'yzm');
-        $replyEmail = '';                   //留空则为发件人EMAIL
-        $replyName = '';                    //回复名称（留空则为发件人名称）
-        $mail->AddReplyTo($replyEmail, $replyName);
-        $mail->Subject = $subject;
-        $mail->MsgHTML($message);
-        $mail->AddAddress($addressee, 'jw');
-        return $mail->Send();
+    $mail->IsSMTP();                    // 设定使用SMTP服务
+    $mail->CharSet ="UTF-8";    //编码s
+    $mail->SMTPDebug = 0;               // SMTP调试功能 0=关闭 1 = 错误和消息 2 = 消息
+    $mail->SMTPAuth = true;             // 启用 SMTP 验证功能
+    $mail->SMTPSecure = 'ssl';          // 使用安全协议
+    $mail->Host = "smtp.qq.com";      // SMTP 服务器
+    $mail->Port = 465;                  // SMTP服务器的端口号
+    $mail->Username = "820677944@qq.com";    // SMTP服务器用户名
+    $mail->Password = "olumlwjydtpcbbjj";     // SMTP服务器密码
+    $mail->SetFrom('820677944@qq.com', 'yzm');
+    $replyEmail = '';                   //留空则为发件人EMAIL
+    $replyName = '';                    //回复名称（留空则为发件人名称）
+    $mail->AddReplyTo($replyEmail, $replyName);
+    $mail->Subject = $subject;
+    $mail->MsgHTML($message);
+    $mail->AddAddress($addressee, 'jw');
+    return $mail->Send();
 
+}
+
+
+/**
+ * 把返回的数据集转换成Tree
+ * @access public
+ * @param array $list 要转换的数据集
+ * @param string $selfkey 每条数据的标记字段
+ * @param string $parentkey 父数据标记字段
+ * @param string $child 子元素的存储字段
+ * @param mixed $root 根数据的值
+ * @return array
+ */
+function list_to_tree($list, $selfkey = 'id', $parentkey = 'parent_id', $child = '_child', $root = 0)
+{
+    // 创建Tree
+    $tree = array();
+    if (is_array($list)) {
+        // 创建基于主键的数组引用
+        $refer = array();
+        foreach ($list as $key => $data) {
+            $refer[$data[$selfkey]] =& $list[$key];
+        }
+        foreach ($list as $key => $data) {
+            // 判断是否存在parent
+            $parentid = $data[$parentkey];
+            if ($root == $parentid) {
+                $tree[] =& $list[$key];
+            } else {
+                if (isset($refer[$parentid])) {
+                    $parent =& $refer[$parentid];
+                    $parent[$child][] =& $list[$key];
+                }
+            }
+        }
     }
+    return $tree;
+}
 
+/**
+ * 将数据列表按父子顺序进行等级排序（一维数组）
+ * @param array $list 要排序的数据集
+ * @param string $selfkey 每条数据的标记字段
+ * @param string $parentkey 父数据标记字段
+ * @param mixed $root 根数据的值
+ * @param int $level 等级的初始值(参与排序的每条数据都会加上level字段，越小越靠前)
+ * @return array
+ */
+function list_to_levellist($list, $selfkey = 'id', $parentkey = 'parent_id', $root = 0, $level=0){
+    $listtree = array();
+    foreach ($list as $k => $v) {
+        if($v[$parentkey] == $root){
+            $v['level'] = $level;
+            $listtree[] = $v;
+            $temp = list_to_levellist($list, $selfkey, $parentkey, $v[$selfkey], $level+1);
+            $listtree = array_merge($listtree, $temp);
+        }
+    }
+    return $listtree;
+}
 
 
 

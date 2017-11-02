@@ -73,6 +73,13 @@ class HomeModel extends Model
     }
 
 
+    /**
+     * 创建家庭
+     * @param 用户ID $user_id 用户ID
+     * @param 房间名称 $home_name 用户房间
+     */
+    public static function createHome($user_id, $home_name){
 
+    }
 
 }

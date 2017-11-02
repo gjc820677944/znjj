@@ -15,64 +15,72 @@ class AdminOperationLogsModel extends Model
     ];
     protected static $operationTexts = [
         'Admin' => [
-            'default' => '{%action%}了管理员[id:{%ad_id%}]',
+            'default' => '{%action%}了管理员[id: {%ad_id%}]',
         ],
         'User' => [
-            'default' => '{%action%}了用户[id:{%user_id%}]',
+            'default' => '{%action%}了用户[id: {%user_id%}]',
         ],
         'Edition' => [
-            'default' => '{%action%}了APP版本记录[id:{%edtion_id%}]',
+            'default' => '{%action%}了APP版本记录[id: {%edtion_id%}]',
         ],
         'Home' => [
-            'default' => '{%action%}了用户家庭[id:{%home_id%}]',
+            'default' => '{%action%}了用户家庭[id: {%home_id%}]',
         ],
         'HomeLeaguer' => [
-            'default' => '{%action%}了家庭成员[Home ID:{%home_id%}, LeaguerID:{%leaguer_id%}]',
+            'default' => '{%action%}了家庭成员[Home id: {%home_id%}, Leaguerid: {%leaguer_id%}]',
         ],
         'HomeDeviceProduct' => [
-            'default' => '{%action%}了用户家庭设备[id:{%product_id%}]',
+            'default' => '{%action%}了用户家庭设备[id: {%product_id%}]',
         ],
         'DeviceModel' => [
-            'default' => '{%action%}了智能设备模型[id:{%model_id%}]',
+            'default' => '{%action%}了智能设备模型[id: {%model_id%}]',
         ],
         'DeviceModelCategory' => [
-            'default' => '{%action%}了智能设备模型分类[id:{%cate_id%}]',
+            'default' => '{%action%}了智能设备模型分类[id: {%cate_id%}]',
         ],
         'DeviceModelPoint' => [
-            'default' => '对智能设备{%action%}[id:{%model_id%}]了功能点[id:{%point_id%}]',
+            'default' => '对智能设备{%action%}[id: {%model_id%}]了功能点[id: {%point_id%}]',
         ],
         'DevicePoint' => [
-            'default' => '{%action%}了智能设备功能点[id:{%point_id%}]',
+            'default' => '{%action%}了智能设备功能点[id: {%point_id%}]',
         ],
         'DevicePointCategory' => [
-            'default' => '{%action%}了智能设备功能点分类[id:{%cate_id%}]',
+            'default' => '{%action%}了智能设备功能点分类[id: {%cate_id%}]',
         ],
 
         'Webconfig' => [
-            'default' => '{%action%}一项网站全局配置[id:{%cate_id%}]',
+            'default' => '{%action%}一项网站全局配置[id: {%cate_id%}]',
             'updateList' => '更新了网站全局配置',
         ],
     ];
 
     /**
      * 记录管理员的后台操作
-     * @param string $controller 操作控制器
      * @param string $action 操作 [create=>添加，update=>更新 delete=》删除]
      * @param mixed $params 参数集合
      * @return bool
      */
-    public static function log($controller, $action, $params = null){
+    public static function log($action, $params = null){
         $ad_id = AdminModel::getLogignAdId();
         $log_type = 2;
         $ad_account = AdminModel::where("ad_id = $ad_id")->value("ad_account");
         $request = Request::instance();
+        $controller = $request->controller();
+        if(count(explode('.', $controller)) >= 2){
+            $array = explode('.', $controller);
+            $controller = ucfirst($array[1]);
+        }
         $data = [
             'ad_id' => $ad_id,
             'ad_account' => $ad_account,
             'log_type' => $log_type,
             'log_ip' => $request->ip(),
             'log_time' => time(),
-            'log_data' => ['controller'=>$controller, 'action'=>$action, 'params'=>$params],
+            'log_data' => json_encode([
+                'controller'=>$controller,
+                'action'=>$action,
+                'params'=>$params,
+            ]),
         ];
         $result = AdminLogsModel::create($data);
         return $result ? true : false;
@@ -106,7 +114,7 @@ class AdminOperationLogsModel extends Model
             $params['action'] = $action_texts[$action];
         }
         $texts = $operation_texts[$controller];
-        $template = (isset($texts[$action]) ? $texts[$action] : $texts['default']);
-        return AdminLogsModel::makeDetail($template, $params);
+        $template_str = (isset($texts[$action]) ? $texts[$action] : $texts['default']);
+        return AdminLogsModel::makeDetail($template_str, $params);
     }
 }

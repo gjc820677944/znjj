@@ -48,7 +48,6 @@ class DeviceModelCategory extends Base
         $result = DeviceModelCategoryModel::create($input);
         if($result){
             AdminOperationLogsModel::log(
-                'DeviceModelCategory',
                 'create',
                 ['cate_id'=>$result->cate_id]
             );
@@ -90,7 +89,6 @@ class DeviceModelCategory extends Base
         $result = DeviceModelCategoryModel::update($input);
         if($result){
             AdminOperationLogsModel::log(
-                'DeviceModelCategory',
                 'update',
                 ['cate_id'=>$result->cate_id]
             );
@@ -111,8 +109,7 @@ class DeviceModelCategory extends Base
         $result = DeviceModelCategoryModel::destroy($id);
         if($result){
             AdminOperationLogsModel::log(
-                'DeviceModelCategory',
-                'update',
+                'delete',
                 ['cate_id'=>$id]
             );
             api_return_json(0, "删除成功");

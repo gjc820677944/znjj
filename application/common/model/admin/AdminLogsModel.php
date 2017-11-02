@@ -14,8 +14,8 @@ class AdminLogsModel extends Model
         2 => '管理员操作',
     ];
     public static $detail_texts = [
-        1 => '管理员{%ad_account%}[id:{%ad_id%}]登录了控制台',
-        2 => '管理员{%ad_account%}[id:{%ad_id%}]{%operation%}',
+        1 => '管理员{%ad_account%}[id: {%ad_id%}]登录了控制台',
+        2 => '管理员{%ad_account%}[id: {%ad_id%}]{%operation%}',
     ];
 
     public static function log($ad_id, $log_type, $log_data = null){
@@ -74,7 +74,7 @@ class AdminLogsModel extends Model
      * @param $template_str
      * @param $data
      */
-    protected static function makeDetail($template_str, $data){
+    public static function makeDetail($template_str, $data){
         preg_match_all('/{%([a-zA-Z0-9_]+)%}/', $template_str, $matchs);
         $keys = $matchs[1];
         if(empty($keys)){
