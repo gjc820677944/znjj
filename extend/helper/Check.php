@@ -28,7 +28,6 @@ class Check {
      * @return boolean
      */
     public static function isUrl($str) {
-
         if (!$str) {
             return false;
         }

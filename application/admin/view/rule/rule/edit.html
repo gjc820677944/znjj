@@ -1,0 +1,83 @@
+{extend name="common/base" /}
+{block name="content"}
+<section class="content-header">
+    <h1>
+        {if condition="$type==1"}
+        添加规则
+        <small>The administrator create</small>
+        {else}
+        更新规则
+        <small>The administrator edit</s
+            {/if}
+    </h1>
+    <ol class="breadcrumb">
+        {include file="admin/breadcrumb"}
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <form role="form" action="{:url('ruleInfo')}" method="post" enctype="multipart/form-data">
+                    <div class="box-body">
+                        <div class="form-group" style="display: none">
+                            <label>规则ID</label>
+                            <input type="text" name="rule_id" class="form-control" value="{$data.rule_id}">
+                        </div>
+                        <div class="form-group">
+                            <label>规则标识<span style="font-size: 2px">(user.user/index)</span></label>
+                            <input type="text" name="rule_name" class="form-control" value="{$data.rule_name}">
+                        </div>
+                        <div class="form-group">
+                            <label>规则名称</label>
+                            <input type="text" name="rule_title" class="form-control" value="{$data.rule_title}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>规则级别</label>
+                            <input type="text" name="level" class="form-control" value="{$data.level}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>上级规则ID</label>
+                            <!--<input type="text" name="parent_id" class="form-control" value="{$data.parent_id}">-->
+                            <select name="parent_id" id="select_k1" class="form-control">
+                                <option value="0">选择</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>规则状态</label>
+                            <div class="radio">
+                                <label class="radio-inline">
+                                    <input type="radio" name="status" value="1" <?php echo $data['status'] === 1 ? 'checked' : ''; ?>> 正常
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="status" value="0" <?php echo $data['status'] === 0 ? 'checked' : ''; ?>> 禁用
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input type="text" name="sort_by" class="form-control" value="{$data.sort_by}">
+                    </div>
+
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <input type="hidden" name="referer_url" value="{$referer_url}">
+                        <button type="submit" class="btn btn-primary">提交</button>
+                        <button type="reset" class="btn btn-primary ml-10">重置</button>
+                        <a class="btn btn-primary ml-10" href="{$referer_url}">Return</a>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <!-- /.row -->
+</section>
+{/block}

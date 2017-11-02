@@ -41,10 +41,13 @@ class UserModel extends Model
             $info= UserModel::insertGetId($data);        //注册用户
             UserLogsModel::addLog($info,1,$ip,time(),"");
 
+            //如果没有家庭有创建一个家庭
+
+            HomeModel::createHome($info, "默认家庭");
+
             if ($info!=false){
                 $arr['token']=$data['token'];
                 $arr['username']= $data['username'];
-                $arr['invite']=array();
                 return $arr;
             }else{
                 return 0;
@@ -65,13 +68,13 @@ class UserModel extends Model
             if ($info!==false){
                 $arr['token']=$data['token'];
                 $arr['username']=$username['username']==null?'':$username['username'];
-                $arr['invite']=HomeLeaguerInviteModel::where('leaguer_id='.$username['user_id'])->select();
                 return $arr;
             }else{
                 return 0;
             }
         }
     }
+
 
     //修改手机号
     public function updateMobile($mobile,$token)
@@ -141,6 +144,10 @@ class UserModel extends Model
                 UserLogsModel::addLog($user_id,1,$ip,time(),"");
                 $data['user_id']=$user_id;
                 Db::name('user_weixin')->insert($data);
+
+                //第一次登录创建家庭
+                HomeModel::createHome($user_id, "默认家庭");
+
                 Db::commit();
                 return Db::name('user_weixin')->alias('uw')->where($where)
                             ->field("u.user_id,u.username,u.avatar,u.token")
