@@ -48,7 +48,6 @@ class UserModel extends Model
             if ($info!=false){
                 $arr['token']=$data['token'];
                 $arr['username']= $data['username'];
-                $arr['invite']=array();
                 return $arr;
             }else{
                 return 0;
@@ -75,6 +74,7 @@ class UserModel extends Model
             }
         }
     }
+
 
     //修改手机号
     public function updateMobile($mobile,$token)
