@@ -14,8 +14,8 @@ class AdminLogsModel extends Model
         2 => '管理员操作',
     ];
     public static $detail_texts = [
-        1 => '管理员{%ad_account%}[id: {%ad_id%}]登录了控制台',
-        2 => '管理员{%ad_account%}[id: {%ad_id%}]{%operation%}',
+        1 => '登录网站控制台',
+        2 => '',
     ];
 
     public static function log($ad_id, $log_type, $log_data = null){

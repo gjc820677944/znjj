@@ -72,7 +72,6 @@ class HomeModel extends Model
         }
     }
 
-
     /**
      * 创建家庭
      * @param int $creater_id 创建人ID
