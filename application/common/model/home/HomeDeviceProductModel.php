@@ -25,6 +25,7 @@ class HomeDeviceProductModel extends Model
         foreach ($tags as $k=>$v){
             if($v === '') unset($tags[$k]);
         }
+        $tags = array_values($tags);
         return $tags;
     }
 }

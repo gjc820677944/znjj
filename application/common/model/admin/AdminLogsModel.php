@@ -58,6 +58,13 @@ class AdminLogsModel extends Model
         $log = self::mergeLogData($log);
         $log_type = $log['log_type'];
         $template_str = self::$detail_texts[$log_type];
+        if($log_type === 2){
+            $operation_str = AdminOperationLogsModel::logDetail($log);
+            if($operation_str === ''){
+                return '';
+            }
+            $template_str .= $operation_str;
+        }
         $log_detail = self::makeDetail($template_str, $log);
         return $log_detail;
     }
@@ -83,52 +90,5 @@ class AdminLogsModel extends Model
             $template_str = str_replace('{%'.$key.'%}', $val, $template_str);
         }
         return $template_str;
-    }
-
-    /**
-     * 记录管理员的后台操作
-     * @param string $controller 操作控制器
-     * @param string $action 操作 [create=>添加，update=>更新 delete=》删除]
-     * @param mixed $id 更新的数据ID或ID集合
-     * @return bool
-     */
-    public static function logOperation($controller, $action, $id = null){
-        $ad_id = AdminModel::getLogignAdId();
-        $log_type = 2;
-        $ad_account = AdminModel::where("ad_id = $ad_id")->value("ad_account");
-        $request = Request::instance();
-        if(is_array($id)){
-            $id = implode(',', $id);
-        }
-        $data = [
-            'ad_id' => $ad_id,
-            'ad_account' => $ad_account,
-            'log_type' => $log_type,
-            'log_ip' => $request->ip(),
-            'log_time' => time(),
-            'log_data' => ['controller'=>$controller, 'action'=>$action, 'id'=>$id],
-        ];
-        $result = AdminLogsModel::create($data);
-        return $result ? true : false;
-    }
-
-    /**
-     * 获取管理员操作详情
-     */
-    public static function logOperationDetail($log){
-        $texts = [
-            'Admin' => '{%action%}了一个管理员[id:{%ad_id%}]',
-            'Edition' => '{%action%}了一条APP版本记录[id:{%ad_id%}]',
-            'User' => '{%action%}了一个用户[id:{%user_id%}]',
-            'Home' => '{%action%}了用户家庭[id:{%home_id%}]',
-            'HomeDeviceProduct' => '%s了家庭设备',
-            'HomeLeaguer' => '%s了家庭成员',
-            'DeviceModel' => '%s了一个智能设备模型',
-            'DeviceModelPoint' => '%s了一个智能设备模型',
-            'DeviceModelCategory' => '%s了一个智能设备模型分类',
-            'DevicePoint' => '%s了一个设备功能点',
-            'DevicePointCategory' => '%s了一个设备功能点分类',
-            'Webconfig' => '%s了网站全局配置项',
-        ];
     }
 }
