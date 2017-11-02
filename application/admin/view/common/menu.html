@@ -21,6 +21,19 @@
         </ul>
     </li>
 
+    <li class="treeview {$active}">
+        <a href="#">
+            <i class="fa fa-hourglass-1"></i> <span>权限管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li class="active"><a href="{:url('role.role/index')}"><i class="fa fa-circle-o"></i> 角色管理</a></li>
+            <li class="active"><a href="{:url('rule.rule/index')}"><i class="fa fa-circle-o"></i> 规则管理</a></li>
+        </ul>
+    </li>
+
     <?php
         if(in_array($controller_name, [
                 'Device.deviceModel', 'Device.deviceModelCategory',
@@ -84,6 +97,8 @@
     <li><a href="{:url('config.webconfig/index')}"><i class="fa fa-cogs"></i> <span>网站全局配置</span></a></li>
 
     <li><a href="{:url('edition.edition/index')}"><i class="fa fa-hourglass-1"></i> <span>版本控制</span></a></li>
+
+
     <!--
     <li class="header">LABELS</li>
     <li><a href="javascript:;"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>

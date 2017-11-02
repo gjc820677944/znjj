@@ -1,5 +1,6 @@
 <?php
 namespace app\api\controller\user;
+use app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\user\UserModel;
 use app\api\controller\Father;
 use think\Request;
@@ -246,6 +247,23 @@ class User extends  Father
         }else{
             echo api_return_json(126, "邮箱绑定失败");
         }
+    }
+
+    //获取邀请信息
+    function getInviteInfo()
+    {
+        $userid=UserModel::getTokenId();
+            try{
+                $mobile=UserModel::where('user_id='.$userid)->find();//获取该用户的手机号
+                $data= HomeLeaguerInviteModel::alias('hl')->field('hl.home_id,su.username,su.mobile')
+                    ->where("leaguer_mobile='".$mobile['mobile']."'")
+                    ->join('smart_user su','su.user_id=hl.inviter_id','left')
+                    ->select();
+                echo api_return_json(0, $data);
+            }catch (\Exception $e){
+                echo api_return_json(1,$e->getMessage());
+            }
+
     }
 
 }

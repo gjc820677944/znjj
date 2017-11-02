@@ -16,7 +16,7 @@ class Home extends Father
     {
         $home_id=input('home_id');  //家庭ID
         $mobile=input('mobile');//被邀请人手机号
-        $token=UserModel::getToken();
+        $user_id=UserModel::getTokenId();
 
         if ($home_id==''){
             echo api_return_json(1,'家庭ID不能为空');
@@ -30,19 +30,17 @@ class Home extends Father
             echo api_return_json(1,'请输入正确手机号');
         }
 
-        $info=UserModel::where("mobile='".$mobile."'")->find();
-        if (empty($info)){
-            echo api_return_json(1,'手机号不存在');
+        //判断自己不能邀请自己
+        $user_info=UserModel::where("mobile='".$mobile."'")->find();
+        if ($user_info['user_id']==$user_id){
+            echo api_return_json(1,'自己不能邀请自己');
         }
 
-
         //判断邀请人是否有邀请他人的权限
-        $leaguer_id=UserModel::where("token='".$token."'")->find();
-
-        $auth=HomeLeaguerModel::where('home_id='.$home_id." and leaguer_id=".$leaguer_id['user_id'])->find();
+        $auth=HomeLeaguerModel::where('home_id='.$home_id." and leaguer_id=".$user_id)->find();
 
         //如果是这个家庭的管理员就不用判断权限
-        $admin=HomeModel::where('home_id='.$home_id." and creater_id=".$leaguer_id['user_id'])->find();
+        $admin=HomeModel::where('home_id='.$home_id." and creater_id=".$user_id)->find();
         if (empty($admin)){
             if (!empty($auth)){
                 $auth=explode(',',$auth);
@@ -55,19 +53,20 @@ class Home extends Father
         }
 
         //判断是否邀请过了
-        $if_exist=HomeLeaguerInviteModel::where('home_id='.$home_id." and leaguer_id=".$info['user_id'])->find();
+        $if_exist=HomeLeaguerInviteModel::where('home_id='.$home_id." and leaguer_mobile=".$mobile)->find();
         if (!empty($if_exist)){
             echo api_return_json(1,'已经邀请过了');
         }
         try{
-            $data['leaguer_id']=$info['user_id'];
+            $data['leaguer_mobile']=$mobile;
             $data['home_id']=$home_id;
             $data['create_time']=time();
+            $data['inviter_id']=$user_id;
             $info=HomeLeaguerInviteModel::insert($data);
 
             echo api_return_json(0,'邀请成功');
         }catch (\Exception $e){
-            echo api_return_json(1,'邀请失败');
+            echo api_return_json(1,$e->getMessage());
         }
     }
 
@@ -75,14 +74,18 @@ class Home extends Father
     function ynInvitation()
     {
         $data['home_id'] =input('home_id');//家庭 ID
-        $data['leaguer_id']=UserModel::getTokenId();//登录人的ID
+        $user_id=UserModel::getTokenId();//登录人的ID
         $type   = input('type');        //1是同意 2是拒绝
+
+        $user_info=UserModel::where("user_id=".$user_id)->find();
         if ($type==1){
             Db::startTrans();
             try{
                 $data['create_time']=time();
+                $data['leaguer_id']=$user_id;
+
                 HomeLeaguerModel::insert($data);
-                HomeLeaguerInviteModel::where('home_id='.$data['home_id']." and leaguer_id=".$data['leaguer_id'])->delete();
+                HomeLeaguerInviteModel::where('home_id='.$data['home_id']." and leaguer_mobile=".$user_info['mobile'])->delete();
             Db::commit();
                 echo api_return_json(0,'加入成功');
             }catch (\Exception $e){
@@ -91,7 +94,7 @@ class Home extends Father
             }
         }else{
             try{
-                HomeLeaguerInviteModel::where('home_id='.$data['home_id']." and leaguer_id=".$data['leaguer_id'])->delete();
+                HomeLeaguerInviteModel::where('home_id='.$data['home_id']." and leaguer_mobile=".$user_info['mobile'])->delete();
                 echo api_return_json(0,'操作成功');
             }catch(\Exception $e){
                 echo api_return_json(1,$e->getMessage());
