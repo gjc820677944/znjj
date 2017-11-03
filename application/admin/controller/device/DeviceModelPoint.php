@@ -3,6 +3,7 @@
 namespace app\admin\controller\device;
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\device\DeviceModelModel;
 use app\common\model\device\DeviceModelPointModel;
 use app\common\model\device\DevicePointCategoryModel;
@@ -89,6 +90,7 @@ class DeviceModelPoint extends Base
         }
         $result = (new DeviceModelPointModel())->insertAll($list);
         if($result){
+            AdminOperationLogsModel::log("为智能设备绑定功能点[id:".$model_id."]");
             api_return_json(0, '绑定成功');
         }
         else{
@@ -101,6 +103,7 @@ class DeviceModelPoint extends Base
         $result = DeviceModelPointModel::where("model_id", $model_id)
             ->where("point_id", $point_id)->delete();
         if($result){
+            AdminOperationLogsModel::log("删除智能设备绑定功能点[id:".$model_id."]");
             api_return_json(0, "删除成功");
         }
         else{

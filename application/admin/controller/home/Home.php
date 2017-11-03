@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller\home;
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\home\HomeModel;
 use app\common\model\home\HomeLeaguerModel;
 use think\Model;
@@ -96,6 +97,8 @@ class Home extends Base
             $arr['auth']=$info['auth1'].",".$info['auth2'];
             HomeLeaguerModel::where('leaguer_id='.$info['user_id']." and home_id=".$input['home_id'])->update($arr);
         }
+
+        AdminOperationLogsModel::log("更新用户家庭信息[id:".$input['home_id']."]");
         $this->success("修改成功", $referer_url);
 
     }

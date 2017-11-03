@@ -2,6 +2,7 @@
 namespace app\admin\controller\user;
 use app\admin\controller\Base;
 use app\common\model\admin\AdminModel;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\home\HomeDeviceProductModel;
 use app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\home\HomeLeaguerModel;
@@ -32,7 +33,7 @@ class User extends Base
         }
         $list = $model->paginate(null);
         foreach ($list as $k=>$v){
-            $v['avatar'] = "/".$v['avatar'];
+            $v['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
             $v['home']=HomeModel::where('creater_id='.$v['user_id'])->count();
             $list[$k] = $v;
         }
@@ -66,7 +67,7 @@ class User extends Base
             $data = UserModel::where('user_id=' . $input['user_id'])
                 ->field('user_id,username,mobile,email,status,avatar')
                 ->find();
-            $data['avatar']="/".$data['avatar'];
+            $data['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
         }
 
         $data = [
@@ -102,7 +103,6 @@ class User extends Base
         if ($input['mobile'] == '') {
             $this->error("手机号不能为空");
         }
-
         if (!preg_match("/^1[34578]{1}\d{9}$/", $input['mobile'])) {
             $this->error("手机号不能为空");
         }
@@ -112,14 +112,17 @@ class User extends Base
             $input['avatar'] = FileHelper::helper()
                 ->saveUploadFile($file->getInfo(), 'user/avatar/' . date("Ymd"));
         }
-            $info=$user->addHtUserInfo($input);
-            if ($info==1){
-                $this->error("手机号已存在");
-            }else if($info==0){
-                $this->error("添加失败");
-            }else if($info==2){
-                $this->success("添加成功",$referer_url);
-            }
+
+        $info=$user->addHtUserInfo($input);
+        if ($info==1){
+            $this->error("手机号已存在");
+        }else if($info==0){
+            $this->error("添加失败");
+        }else if($info==2){
+            $user_id = UserModel::getUserIdByAttr('mobile', $input['mobile']);
+            AdminOperationLogsModel::log("添加用户[id:".$user_id."]");
+            $this->success("添加成功",$referer_url);
+        }
     }
 
 
@@ -149,6 +152,8 @@ class User extends Base
         }else if($info==0){
             $this->error("修改失败");
         }else if($info==2){
+            $user_id = UserModel::getUserIdByAttr('mobile', $input['mobile']);
+            AdminOperationLogsModel::log("更新用户[id:".$user_id."]");
             $this->success("修改成功",$referer_url);
         }
     }
@@ -174,9 +179,10 @@ class User extends Base
             UserLogsModel::where('user_id='.$user_id)->delete();
 
             //邀请信息里面的也删掉
-            HomeLeaguerInviteModel::where('leaguer_id'.$user_id)->delete();
+            //HomeLeaguerInviteModel::where('leaguer_id='.$user_id)->delete();
 
             Db::commit();
+            AdminOperationLogsModel::log("删除用户[id:".$user_id."]");
             api_return_json(0, "删除成功");
         }catch (\Exception $e){
             Db::rollback();

@@ -15,7 +15,6 @@ class AdminLogsModel extends Model
     ];
     public static $detail_texts = [
         1 => '登录网站控制台',
-        2 => '',
     ];
 
     public static function log($ad_id, $log_type, $log_data = null){
@@ -55,17 +54,15 @@ class AdminLogsModel extends Model
      * @return
      */
     public static function logDetail($log){
-        $log = self::mergeLogData($log);
         $log_type = $log['log_type'];
-        $template_str = self::$detail_texts[$log_type];
         if($log_type === 2){
-            $operation_str = AdminOperationLogsModel::logDetail($log);
-            if($operation_str === ''){
-                return '';
-            }
-            $template_str .= $operation_str;
+            $log_detail = AdminOperationLogsModel::logDetail($log);
         }
-        $log_detail = self::makeDetail($template_str, $log);
+        else{
+            $log = self::mergeLogData($log);
+            $template_str = self::$detail_texts[$log_type];
+            $log_detail = self::makeDetail($template_str, $log);
+        }
         return $log_detail;
     }
 

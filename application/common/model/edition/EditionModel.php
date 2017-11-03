@@ -7,7 +7,4 @@ use think\Db;
 class EditionModel extends Model
 {
     protected $name = "edition";
-
-
-
 }
