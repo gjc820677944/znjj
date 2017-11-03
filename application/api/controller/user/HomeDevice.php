@@ -64,7 +64,7 @@ class HomeDevice extends Base
             $where = "home_id = $home_id and is_gateway = 1";
             $count = HomeDeviceProductModel::where($where)->count();
             if($count > 0){
-                api_return_json(0, '房间内已有网关设备');
+                api_return_json(364, '房间内已有网关设备');
             }
         }
         if($product_id > 0){//更新
