@@ -262,7 +262,26 @@ class UserModel extends Model
         }else{
             return 0;
         }
+    }
 
+    /**
+     * 根据用户的唯一属性获取用户ID
+     * @param $attr
+     * @param $value
+     */
+    public static function getUserIdByAttr($attr, $value){
+        $user_id = UserModel::where($attr, $value)->value('user_id');
+        return (int)$user_id;
+    }
+
+    /**
+     * 根据用户ID获取用户指定属性
+     * @param $attr
+     * @param $user_id
+     */
+    public static function getAttrByUserId($attr, $user_id){
+        $attr = UserModel::where("user_id", $user_id)->value($attr);
+        return $attr;
     }
 
 }

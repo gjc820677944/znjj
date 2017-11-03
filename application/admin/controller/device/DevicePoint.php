@@ -3,6 +3,7 @@
 namespace app\admin\controller\device;
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\device\DevicePointCategoryModel;
 use app\common\model\device\DevicePointModel;
 
@@ -72,6 +73,7 @@ class DevicePoint extends Base
         //保存管理员信息
         $result = DevicePointModel::create($input);
         if($result){
+            AdminOperationLogsModel::log("添加智能设备功能点[id:".$result->point_id."]");
             $this->success("创建成功", $referer_url);
         }
         else{
@@ -105,6 +107,7 @@ class DevicePoint extends Base
         //更新功能点信息
         $result = DevicePointModel::update($input);
         if($result){
+            AdminOperationLogsModel::log("更新智能设备功能点[id:".$result->point_id."]");
             $this->success("更新成功", $referer_url);
         }
         else{
@@ -116,6 +119,7 @@ class DevicePoint extends Base
     {
         $result = DevicePointModel::destroy($id);
         if($result){
+            AdminOperationLogsModel::log("删除智能设备功能点[id:".$id."]");
             api_return_json(0, "删除成功");
         }
         else{

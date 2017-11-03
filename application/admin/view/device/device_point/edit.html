@@ -27,7 +27,6 @@
                     <div class="form-group">
                         <label>分类</label>
                         <select class="form-control" name="cate_id">
-                            <option value="">全部</option>
                             {volist id="vo" name="cate_list"}
                             <option value="{$vo.cate_id}" <?php echo $data['cate_id'] === $vo['cate_id'] ? 'selected' : ''; ?>>{$vo.cate_name}</option>
                             {/volist}

@@ -4,6 +4,7 @@ namespace app\admin\controller\admin;
 
 use app\admin\controller\Base;
 use app\common\model\admin\AdminModel;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\validate\ValidateHelper;
 use filehelper\FileHelper;
 use helper\Helper;
@@ -82,6 +83,7 @@ class Account extends Base
         //保存管理员信息
         $result = AdminModel::createOrUpdate(0, $input);
         if($result){
+            AdminOperationLogsModel::log("添加控制台管理员[id:".$result->ad_id."]");
             $this->success("创建成功", $referer_url);
         }
         else{
@@ -126,6 +128,7 @@ class Account extends Base
         //更新管理员信息
         $result = AdminModel::createOrUpdate($ad_id, $input);
         if($result){
+            AdminOperationLogsModel::log("更新控制台管理员[id:".$result->ad_id."]");
             $this->success("更新成功", $referer_url);
         }
         else{
@@ -140,6 +143,7 @@ class Account extends Base
         }
         $result = AdminModel::destroy($id);
         if($result){
+            AdminOperationLogsModel::log("删除控制台管理员[id:".$id."]");
             api_return_json(0, "删除成功");
         }
         else{

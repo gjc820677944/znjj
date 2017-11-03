@@ -46,6 +46,7 @@ class DeviceModelCategory extends Base
         //保存分类信息
         $result = DeviceModelCategoryModel::create($input);
         if($result){
+            AdminOperationLogsModel::log("添加智能设备模型分类[id:".$result->cate_id."]");
             $this->success("创建成功", $referer_url);
         }
         else{
@@ -83,6 +84,7 @@ class DeviceModelCategory extends Base
         //更新分类信息
         $result = DeviceModelCategoryModel::update($input);
         if($result){
+            AdminOperationLogsModel::log("更新智能设备模型分类[id:".$result->cate_id."]");
             $this->success("更新成功", $referer_url);
         }
         else{
@@ -99,6 +101,7 @@ class DeviceModelCategory extends Base
 
         $result = DeviceModelCategoryModel::destroy($id);
         if($result){
+            AdminOperationLogsModel::log("删除智能设备模型分类[id:".$id."]");
             api_return_json(0, "删除成功");
         }
         else{

@@ -3,6 +3,7 @@
 namespace app\admin\controller\device;
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\device\DeviceModelCategoryModel;
 use app\common\model\device\DeviceModelModel;
 use filehelper\FileHelper;
@@ -93,6 +94,7 @@ class DeviceModel extends Base
         //保存管理员信息
         $result = DeviceModelModel::create($input);
         if($result){
+            AdminOperationLogsModel::log("添加智能设备模型[id:".$result->model_id."]");
             $this->success("创建成功", $referer_url);
         }
         else{
@@ -135,6 +137,7 @@ class DeviceModel extends Base
         //更新功能点信息
         $result = DeviceModelModel::update($input);
         if($result){
+            AdminOperationLogsModel::log("更新智能设备模型[id:".$result->model_id."]");
             $this->success("更新成功", $referer_url);
         }
         else{
@@ -146,6 +149,7 @@ class DeviceModel extends Base
     {
         $result = DeviceModelModel::destroy($id);
         if($result){
+            AdminOperationLogsModel::log("删除智能设备模型[id:".$id."]");
             api_return_json(0, "删除成功");
         }
         else{

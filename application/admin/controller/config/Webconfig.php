@@ -4,6 +4,7 @@ namespace app\admin\controller\config;
 
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\config\WebConfigModel;
 use app\common\validate\ValidateHelper;
 
@@ -46,6 +47,7 @@ class Webconfig extends Base
         $result = WebConfigModel::create($input);
         if($result){
             WebConfigModel::makeConfigFile();
+            AdminOperationLogsModel::log("添加网站全局配置项[id:".$result->conf_id."]");
             $this->success("创建成功", url("index"));
         }
         else{
@@ -74,6 +76,7 @@ class Webconfig extends Base
         $result = WebConfigModel::update($input);
         if($result){
             WebConfigModel::makeConfigFile();
+            AdminOperationLogsModel::log("更新网站全局配置项[id:".$result->conf_id."]");
             $this->success("更新成功", url("index"));
         }
         else{
@@ -87,6 +90,7 @@ class Webconfig extends Base
         $result = WebConfigModel::destroy($id);
         if($result){
             WebConfigModel::makeConfigFile();
+            AdminOperationLogsModel::log("删除网站全局配置项[id:".$id."]");
             api_return_json(0, "删除成功");
         }
         else{
@@ -103,6 +107,7 @@ class Webconfig extends Base
             WebConfigModel::where("conf_key = '$k'")->update(['conf_value'=>$v]);
         }
         WebConfigModel::makeConfigFile();
+        AdminOperationLogsModel::log("更新网站全局配置");
         $this->success("更新成功");
     }
 }

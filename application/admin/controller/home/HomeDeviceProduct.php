@@ -2,6 +2,7 @@
 namespace app\admin\controller\home;
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\home\HomeDeviceProductModel;
 use app\common\model\home\HomeModel;
 use filehelper\FileHelper;
@@ -59,6 +60,7 @@ class HomeDeviceProduct extends Base
     {
         $result = HomeDeviceProductModel::destroy($id);
         if($result){
+            AdminOperationLogsModel::log("删除用户家庭绑定设备[id:".$id."]");
             api_return_json(0);
         }
         else{

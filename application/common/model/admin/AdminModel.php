@@ -47,7 +47,7 @@ class AdminModel extends Model
      * 根据提交信息创建或更新管理员信息
      * @param int $ad_id 管理员ID，为0时表示插入管理员，大于0时表示更新管理员
      * @param array $input 输入数据
-     * @return bool true|false
+     * @return object
      */
     public static function createOrUpdate(int $ad_id, array $input){
         if($ad_id === 0){ //插入管理员
@@ -68,7 +68,7 @@ class AdminModel extends Model
             }
             $result = AdminModel::update($input);
         }
-        return $result ? true : false;
+        return $result;
     }
 
     /**

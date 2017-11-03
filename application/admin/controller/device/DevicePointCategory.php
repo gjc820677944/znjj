@@ -3,6 +3,7 @@
 namespace app\admin\controller\device;
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\device\DevicePointCategoryModel;
 use app\common\model\device\DevicePointModel;
 
@@ -46,6 +47,7 @@ class DevicePointCategory extends Base
         //保存分类信息
         $result = DevicePointCategoryModel::create($input);
         if($result){
+            AdminOperationLogsModel::log("添加智能设备功能点分类[id:".$result->cate_id."]");
             $this->success("创建成功", $referer_url);
         }
         else{
@@ -83,6 +85,7 @@ class DevicePointCategory extends Base
         //更新分类信息
         $result = DevicePointCategoryModel::update($input);
         if($result){
+            AdminOperationLogsModel::log("更新智能设备功能点分类[id:".$result->cate_id."]");
             $this->success("更新成功", $referer_url);
         }
         else{
@@ -98,6 +101,7 @@ class DevicePointCategory extends Base
         }
         $result = DevicePointCategoryModel::destroy($id);
         if($result){
+            AdminOperationLogsModel::log("更新智能设备功能点分类[id:".$id."]");
             api_return_json(0, "删除成功");
         }
         else{

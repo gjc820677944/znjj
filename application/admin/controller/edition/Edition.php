@@ -1,10 +1,8 @@
 <?php
 namespace app\admin\controller\Edition;
+use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\edition\EditionModel;
 use app\admin\controller\Base;
-use think\Request;
-use filehelper\FileHelper;
-use think\Db;
 
 class Edition extends Base
 {
@@ -70,13 +68,14 @@ class Edition extends Base
     //添加版本
     public function addEdition($input)
     {
-        $referer_url=$input['referer_url'];
+        $referer_url = $input['referer_url'];
         unset($input['referer_url']);
         $input['addtime']=time();
-        $info=EditionModel::insert($input);
-        if ($info==false){
+        $info = EditionModel::create($input);
+        if (empty($info)){
             $this->error("添加失败");
         }else{
+            AdminOperationLogsModel::log("添加APP版本记录[id:".$info->edition_id."]");
             $this->success("添加成功",$referer_url);
         }
     }
@@ -86,11 +85,11 @@ class Edition extends Base
     {
         $referer_url=$input['referer_url'];
         unset($input['referer_url']);
-        $input['addtime']=time();
-        $info=EditionModel::where('edition_id='.$input['edition_id'])->update($input);
+        $info = EditionModel::update($input);
         if ($info==false){
             $this->error("修改失败");
         }else{
+            AdminOperationLogsModel::log("更新APP版本记录[id:".$info->edition_id."]");
             $this->success("修改成功",$referer_url);
         }
     }
@@ -103,6 +102,7 @@ class Edition extends Base
         if ($info==false){
             api_return_json(1, "删除失败");
         }else{
+            AdminOperationLogsModel::log("删除APP版本记录[id:".$input['edition_id']."]");
             api_return_json(0, "删除成功");
         }
     }
