@@ -3,7 +3,6 @@
 namespace app\admin\controller\device;
 
 use app\admin\controller\Base;
-use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\device\DeviceModelCategoryModel;
 use app\common\model\device\DeviceModelModel;
 use filehelper\FileHelper;

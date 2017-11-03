@@ -9,66 +9,61 @@ class AdminOperationLogsModel extends Model
 {
     protected $name = "admin_logs";
     protected static $actionTexts = [
-        'create' => '添加',
+        'save' => '添加',
         'update' => '更新',
         'delete' => '删除',
     ];
     protected static $operationTexts = [
-        'Admin' => [
-            'default' => '{%action%}了管理员[id: {%ad_id%}]',
+        'Admin.admin' => [
+            'default' => '{%action%}管理员[id: {%ad_id%}]',
         ],
-        'User' => [
-            'default' => '{%action%}了用户[id: {%user_id%}]',
+        'User.user' => [
+            'default' => '{%action%}用户[id: {%user_id%}]',
         ],
-        'Edition' => [
-            'default' => '{%action%}了APP版本记录[id: {%edtion_id%}]',
+        'Edition.edition' => [
+            'default' => '{%action%}APP版本记录[id: {%edtion_id%}]',
         ],
-        'Home' => [
-            'default' => '{%action%}了用户家庭[id: {%home_id%}]',
+        'Home.home' => [
+            'default' => '{%action%}用户家庭[id: {%home_id%}]',
         ],
-        'HomeLeaguer' => [
-            'default' => '{%action%}了家庭成员[Home id: {%home_id%}, Leaguerid: {%leaguer_id%}]',
+        'Home.homeDeviceProduct' => [
+            'default' => '{%action%}用户家庭设备[id: {%product_id%}]',
         ],
-        'HomeDeviceProduct' => [
-            'default' => '{%action%}了用户家庭设备[id: {%product_id%}]',
+        'Device.deviceModel' => [
+            'default' => '{%action%}智能设备模型[id: {%model_id%}]',
         ],
-        'DeviceModel' => [
-            'default' => '{%action%}了智能设备模型[id: {%model_id%}]',
+        'Device.deviceModelCategory' => [
+            'default' => '{%action%}智能设备模型分类[id: {%cate_id%}]',
         ],
-        'DeviceModelCategory' => [
-            'default' => '{%action%}了智能设备模型分类[id: {%cate_id%}]',
+        'Device.deviceModelPoint' => [
+            'default' => '对智能设备[id: {%model_id%}]{%action%}了功能点',
         ],
-        'DeviceModelPoint' => [
-            'default' => '对智能设备{%action%}[id: {%model_id%}]了功能点[id: {%point_id%}]',
+        'Device.devicePoint' => [
+            'default' => '{%action%}智能设备功能点[id: {%point_id%}]',
         ],
-        'DevicePoint' => [
-            'default' => '{%action%}了智能设备功能点[id: {%point_id%}]',
-        ],
-        'DevicePointCategory' => [
-            'default' => '{%action%}了智能设备功能点分类[id: {%cate_id%}]',
+        'Device.devicePointCategory' => [
+            'default' => '{%action%}智能设备功能点分类[id: {%cate_id%}]',
         ],
 
-        'Webconfig' => [
-            'default' => '{%action%}一项网站全局配置[id: {%cate_id%}]',
+        'Config.webconfig' => [
+            'default' => '{%action%}一个全局配置项[id: {%cate_id%}]',
             'updateList' => '更新了网站全局配置',
         ],
     ];
 
     /**
      * 记录管理员的后台操作
-     * @param string $action 操作 [create=>添加，update=>更新 delete=》删除]
      * @param mixed $params 参数集合
      * @return bool
      */
-    public static function log($action, $params = null){
+    public static function log($params = null, $action = null){
         $ad_id = AdminModel::getLogignAdId();
         $log_type = 2;
         $ad_account = AdminModel::where("ad_id = $ad_id")->value("ad_account");
         $request = Request::instance();
         $controller = $request->controller();
-        if(count(explode('.', $controller)) >= 2){
-            $array = explode('.', $controller);
-            $controller = ucfirst($array[1]);
+        if($action === null){
+            $action = $request->action();
         }
         $data = [
             'ad_id' => $ad_id,
