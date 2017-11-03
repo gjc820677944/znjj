@@ -52,21 +52,40 @@ class HomeDevice extends Base
         if($model_id <= 0){
             api_return_json(363, "设备编号错误，无法查询到相关设备");
         }
-
-        $count = HomeDeviceProductModel::where("home_id", $home_id)
-            ->where("serial_number", $serial_number)->count();
-        if($count > 0){
-            api_return_json(364, "该编号设备已存在，无法再次绑定");
-        }
+        //模型相关信息
         $model_data = DeviceModelModel::field("is_gateway")->find($model_id);
-        $data = [
-            'home_id' => $home_id,
-            'tag' => empty($input['tag']) ? '' : trim($input['tag']),
-            'serial_number' => $serial_number,
-            'model_id' => $model_id,
-            'is_gateway' => $model_data['is_gateway'],
-        ];
-        $result = HomeDeviceProductModel::create($data);
+
+        //判断该编号设备是否已经存在，存在就更新设备信息，不存在就添加设备信息
+        $product_id = (int)HomeDeviceProductModel::where("home_id", $home_id)
+            ->where("serial_number", $serial_number)->value("product_id");
+
+        //校验房间是否已有网关设备
+        if ($product_id > 0 && $model_data['is_gateway'] === 1){//添加失败
+            $where = "home_id = $home_id and is_gateway = 1";
+            $count = HomeDeviceProductModel::where($where)->count();
+            if($count > 0){
+                api_return_json(0, '房间内已有网关设备');
+            }
+        }
+        if($product_id > 0){//更新
+            $data = [
+                'product_id' => $product_id,
+                'tag' => empty($input['tag']) ? '' : trim($input['tag']),
+                'model_id' => $model_id,
+                'is_gateway' => $model_data['is_gateway'],
+            ];
+            $result = HomeDeviceProductModel::update($data);
+        }
+        else{//添加
+            $data = [
+                'home_id' => $home_id,
+                'tag' => empty($input['tag']) ? '' : trim($input['tag']),
+                'serial_number' => $serial_number,
+                'model_id' => $model_id,
+                'is_gateway' => $model_data['is_gateway'],
+            ];
+            $result = HomeDeviceProductModel::create($data);
+        }
         if($result){
             api_return_json(0);
         }
