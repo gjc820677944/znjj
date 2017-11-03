@@ -67,7 +67,7 @@ class User extends Base
             $data = UserModel::where('user_id=' . $input['user_id'])
                 ->field('user_id,username,mobile,email,status,avatar')
                 ->find();
-            $data['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
+            $data['avatar'] = FileHelper::helper()->getWebsitePath($data['avatar']);
         }
 
         $data = [
