@@ -64,7 +64,7 @@ class Edition extends Base
         }else{
             unset($input['edition_id']);
             Edition::addEdition($input);
-        }
+        }  
 
     }
     //添加版本
