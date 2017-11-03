@@ -57,15 +57,17 @@
                                 {/if}
                             </td>
                             <td class="text-center">{$vo.sort_by}</td>
-                            <td class="text-center">{$vo.parent_id}</td>
-                            <td class="text-center">{$vo.show_menu}</td>
-                            <td class="text-center">
-                                <a class="btn btn-primary btn-sm" href="{:url('create',array('type'=>2,'user_id'=>$vo.user_id))}">修改</a>
-                                {if condition="$vo.home > 0"}
-                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="alert('不能删除该用户')">删除</a>
+                            <td class="text-center">{$vo.f_rule_name}</td>
+                            <td>
+                                {if condition="$vo.show_menu == 1"}
+                                不显示
                                 {else/}
-                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('deleteUserInfo', ['user_id'=>$vo.user_id])}', '您确认删除该用户吗？')">删除</a>
+                                显示
                                 {/if}
+                            </td>
+                            <td class="text-center">
+                                <a class="btn btn-primary btn-sm" href="{:url('create',array('type'=>2,'rule_id'=>$vo.rule_id))}">修改</a>
+                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('deleteRuleInfo', ['rule_id'=>$vo.rule_id])}', '确定删除该规则吗？')">删除</a>
                             </td>
                         </tr>
                         {/volist}

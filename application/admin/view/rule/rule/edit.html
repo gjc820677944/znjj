@@ -35,16 +35,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label>规则级别</label>
-                            <input type="text" name="level" class="form-control" value="{$data.level}">
-                        </div>
-
-                        <div class="form-group">
                             <label>上级规则ID</label>
-                            <!--<input type="text" name="parent_id" class="form-control" value="{$data.parent_id}">-->
                             <select name="parent_id" id="select_k1" class="form-control">
                                 <option value="0">选择</option>
-
+                                {volist id="vo" name="rule" key="k"}
+                                    <option value="{$vo.rule_id}" {if condition="$vo.rule_id eq $data.parent_id"} selected = selected {/if}>{$vo.length}{$vo.rule_title}</option>
+                                {/volist}
                             </select>
                         </div>
                         <div class="form-group">
@@ -55,6 +51,19 @@
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="status" value="0" <?php echo $data['status'] === 0 ? 'checked' : ''; ?>> 禁用
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>是否显示菜单栏</label>
+                            <div class="radio">
+                                <label class="radio-inline">
+                                    <input type="radio" name="show_menu" value="1" <?php echo $data['show_menu'] === 0 ? 'checked' : ''; ?>> 显示
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="show_menu" value="0" <?php echo $data['show_menu'] === 1 ? 'checked' : ''; ?>> 不显示
+
                                 </label>
                             </div>
                         </div>

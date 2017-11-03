@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller\role;
 use app\admin\controller\Base;
+use app\common\model\admin\AdminAuthRuleModel;
 use app\common\model\admin\AdminRoleModel;
 use think\Request;
 use filehelper\FileHelper;
@@ -32,6 +33,46 @@ class Role extends Base
         return $this->fetch('', $data);
 
     }
+
+    //添加或修改角色
+    function create()
+    {
+        $input = $this->request->param();
+
+        //1是添加规则
+        if ($input['type'] == 1) {
+            $rule_info = [
+                'group_id' => 0,
+                'title' => '',
+                'status' => '',
+            ];
+        } else {
+            $rule_info = AdminRoleModel::where('group_id=' . $input['group_id'])->find();
+        }
+        $rule= $data=AdminAuthRuleModel::select();
+        $arr=$this->digui($rule);
+        $data = [
+            'data' => $rule_info,
+            'post_url' => url('save'),
+            'type' => $input['type'],
+        ];
+        return $this->fetch('edit', $data);
+    }
+
+
+    //递归获取权限等级
+    function digui($data,$j=0)
+    {
+        $subs=array();//存放子孙数组
+        foreach ($data as $v){
+            if ($v['parent_id']==$j){
+                $v['zi']=$this->digui($data,$v['rule_id'] );
+                $subs[]=$v;
+            }
+        }
+        return $subs;
+    }
+
 
 }
 

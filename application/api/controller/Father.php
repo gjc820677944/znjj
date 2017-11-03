@@ -12,7 +12,7 @@ class Father
         $url=$_SERVER['REQUEST_URI'];
         $url=explode('/',$url);
 
-        $array=array('getWeixinInfo','login');//$url[count($url)-1]
+        $array=array('getWeixinInfo','login','getv_code');//$url[count($url)-1]
         if (!in_array($url[count($url)-1],$array)){
             //获取token
             $_token = isset($info['token']) ? $info['token'] : "";
