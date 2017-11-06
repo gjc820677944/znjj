@@ -78,6 +78,7 @@ class UserQQModel extends Model
             UserQQModel::create($wx_data);
             $u_data['avatar']=$avatar['save_path'];
             $u_data['username']=json_encode($weixin_data['nickname']);
+            $u_data['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($u_data);
         }else{
             //如果绑定过QQ 那就覆盖以前的QQ
@@ -86,6 +87,7 @@ class UserQQModel extends Model
             //修改用户信息
             $userData['avatar']=$avatar['save_path'];
             $userData['username']=json_encode($weixin_data['nickname']);
+            $userData['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($userData);
         }
         //然后删除缓存的QQ信息

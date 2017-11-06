@@ -41,7 +41,6 @@ class UserWeixinModel extends Model
                 $new_token['token']=UserModel::settoken();
                 $new_token['user_id']=$info['user_id'];
                 UserModel::update($new_token);
-
                 return UserModel::where('user_id='.$info['user_id'])->field('username,token')->find();
             }
         }
@@ -73,19 +72,22 @@ class UserWeixinModel extends Model
 
             $u_data['avatar']=$avatar['save_path'];
             $u_data['username']=json_encode($weixin_data['nickname']);
+            $u_data['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($u_data);
         }else{
-            //如果绑定过QQ 那就覆盖以前的QQ
+            //如果绑定过微信 那就覆盖以前的微信
             $data['wx_openid']=$openid;
             UserWeixinModel::where("user_id=".$info['user_id'])->update($data);
             //修改用户信息
             $userData['avatar']=$avatar['save_path'];
             $userData['username']=json_encode($weixin_data['nickname']);
+            $u_data['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($userData);
         }
         //然后删除缓存的微信信息
         UserThirdLogsModel::where("third_id='".$openid."'")->delete();
         UserModel::rmAvatarByid($user_id);//删除原图片
+
         return UserModel::where('user_id='.$user_id)->field('username,token')->find();
     }
 
