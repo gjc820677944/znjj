@@ -41,11 +41,13 @@ class UserQQModel extends Model
             if (empty($info)){
                 api_return_json(150, "还未绑定手机号");
             }else{
-                $where['qq_openid']=$openid;
-                return  $data= Db::name('user_qq')->alias('uq')->where($where)
-                    ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
-                    ->join('user u','u.user_id=uq.user_id','left')
-                    ->find();
+                //生成新token
+                $new_token['token']=UserModel::settoken();
+                $new_token['user_id']=$info['user_id'];
+                UserModel::update($new_token);
+
+                return UserModel::where('user_id='.$info['user_id'])->field('username,token')->find();
+
             }
         }
     }
@@ -64,7 +66,6 @@ class UserQQModel extends Model
     //手机号以前绑定过 QQ
     public static function yesbinding($openid,$user_id)
     {
-
         //获取新QQ信息
         $weixin_data=UserThirdLogsModel::where("third_id='".$openid."'")->find();
         $weixin_data=json_decode($weixin_data['third_data'],true);

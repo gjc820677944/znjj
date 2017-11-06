@@ -37,12 +37,13 @@ class UserWeixinModel extends Model
             $info=UserModel::where('user_id='.$info['user_id'])->find();
             if (empty($info)) {
                 api_return_json(150, "还未绑定手机号");
+            }else{
+                $new_token['token']=UserModel::settoken();
+                $new_token['user_id']=$info['user_id'];
+                UserModel::update($new_token);
+
+                return UserModel::where('user_id='.$info['user_id'])->field('username,token')->find();
             }
-            $where['wx_openid']=$openid;
-            return  $data= Db::name('user_weixin')->alias('uw')->where($where)
-                ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
-                ->join('user u','u.user_id=uw.user_id','left')
-                ->find();
         }
     }
     //判断手机号是否绑定过微信
