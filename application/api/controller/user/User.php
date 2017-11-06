@@ -163,17 +163,17 @@ class User extends  Father
         $type = input('type');  //区分是什么登录
         $access_token = input("access_token");      //token
         $openid = input('openid');     //用户微信或QQID
-        $unionid = input('unionid','');   //用户微信或QQ联合ID
+        $appid = input('appid','');   //申请QQ登录成功后，分配给应用的appid
         if ($openid == '' || $access_token == '') {
             echo api_return_json(105, "openid或access_token不能为空");
         }
         //1是QQ 2是微信
         switch ($type){
             case 1:
-                $info=UserQQModel::QQlogin($type,$access_token,$openid,$unionid);
+                $info=UserQQModel::QQlogin($type,$access_token,$openid,$appid);
                 break;
             case 2:
-                $info=UserWeixinModel::weixinlogin($type,$access_token,$openid,$unionid);
+                $info=UserWeixinModel::weixinlogin($type,$access_token,$openid);
                 break;
             default:
         }
@@ -184,7 +184,6 @@ class User extends  Father
             echo api_return_json(1, "登录失败");
         }
     }
-
     //绑定手机号
     function bindingPhone()
     {
@@ -194,7 +193,7 @@ class User extends  Father
         if (!preg_match("/^1[34578]{1}\d{9}$/", $mobile)) {
             echo api_return_json(121, '手机号格式不对');
         }
-        if ($v_code=="123456"){
+        if ($v_code!="123456"){
             echo api_return_json(102, '验证码不正确');
         }
 
