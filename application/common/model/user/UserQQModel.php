@@ -22,7 +22,6 @@ class UserQQModel extends Model
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $output = curl_exec($ch);
-
         $output = json_decode($output, true);
         if (!isset($output['nickname'])){
             api_return_json(1, "获取QQ信息失败");
@@ -42,10 +41,10 @@ class UserQQModel extends Model
             if (empty($info)){
                 api_return_json(150, "还未绑定手机号");
             }else{
-                $where['wx_openid']=$openid;
-                return  $data= Db::name('user_weixin')->alias('uw')->where($where)
+                $where['qq_openid']=$openid;
+                return  $data= Db::name('user_qq')->alias('uq')->where($where)
                     ->field("u.user_id,u.username,ifnull(u.mobile,'') as mobile,u.avatar,u.token")
-                    ->join('user u','u.user_id=uw.user_id','left')
+                    ->join('user u','u.user_id=uq.user_id','left')
                     ->find();
             }
         }
