@@ -33,7 +33,7 @@ class UserQQModel extends Model
             $data['log_time']=time();
             $data['third_data']=$output;
             UserWeixinModel::create($data);
-            api_return_json(125, "还未绑定手机号");
+            api_return_json(150, "还未绑定手机号");
         }else{
             $where['wx_openid']=$openid;
             return  $data= Db::name('user_weixin')->alias('uw')->where($where)

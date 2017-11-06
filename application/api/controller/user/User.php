@@ -158,7 +158,7 @@ class User extends  Father
     }
 
     //第三方登录
-    function getWeixinInfo()
+    function thirdPartyLogin()
     {
         $type = input('type');  //区分是什么登录
         $access_token = input("access_token");      //token

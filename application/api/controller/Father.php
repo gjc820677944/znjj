@@ -10,7 +10,7 @@ class Father
 
         $info = Request::instance()->header();  //获取请求头信息
         $url=$_SERVER['REQUEST_URI'];
-        $array=array('getWeixinInfo','login','getv_code','bindingPhone');//$url[count($url)-1]
+        $array=array('thirdPartyLogin','login','getv_code','bindingPhone');//$url[count($url)-1]
         for($i=0;$i<count($array);$i++){
             if (strpos($url,$array[$i])){
                 return;
