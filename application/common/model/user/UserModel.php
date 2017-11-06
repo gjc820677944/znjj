@@ -217,87 +217,23 @@ class UserModel extends Model
     public static function saveInfo($openid,$mobile)
     {
         Db::startTrans();
-        $info=UserModel::where("mobile='".$mobile."'")->find();
+        $third_party=UserThirdLogsModel::where("third_id='".$openid."'")->find();
         try{
-            //判断手机号是否存在
-            if (!empty($info)) {
-                UserModel::yesbinding($openid, $info['user_id']);
-                Db::commit();
-                $data['token']=$info['token'];
-                $data['username']=$info['username'];
-                echo api_return_json(0,$data);
-            }else{
-                $user_id=UserModel::nobinding($openid, $info['user_id'],$mobile);
-                Db::commit();
-                $info=UserModel::where('user_id='.$user_id)->field('username,token')->find();
-                echo api_return_json(0,$info);
+            switch ($third_party['type']){
+                case 1:
+                    $data=UserQQModel::third_party_qq($openid,$mobile);
+                    break;
+                case 2:
+                    $data=UserWeixinModel::third_party_wx($openid,$mobile);
+                    break;
+                default:
             }
+            Db::commit();
+            api_return_json(0,$data);
         }catch (\Exception $e){
             Db::rollback();
             api_return_json(1, $e->getMessage());
         }
-    }
-
-    //手机号以前绑定过
-    public static function yesbinding($openid,$user_id)
-    {
-        //获取新微信信息
-        $weixin_data=UserWeixinModel::where("third_id='".$openid."'")->find();
-        $weixin_data=json_decode($weixin_data['third_data'],true);
-        $avatar=getImage($weixin_data['headimgurl'],'uploads/weixin/'.date('Ymd'),time().".jpg",1);
-        //如果存在并且没有绑定过微信那就关联起来
-        $info=Db::name('user_weixin')->where("user_id=".$user_id)->find();
-        if (empty($info)){
-            $wx_data['wx_openid']=$openid;
-            $wx_data['user_id']=$user_id;
-            Db::name('user_weixin')->create($wx_data);
-
-            $u_data['avatar']=$avatar['save_path'];
-            $u_data['username']=json_encode($weixin_data['nickname']);
-            UserModel::where("user_id='".$user_id."'")->update($u_data);
-        }else{
-            //如果绑定过微信就覆盖以前的微信信息
-            $data['wx_openid']=$openid;
-            Db::name('user_weixin')->where("user_id=".$info['user_id'])->update($data);
-            //修改用户信息
-            $userData['avatar']=$avatar['save_path'];
-            $userData['username']=json_encode($weixin_data['nickname']);
-            UserModel::where("user_id='".$user_id."'")->update($userData);
-        }
-        //然后删除缓存的QQ或微信信息
-        UserWeixinModel::where("third_id='".$openid."'")->detele();
-        UserModel::rmAvatarByid($user_id);//删除原图片
-    }
-
-    //手机号以前没有绑定过
-    public static function nobinding($openid,$user_id,$mobile)
-    {
-
-        $request = Request::instance();
-        $ip=$request->ip();
-        //获取新微信信息
-        $weixin_data=UserWeixinModel::where("third_id='".$openid."'")->find();
-        $weixin_data=json_decode($weixin_data['third_data'],true);
-        $avatar=getImage($weixin_data['headimgurl'],'uploads/weixin/'.date('Ymd'),time().".jpg",1);
-
-
-        $data['username']=json_encode($weixin_data['nickname']).rand(1,5);
-        $data['mobile']=$mobile;
-        $data['avatar']=$avatar['save_path'];;
-        $data['last_login_ip']=$ip;
-        $data['last_login_time']=time();
-        $data['reg_ip']=$ip;
-        $data['reg_time']=time();
-        $data['token']=UserModel::settoken();
-
-        $user_id=UserModel::insertGetId($data);
-        $wx_data['user_id']=$user_id;
-        $wx_data['wx_openid']=$openid;
-        Db::name('user_weixin')->insert($wx_data);
-        //然后删除缓存的QQ或微信信息
-        UserWeixinModel::where("third_id='".$openid."'")->delete();
-        HomeModel::createHome($user_id, "默认家庭");
-        return $user_id;
     }
 
 }
