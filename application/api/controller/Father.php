@@ -10,10 +10,12 @@ class Father
 
         $info = Request::instance()->header();  //获取请求头信息
         $url=$_SERVER['REQUEST_URI'];
-        $url=explode('/',$url);
-
         $array=array('getWeixinInfo','login','getv_code');//$url[count($url)-1]
-        if (!in_array($url[count($url)-1],$array)){
+        for($i=0;$i<count($array);$i++){
+            if (strpos($url,$array[$i])){
+                return;
+            }
+        }
             //获取token
             $_token = isset($info['token']) ? $info['token'] : "";
             $_token = empty($_token) ? input("post.token") : $_token;
@@ -21,7 +23,7 @@ class Father
             $_token = empty($_token) ? "" : $_token;
 
             if ($_token==''){
-                echo api_return_json(106,'token不能为空');
+                echo api_return_json(101,'token不能为空');
             }
 
             if(!empty($_token)){
@@ -31,6 +33,5 @@ class Father
                     exit;
                 }
             }
-        }
     }
 }

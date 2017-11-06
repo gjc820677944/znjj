@@ -3,6 +3,8 @@ namespace app\api\controller\user;
 use app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\user\UserModel;
 use app\api\controller\Father;
+use app\common\model\user\UserQQModel;
+use app\common\model\user\UserWeixinModel;
 use think\Request;
 use filehelper\FileHelper;
 use think\Cache;
@@ -155,42 +157,52 @@ class User extends  Father
         }
     }
 
-    //添加微信数据
+    //第三方登录
     function getWeixinInfo()
     {
-        $user = new UserModel();
+        $type = input('type');  //区分是什么登录
         $access_token = input("access_token");      //token
-        $wx_openid = input('wx_openid');     //用户微信ID
-        $wx_unionid = input('wx_unionid','');   //用户微信联合ID
-        if ($wx_openid == '' || $access_token == '') {
+        $openid = input('openid');     //用户微信或QQID
+        $unionid = input('unionid','');   //用户微信或QQ联合ID
+        if ($openid == '' || $access_token == '') {
             echo api_return_json(105, "openid或access_token不能为空");
         }
+        //1是QQ 2是微信
+        switch ($type){
+            case 1:
+                $info=UserQQModel::QQlogin($type,$access_token,$openid,$unionid);
+                break;
+            case 2:
+                $info=UserWeixinModel::weixinlogin($type,$access_token,$openid,$unionid);
+                break;
+            default:
+        }
 
-
-        //获取用户微信息
-//        $token="eMFmfYsbaqAoqbfj8XVPZiJ0z70o_TIYNHf3bkK2TmCToO_2Liy6wA-M0HXaV7dISy1ItP9OcjuO3ApUTjdDzla6UICZgzb4mmWpB-dpxh1lXZWkxUkOFqY_QGJd3uw3JTWiAJAVFI";
-//        $wx_openid="orryGwi9BZp8GQQMWpvxl-g_KEkI";
-//        $wx_unionid="";
-        $url = "https://api.weixin.qq.com/sns/userinfo?access_token=" . $access_token . "&openid=" . $wx_openid . "&lang=zh_CN ";
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        $output = json_decode($output, true);
-
-        curl_close($ch);
-        //下载微信图片保存到本地
-        $info = $user->saveWeixinInfo($output, $wx_openid, $wx_unionid, $output['nickname']);
-        if ($info === 0) {
-            echo api_return_json(107, "微信登录失败，请重新尝试");
-        } else {
+        if (!empty($info)){
             echo api_return_json(0, $info);
+        }else{
+            echo api_return_json(1, "登录失败");
         }
     }
 
+    //绑定手机号
+    function bindingPhone()
+    {
+        $mobile = input('mobile');     //新手机号
+        $v_code = input('v_code');    //验证码
+        $openid = input('openid');      //第三方ID
+        if (!preg_match("/^1[34578]{1}\d{9}$/", $mobile)) {
+            echo api_return_json(121, '手机号格式不对');
+        }
+        if ($v_code=="123456"){
+            echo api_return_json(102, '验证码不正确');
+        }
+
+        UserModel::saveInfo($openid,$mobile);
+
+
+
+    }
 
     //发送验证码
     function sendEmailCode()
