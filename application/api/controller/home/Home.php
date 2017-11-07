@@ -6,7 +6,9 @@ use  app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\home\HomeLeaguerModel;
 use app\common\model\home\HomeModel;
 use app\common\model\user\UserModel;
+use app\common\model\user\UserUmeng;
 use think\Db;
+use umeng\Umeng;
 
 
 class Home extends Father
@@ -35,10 +37,8 @@ class Home extends Father
         if ($user_info['user_id']==$user_id){
             echo api_return_json(1,'自己不能邀请自己');
         }
-
         //判断邀请人是否有邀请他人的权限
         $auth=HomeLeaguerModel::where('home_id='.$home_id." and leaguer_id=".$user_id)->find();
-
         //如果是这个家庭的管理员就不用判断权限
         $admin=HomeModel::where('home_id='.$home_id." and creater_id=".$user_id)->find();
         if (empty($admin)){
@@ -70,7 +70,29 @@ class Home extends Father
         }
     }
 
-    //同意或邀请
+    //给被邀请的人发消息
+    public static function sendMessage($mobile)
+    {
+        //给被邀请的人发送短信
+
+        //给app推送消息
+        $info=UserModel::where("mobile='".$mobile."'")->find();
+        if (!empty($info)){
+            //获取该用户的设备token
+            $device_token=UserUmeng::where('user_id='.$info['user_id'])->find();
+            if (!empty($device_token)){
+                if ($device_token['android_device_token']!=''){
+                    Umeng::sendUnicast($device_token['android_device_token'],'测试消息',1);
+                }else{
+                    Umeng::sendUnicast($device_token['android_device_token'],'测试消息',2);
+                }
+            }
+        }
+
+
+    }
+
+    //同意或拒绝
     function ynInvitation()
     {
         $data['home_id'] =input('home_id');//家庭 ID

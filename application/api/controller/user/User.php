@@ -4,6 +4,7 @@ use app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\user\UserModel;
 use app\api\controller\Father;
 use app\common\model\user\UserQQModel;
+use app\common\model\user\UserUmengModel;
 use app\common\model\user\UserWeixinModel;
 use think\Request;
 use filehelper\FileHelper;
@@ -250,7 +251,6 @@ class User extends  Father
         $data['email']=$email;
         $user_id=UserModel::getTokenId();
 
-
         $info=UserModel::where('user_id='.$user_id)->update($data);
         if ($info!==false){
             Cache::set($email,null);
@@ -274,7 +274,45 @@ class User extends  Father
             }catch (\Exception $e){
                 echo api_return_json(1,$e->getMessage());
             }
+    }
 
+    //获取设备token
+    function getdevice_token()
+    {
+        $getdevice_token=input('getdevice_token');  //设备token
+        $type=input('type');//1是安卓 2是ios
+        $user_id=UserModel::getTokenId();
+        if ($getdevice_token==''){
+            echo api_return_json(0, "设备token不能为空");
+        }
+        try{
+            if ($type==1){
+                $info=UserUmengModel::where("android_device_token='".$getdevice_token."'")->find();
+                if (empty($info)){
+                    $data['android_device_token']=$getdevice_token;
+                    $data['user_id']=$user_id;
+                    UserUmengModel::create($data);
+                }else{
+                    $data['android_device_token']=$getdevice_token;
+                    $data['user_id']=$user_id;
+                    UserUmengModel::update($data);
+                }
+            }else{
+                $info=UserUmengModel::where("ios_device_token='".$getdevice_token."'")->find();
+                if (empty($info)){
+                    $data['ios_device_token']=$getdevice_token;
+                    $data['user_id']=$user_id;
+                    UserUmengModel::create($data);
+                }else{
+                    $data['ios_device_token']=$getdevice_token;
+                    $data['user_id']=$user_id;
+                    UserUmengModel::update($data);
+                }
+            }
+            echo api_return_json(0,"成功" );
+        }catch (\Exception $e){
+            echo api_return_json(1, $e->getMessage());
+        }
     }
 
 }
