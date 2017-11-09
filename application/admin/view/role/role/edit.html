@@ -58,7 +58,7 @@
                             <label>权限<span style="font-size: 2px"></span></label><br>
                             {volist id="vo" name="rule"}
                             <div class="auth-one">
-                               <label><input name="Fruit[]" type="checkbox" value="{$vo.rule_id}" <?php echo in_array($vo['rule_id'],$gz)?'checked':'' ?> />{$vo.rule_title} </label></div>
+                               <label><input name="Fruit[]" type="checkbox" value="{$vo.rule_id}" <?php echo in_array($vo['rule_id'],$gz)?'checked':'' ?> />{$vo.rule_title} </label>
                                {volist id="vi" name="vo.zi"}
                                 <div class="auth-two">
                                     <label class="checkbox-inline"><input name="Fruit[]" type="checkbox" value="{$vi.rule_id}" <?php echo in_array($vi['rule_id'],$gz)?'checked':'' ?> />{$vi.rule_title} </label>
@@ -95,4 +95,16 @@
         </div>
     </div>
 </section>
+{/block}
+{block name="foot"}
+<!--<script>-->
+    <!--$(document).ready(function () {-->
+        <!--$('label').click(function () {-->
+            <!--console.log($(this).parentsUntil(".auth-one").html());-->
+        <!--});-->
+    <!--});-->
+
+
+<!--</script>-->
+
 {/block}

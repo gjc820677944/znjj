@@ -71,23 +71,26 @@ class Home extends Father
     }
 
     //给被邀请的人发消息
-    public static function sendMessage($mobile)
+    public static function sendMessage()
     {
-        //给被邀请的人发送短信
-
+       // 给被邀请的人发送短信
+        $data['title']="ces";
+        $data['subtitle']="ces";
+        $data['body']="ces";
+        Umeng::sendUnicast("f3e9435e362d3e79c0a102f8cbf69c1d98f194317c516900ded9d768a9d080a2",$data,2);
         //给app推送消息
-        $info=UserModel::where("mobile='".$mobile."'")->find();
-        if (!empty($info)){
-            //获取该用户的设备token
-            $device_token=UserUmeng::where('user_id='.$info['user_id'])->find();
-            if (!empty($device_token)){
-                if ($device_token['android_device_token']!=''){
-                    Umeng::sendUnicast($device_token['android_device_token'],'测试消息',1);
-                }else{
-                    Umeng::sendUnicast($device_token['android_device_token'],'测试消息',2);
-                }
-            }
-        }
+//        $info=UserModel::where("mobile='".$mobile."'")->find();
+//        if (!empty($info)){
+//            //获取该用户的设备token
+//            $device_token=UserUmeng::where('user_id='.$info['user_id'])->find();
+//            if (!empty($device_token)){
+//                if ($device_token['android_device_token']!=''){
+//                    Umeng::sendUnicast($device_token['android_device_token'],'测试消息',1);
+//                }else{
+//                    Umeng::sendUnicast($device_token['android_device_token'],'测试消息',2);
+//                }
+//            }
+//        }
 
 
     }
@@ -192,7 +195,6 @@ class Home extends Father
 //            echo api_return_json(1,"修改失败");
 //        }
 //    }
-
 
 
 

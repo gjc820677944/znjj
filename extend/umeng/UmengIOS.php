@@ -1,11 +1,11 @@
 <?php
 namespace umeng;
 
+require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSUnicast.php');
 require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSListcast.php');
 require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSBroadcast.php');
 require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSFilecast.php');
 require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSGroupcast.php');
-require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSUnicast.php');
 require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSCustomizedcast.php');
 
 /**
@@ -16,8 +16,8 @@ require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSCustomizedcast.php')
 class UmengIOS
 {
     protected static $helper = null;
-    protected $appkey = null;
-    protected $appMasterSecret = null;
+    protected $appkey = "5a02a9d68f4a9d1cb2000152";
+    protected $appMasterSecret = "wjhddrqteevoadh21lipaoc29pu7vrtg";
     protected $timestamp = null;
     protected $validation_token = null;
 
@@ -43,7 +43,7 @@ class UmengIOS
      */
     public function sendIOSUnicast($device_tokens, $ticker, $custom) {
         try {
-            $unicast = new IOSUnicast();
+            $unicast = new \IOSUnicast();
             $unicast->setAppMasterSecret($this->appMasterSecret);
             $unicast->setPredefinedKeyValue("appkey",           $this->appkey);
             $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);

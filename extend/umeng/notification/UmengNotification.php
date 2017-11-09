@@ -69,12 +69,13 @@ abstract class UmengNotification {
 	//send the notification to umeng, return response data if SUCCESS , otherwise throw Exception with details.
 	function send() {
 		//check the fields to make sure that they are not NULL
+//        var_dump($this->data);exit;
     	$this->isComplete();
-
         $url = $this->host . $this->postPath;
         $postBody = json_encode($this->data);
         $sign = md5("POST" . $url . $postBody . $this->appMasterSecret);
         $url = $url . "?sign=" . $sign;
+
   		$ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
@@ -87,7 +88,7 @@ abstract class UmengNotification {
         $curlErrNo = curl_errno($ch);
         $curlErr = curl_error($ch);
         curl_close($ch);
-        //print($result . "\r\n");
+        print($result . "\r\n");
         if ($httpCode == "0") {
           	 // Time out
            	throw new Exception("Curl error number:" . $curlErrNo . " , Curl error details:" . $curlErr . "\r\n");

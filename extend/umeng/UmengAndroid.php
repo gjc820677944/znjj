@@ -16,8 +16,8 @@ require_once(dirname(__FILE__) . '/' . 'notification/android/AndroidCustomizedca
 class UmengAndroid
 {
     protected static $helper = null;
-    protected $appkey = null;
-    protected $appMasterSecret = null;
+    protected $appkey = "5962d002677baa03720008aa";
+    protected $appMasterSecret = "impu2lplhphqkaaplekuiwwilxovu6vg";
     protected $timestamp = null;
     protected $validation_token = null;
 
@@ -43,7 +43,7 @@ class UmengAndroid
      */
     public function sendAndroidUnicast($device_tokens, $ticker, $custom) {
         try {
-            $unicast = new AndroidUnicast();
+            $unicast = new \AndroidUnicast();
             $unicast->setAppMasterSecret($this->appMasterSecret);
             $unicast->setPredefinedKeyValue("appkey",           $this->appkey);
             $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);
