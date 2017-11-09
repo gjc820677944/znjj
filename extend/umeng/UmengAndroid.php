@@ -49,6 +49,7 @@ class UmengAndroid
             $unicast->setPredefinedKeyValue("timestamp",        $this->timestamp);
             // Set your device tokens here
             $unicast->setPredefinedKeyValue("device_tokens",    $device_tokens);
+            $unicast->setPredefinedKeyValue("expire_time", date('Y-m-d H:i:s',time()+3600));
             $unicast->setPredefinedKeyValue("ticker",           $ticker);
             $unicast->setPredefinedKeyValue("title",            $ticker);
             $unicast->setPredefinedKeyValue("text",             $ticker);
@@ -60,7 +61,7 @@ class UmengAndroid
             // Set extra fields
             $unicast->setExtraField("test", "helloworld");
             // print("Sending unicast notification, please wait...\r\n");
-            $unicast->send();
+            $result = $unicast->send();
             // print("Sent SUCCESS\r\n");
             return true;
         } catch (Exception $e) {

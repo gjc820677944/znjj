@@ -69,10 +69,10 @@ abstract class UmengNotification {
 	//send the notification to umeng, return response data if SUCCESS , otherwise throw Exception with details.
 	function send() {
 		//check the fields to make sure that they are not NULL
-//        var_dump($this->data);exit;
     	$this->isComplete();
         $url = $this->host . $this->postPath;
         $postBody = json_encode($this->data);
+//        echo $postBody;exit;
         $sign = md5("POST" . $url . $postBody . $this->appMasterSecret);
         $url = $url . "?sign=" . $sign;
 

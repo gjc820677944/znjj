@@ -16,8 +16,8 @@ require_once(dirname(__FILE__) . '/' . 'notification/ios/IOSCustomizedcast.php')
 class UmengIOS
 {
     protected static $helper = null;
-    protected $appkey = "5a02a9d68f4a9d1cb2000152";
-    protected $appMasterSecret = "wjhddrqteevoadh21lipaoc29pu7vrtg";
+    protected $appkey = null;
+    protected $appMasterSecret = null;
     protected $timestamp = null;
     protected $validation_token = null;
 
@@ -41,7 +41,8 @@ class UmengIOS
      * @param string $custom 自定义内容
      * @return bool
      */
-    public function sendIOSUnicast($device_tokens, $ticker, $custom) {
+    public function sendIOSUnicast($device_tokens, $ticker) {
+
         try {
             $unicast = new \IOSUnicast();
             $unicast->setAppMasterSecret($this->appMasterSecret);
@@ -50,12 +51,12 @@ class UmengIOS
             // Set your device tokens here
             $unicast->setPredefinedKeyValue("device_tokens",    $device_tokens);
             $unicast->setPredefinedKeyValue("alert", $ticker);
-            $unicast->setPredefinedKeyValue("badge", 0);
-            $unicast->setPredefinedKeyValue("sound", "chime");
+//            $unicast->setPredefinedKeyValue("badge", 0);
+//            $unicast->setPredefinedKeyValue("sound", "chime");
             // Set 'production_mode' to 'true' if your app is under production mode
             $unicast->setPredefinedKeyValue("production_mode", "false");
             // Set customized fields
-            $unicast->setCustomizedField("custom", $custom);
+//            $unicast->setCustomizedField("custom", $custom);
             //print("Sending unicast notification, please wait...\r\n");
             $unicast->send();
             //print("Sent SUCCESS\r\n");

@@ -13,11 +13,11 @@ class Umeng{
     public static function sendUnicast($device_token, $message, $type = 1){
         if($type === 1){
             $result = UmengAndroid::instance()
-                ->sendAndroidUnicast($device_token, $message, '');
+                ->sendAndroidUnicast($device_token, $message,'');
         }
         else{
             $result = UmengIOS::instance()
-                ->sendIOSUnicast($device_token, $message, '');
+                ->sendIOSUnicast($device_token, $message);
         }
         return $result;
     }
