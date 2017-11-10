@@ -115,6 +115,7 @@ class User extends  Father
         if (empty($info)) {
             echo api_return_json(145, "获取用户信息失败");
         } else {
+            $info['avatar']=FileHelper::helper()->getWebsitePath($info['avatar']);
             echo api_return_json(0, $info);
         }
     }
