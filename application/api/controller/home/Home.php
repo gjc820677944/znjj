@@ -78,8 +78,10 @@ class Home extends Father
        // 给被邀请的人发送短信
         $mobile=input('mobile');
         //给app推送消息
-        $info=UserModel::where("mobile='".$mobile."'")->find();
 
+        //获取该手机用户的信息
+        $info=UserModel::where("mobile='".$mobile."'")->find();
+        //如果用户信息不为空 就去找该用户设备的token
         if (!empty($info)){
             //获取该用户的设备token
             $device_token=UserUmeng::where('user_id='.$info['user_id'])->find();

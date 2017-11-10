@@ -36,6 +36,15 @@ class HomeDevice extends Base
         api_return_json(0, $list);
     }
 
+    //设备类型
+    public function deviceType(){
+        $data['1']="摄像头";
+        $data['2']="智能门";
+        $data['3']="智能灯";
+
+        api_return_json(0, $data);
+    }
+
     //绑定设备
     public function bind(){
         $input = $this->requset->param();
