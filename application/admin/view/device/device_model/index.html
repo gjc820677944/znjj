@@ -35,7 +35,7 @@
                             <select class="form-control" name="device_type">
                                 <option value="">全部</option>
                                 {volist id="vo" name="device_type_texts"}
-                                <option value="{$key}" <?php echo !empty($input['device_type']) && (int)$input['device_type'] === $key ? 'selected' : ''; ?>>{$vo}</option>
+                                <option value="{$vo.id}" <?php echo !empty($input['device_type']) && (int)$input['device_type'] === $vo['id'] ? 'selected' : ''; ?>>{$vo.name}</option>
                                 {/volist}
                             </select>
                         </div>
@@ -95,7 +95,7 @@
                                     <a href="{:url('index', ['cate_id'=>$vo['cate_id']])}">{$vo.cate_name}</a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{:url('index', ['device_type'=>$vo['device_type']])}">{$device_type_texts[$vo['device_type']]}</a>
+                                    <a href="{:url('index', ['device_type'=>$vo['device_type']])}">{$vo.device_type_text}</a>
                                 </td>
                                 <td class="text-center">
                                     {if condition="$vo.is_gateway eq 1"}
