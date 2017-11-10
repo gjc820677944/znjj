@@ -31,6 +31,15 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label>设备类型</label>
+                            <select class="form-control" name="device_type">
+                                <option value="">全部</option>
+                                {volist id="vo" name="device_type_texts"}
+                                <option value="{$key}" <?php echo !empty($input['device_type']) && (int)$input['device_type'] === $key ? 'selected' : ''; ?>>{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>开启状态</label>
                             <select class="form-control" name="status">
                                 <option value="">全部</option>
@@ -57,6 +66,7 @@
                                 <td class="text-center" width="20%">简介</td>
                                 <td class="text-center">通讯协议</td>
                                 <td class="text-center">所属分类</td>
+                                <td class="text-center">设备类型</td>
                                 <td class="text-center">是否为网关</td>
                                 <td class="text-center">开启状态</td>
                                 <td class="text-center">创建时间</td>
@@ -83,6 +93,9 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="{:url('index', ['cate_id'=>$vo['cate_id']])}">{$vo.cate_name}</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{:url('index', ['device_type'=>$vo['device_type']])}">{$device_type_texts[$vo['device_type']]}</a>
                                 </td>
                                 <td class="text-center">
                                     {if condition="$vo.is_gateway eq 1"}

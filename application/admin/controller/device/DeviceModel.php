@@ -31,6 +31,10 @@ class DeviceModel extends Base
             $cate_id = (int)$input['cate_id'];
             $model->where("m.cate_id", $cate_id);
         }
+        if(isset($input['device_type']) && $input['device_type'] !== ''){
+            $device_type = (int)$input['device_type'];
+            $model->where("m.device_type", $device_type);
+        }
         if(isset($input['status']) && $input['status'] !== ''){
             $status = (int)$input['status'];
             $model->where("m.status", $status);
@@ -47,6 +51,7 @@ class DeviceModel extends Base
             'page' => $list->render(),
             'input' => $input,
             'cate_list' => DeviceModelCategoryModel::lists(),
+            'device_type_texts' => DeviceModelModel::$device_type_texts,
             'create_url' => url('create'),
         ];
         return $this->fetch('index', $data);
@@ -71,6 +76,7 @@ class DeviceModel extends Base
             'data' => $data,
             'cate_list' => DeviceModelCategoryModel::lists(),
             'protocol_texts' => DeviceModelModel::$protocol_texts,
+            'device_type_texts' => DeviceModelModel::$device_type_texts,
             'post_url' => url('save'),
         ];
         return $this->fetch('edit', $data);
@@ -114,6 +120,7 @@ class DeviceModel extends Base
             'data' => $data,
             'cate_list' => DeviceModelCategoryModel::lists(),
             'protocol_texts' => DeviceModelModel::$protocol_texts,
+            'device_type_texts' => DeviceModelModel::$device_type_texts,
             'post_url' => url('update'),
         ];
         return $this->fetch('edit', $data);

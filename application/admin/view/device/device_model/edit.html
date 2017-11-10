@@ -48,6 +48,14 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>设备类型</label>
+                        <select class="form-control" name="device_type">
+                            {volist id="vo" name="device_type_texts"}
+                            <option value="{$key}" <?php echo $data['device_type'] === $key ? 'selected' : ''; ?>>{$vo}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>简介</label>
                         <textarea class="form-control" name="summary" rows="3">{$data.summary}</textarea>
                     </div>
