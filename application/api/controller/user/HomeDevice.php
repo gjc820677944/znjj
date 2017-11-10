@@ -3,6 +3,7 @@
 namespace app\api\controller\user;
 
 use app\common\model\device\DeviceModelModel;
+use app\common\model\device\DeviceWallpaperModel;
 use app\common\model\home\HomeDeviceProductModel;
 use filehelper\FileHelper;
 
@@ -41,7 +42,6 @@ class HomeDevice extends Base
             $data[$k]['deviceConfig']=$v['deviceConfig'];
             $data[$k]['deviceInfo']=$v;
         }
-
         api_return_json(0, $data);
     }
 
@@ -148,4 +148,18 @@ class HomeDevice extends Base
             api_return_json(363, "删除失败，请重新尝试");
         }
     }
+
+    //墙纸
+    public function wallpaperList()
+    {
+        $list=DeviceWallpaperModel::select();
+        foreach ($list as $k=>$v){
+            $v['url'] = FileHelper::helper()->getWebsitePath($v['url']);
+            $list[$k] = $v;
+        }
+        api_return_json(0,$list);
+
+    }
+
+
 }
