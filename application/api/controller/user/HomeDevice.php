@@ -31,6 +31,7 @@ class HomeDevice extends Base
         $list = $model->alias("p")->field($field)
             ->join("device_model m", "m.model_id = p.model_id", "left")
             ->select();
+        $data=array();
         foreach ($list as $k=>$v){
             $v['model_cover'] = FileHelper::helper()->getWebsitePath($v['model_cover']);
             $list[$k] = $v;
