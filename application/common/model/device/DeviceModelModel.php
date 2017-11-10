@@ -16,6 +16,12 @@ class DeviceModelModel extends Model
         3 => '蓝牙',
     ];
 
+    public static $device_type_texts = [
+        1 => '门',
+        2 => '锁',
+        3 => '摄像头',
+    ];
+
     public function getProtocolNameAttr($value, $data){
         $protocol = $data['protocol'];
         return self::$protocol_texts[$protocol];
