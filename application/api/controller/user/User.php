@@ -112,6 +112,10 @@ class User extends  Father
         $token = UserModel::getToken();
 
         $info = $user->getUserInfo($token);
+        if (strstr($info['username'],'"')){
+            $info['username']=json_decode($info['username']);
+        }
+
         if (empty($info)) {
             echo api_return_json(145, "获取用户信息失败");
         } else {

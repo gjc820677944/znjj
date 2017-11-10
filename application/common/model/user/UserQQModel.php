@@ -86,7 +86,7 @@ class UserQQModel extends Model
             UserQQModel::where("user_id=".$info['user_id'])->update($data);
             //修改用户信息
             $userData['avatar']=$avatar['save_path'];
-            $userData['username']=json_encode($weixin_data['nickname']);
+            $userData['username']=json_encode($weixin_data['nickname'].rand(1,99));
             $userData['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($userData);
         }
@@ -106,7 +106,7 @@ class UserQQModel extends Model
         $QQ_data=json_decode($QQ_data['third_data'],true);
         $avatar=getImage($QQ_data['headimgurl'],'uploads/weixin/'.date('Ymd'),time().".jpg",1);
 
-        $data['username']=json_encode($QQ_data['nickname']).rand(1,5);
+        $data['username']=json_encode($QQ_data['nickname'].rand(1,99));
         $data['mobile']=$mobile;
         $data['avatar']=$avatar['save_path'];;
         $data['last_login_ip']=$ip;

@@ -71,7 +71,7 @@ class UserWeixinModel extends Model
             UserWeixinModel::create($wx_data);
 
             $u_data['avatar']=$avatar['save_path'];
-            $u_data['username']=json_encode($weixin_data['nickname']);
+            $u_data['username']=json_encode($weixin_data['nickname'].rand(1,99));
             $u_data['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($u_data);
         }else{
@@ -80,7 +80,7 @@ class UserWeixinModel extends Model
             UserWeixinModel::where("user_id=".$info['user_id'])->update($data);
             //修改用户信息
             $userData['avatar']=$avatar['save_path'];
-            $userData['username']=json_encode($weixin_data['nickname']);
+            $userData['username']=json_encode($weixin_data['nickname'].rand(1,99));
             $u_data['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($userData);
         }

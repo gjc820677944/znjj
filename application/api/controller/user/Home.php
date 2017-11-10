@@ -25,6 +25,9 @@ class Home extends Base
             $serial_number = '';
         }
 
+        //
+
+
         $where = "is_gateway = 1 and status = 1";
         $model_id = DeviceModelModel::getIdBySN($serial_number, $where);
 
