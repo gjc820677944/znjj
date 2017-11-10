@@ -23,4 +23,6 @@ class DeviceModel extends Base
         }
         api_return_json(0, $list);
     }
+
+
 }

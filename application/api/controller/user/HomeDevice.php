@@ -25,23 +25,28 @@ class HomeDevice extends Base
             $tag = trim($input['tag']);
             $model->where("p.tag", $tag);
         }
-        $field = "p.*, m.model_name, m.model_number, m.model_cover, m.protocol";
+        
+
+        $field = "p.*, m.model_name, m.model_number, m.model_cover, m.protocol,m.device_type";
         $list = $model->alias("p")->field($field)
             ->join("device_model m", "m.model_id = p.model_id", "left")
             ->select();
         foreach ($list as $k=>$v){
             $v['model_cover'] = FileHelper::helper()->getWebsitePath($v['model_cover']);
             $list[$k] = $v;
+            $data[$k]['deviceID']=$v['product_id'];
+            $data[$k]['deviceName']=$v['model_name'];
+            $data[$k]['devicetype']=$v['device_type'];
+            $data[$k]['deviceConfig']=$v['deviceConfig'];
+            $data[$k]['deviceInfo']=$v;
         }
-        api_return_json(0, $list);
+
+        api_return_json(0, $data);
     }
 
     //设备类型
     public function deviceType(){
-        $data['1']="摄像头";
-        $data['2']="智能门";
-        $data['3']="智能灯";
-
+        $data=DeviceModelModel::$device_type_texts;
         api_return_json(0, $data);
     }
 
@@ -56,6 +61,7 @@ class HomeDevice extends Base
         }
         $home_id = $input['home_id'];
         $serial_number = $input['serial_number'];
+        $deviceConfig = $input['deviceConfig'];
         //校验设备编号
         $model_id = DeviceModelModel::getIdBySN($serial_number);
         if($model_id <= 0){
@@ -82,6 +88,7 @@ class HomeDevice extends Base
                 'tag' => empty($input['tag']) ? '' : trim($input['tag']),
                 'model_id' => $model_id,
                 'is_gateway' => $model_data['is_gateway'],
+                'deviceConfig'=>$deviceConfig,
             ];
             $result = HomeDeviceProductModel::update($data);
         }
@@ -92,6 +99,7 @@ class HomeDevice extends Base
                 'serial_number' => $serial_number,
                 'model_id' => $model_id,
                 'is_gateway' => $model_data['is_gateway'],
+                'deviceConfig'=>$deviceConfig,
             ];
             $result = HomeDeviceProductModel::create($data);
         }
