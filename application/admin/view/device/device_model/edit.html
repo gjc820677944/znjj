@@ -51,7 +51,7 @@
                         <label>设备类型</label>
                         <select class="form-control" name="device_type">
                             {volist id="vo" name="device_type_texts"}
-                            <option value="{$key}" <?php echo $data['device_type'] === $key ? 'selected' : ''; ?>>{$vo}</option>
+                            <option value="{$vo.id}" <?php echo $data['device_type'] === $vo['id'] ? 'selected' : ''; ?>>{$vo.name}</option>
                             {/volist}
                         </select>
                     </div>

@@ -17,9 +17,9 @@ class DeviceModelModel extends Model
     ];
 
     public static $device_type_texts = [
-        1 => '门',
-        2 => '锁',
-        3 => '摄像头',
+        ['id'=>1, 'name'=>'门'],
+        ['id'=>2, 'name'=>'锁'],
+        ['id'=>3, 'name'=>'摄像头'],
     ];
 
     public function getProtocolNameAttr($value, $data){
@@ -31,6 +31,16 @@ class DeviceModelModel extends Model
         $status = $data['status'];
         $texts = [1=>'已开启', 4=>'已关闭'];
         return $texts[$status];
+    }
+
+    public function getDeviceTypeTextAttr($value, $data){
+        $device_type = $data['device_type'];
+        foreach (self::$device_type_texts as $v){
+            if($v['id'] === $device_type){
+                return $v['name'];
+            }
+        }
+        return '';
     }
 
     protected static function init()
