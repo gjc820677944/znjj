@@ -222,4 +222,30 @@ class Home extends Base
             api_return_json(334, "解散失败，请重新尝试");
         }
     }
+
+    //退出家庭
+    function quitHome()
+    {
+        $where['home_id'] = (int)$this->requset->param('home_id');
+        $where['leaguer_id']=$this->user_id;
+
+        if ($where['home_id']<=0){
+            api_return_json(1,"家庭ID不能为空");
+        }
+
+        $info=HomeModel::where('home_id='.$where['home_id'])->find();
+        if (!empty($info)){
+            if ($info['creater_id']==$this->user_id){
+                api_return_json(1,"你是创建人，不能退出，可以去解散");
+            }
+        }
+
+        $info=HomeLeaguerModel::where($where)->delete();
+        if ($info){
+            api_return_json(0,"成功退出");
+        }else{
+            api_return_json(1, "退出失败，请重新尝试");
+        }
+
+    }
 }
