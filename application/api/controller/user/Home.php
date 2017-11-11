@@ -37,8 +37,9 @@ class Home extends Base
             $data['wallpaper']=$new_url;
         }
 
-
-
+        if (!isset($data['wallpaper'])){
+            api_return_json(301, "请选择壁纸");
+        }
 
 
         $where = "is_gateway = 1 and status = 1";
