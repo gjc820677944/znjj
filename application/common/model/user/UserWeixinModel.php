@@ -101,7 +101,7 @@ class UserWeixinModel extends Model
         $weixin_data=json_decode($weixin_data['third_data'],true);
         $avatar=getImage($weixin_data['headimgurl'],'uploads/weixin/'.date('Ymd'),time().".jpg",1);
 
-        $data['username']=json_encode($weixin_data['nickname']).rand(1,5);
+        $data['username']=json_encode($weixin_data['nickname'].rand(1,99));
         $data['mobile']=$mobile;
         $data['avatar']=$avatar['save_path'];;
         $data['last_login_ip']=$ip;

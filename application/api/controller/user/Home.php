@@ -3,6 +3,7 @@
 namespace app\api\controller\user;
 
 use app\common\model\device\DeviceModelModel;
+use app\common\model\device\DeviceWallpaperModel;
 use app\common\model\home\HomeDeviceProductModel;
 use app\common\model\home\HomeLeaguerModel;
 use app\common\model\home\HomeModel;
@@ -24,15 +25,27 @@ class Home extends Base
         else{
             $serial_number = '';
         }
+        if($file = Request::instance()->file('wallpaper')){ //家庭封面
+            $data['wallpaper'] = FileHelper::helper()
+                ->saveUploadFile($file->getInfo(), 'home/wallpaper/'.date("Ymd"));
+        }
+        //墙纸处理
+        elseif (isset($input['wallpaper_id']) && (int)$input['wallpaper_id']>0){
+                $url=DeviceWallpaperModel::where('wallpaper_id='.$input['wallpaper_id'])->value('url');
+                $new_url='uploads/home/wallpaper/'.date("Ymd")."/".time().".jpg";
+                FileHelper::helper()->copyLocalFileTo($url,$new_url);
+            $data['wallpaper']=$new_url;
+        }
 
-        //
+
+
 
 
         $where = "is_gateway = 1 and status = 1";
         $model_id = DeviceModelModel::getIdBySN($serial_number, $where);
 
         //添加房间与家庭
-        $result = HomeModel::createHome($this->user_id, $home_name);
+        $result = HomeModel::createHome($this->user_id, $home_name,$data['wallpaper']);
         if(!$result){
             api_return_json(304, "房间创建失败，请重新尝试");
         }

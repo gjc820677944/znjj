@@ -88,6 +88,32 @@ class LocalHelper extends BaseHelper
     }
 
     /**
+     * 复制本地文件到指定目录
+     * @param string $local_path 文件本地路径
+     * @param string $to_path 移动后的文件路径
+     * @return bool
+     */
+    public function copyLocalFileTo($local_path, $to_path){
+
+        $local_abs_path = $this->rootDir . $local_path; //文件绝对路径
+        if(!file_exists($local_abs_path)){
+            return false;
+        }
+//        $to_abs_path = $this->rootDir . $to_path; //文件绝对路径
+        $to_abs_dir = dirname($to_path); //文件目录
+        if(!is_dir($to_abs_dir)){
+            mkdir($to_abs_dir, 0777, true);
+        }
+        $result = copy($local_abs_path, $to_path);
+        if($result){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    /**
      * 移动文件位置
      * @param string $from_path 原文件路径
      * @param string $to_path 新文件路径

@@ -77,7 +77,7 @@ class UserQQModel extends Model
             $wx_data['user_id']=$user_id;
             UserQQModel::create($wx_data);
             $u_data['avatar']=$avatar['save_path'];
-            $u_data['username']=json_encode($weixin_data['nickname']);
+            $u_data['username']=json_encode($weixin_data['nickname'].rand(1,99));
             $u_data['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($u_data);
         }else{

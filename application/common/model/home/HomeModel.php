@@ -77,7 +77,7 @@ class HomeModel extends Model
      * @param int $creater_id 创建人ID
      * @param string $home_name 房间名称
      */
-    public static function createHome($creater_id, $home_name){
+    public static function createHome($creater_id, $home_name,$wallpaper){
         //添加房间与家庭
         $model = new HomeModel();
         $model->startTrans();
@@ -85,6 +85,7 @@ class HomeModel extends Model
         $home_data = [
             'creater_id' => $creater_id,
             'home_name' => $home_name,
+            'wallpaper'=>$wallpaper,
         ];
         $home = HomeModel::create($home_data);
         if(empty($home)){
