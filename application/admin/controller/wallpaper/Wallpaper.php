@@ -13,6 +13,10 @@ class Wallpaper extends Base
         $input = $this->request->param();
         $model = new DeviceWallpaperModel();
 
+        if (isset($input['keywords']) && $input['keywords'] !== '') {
+            $keywords = $input['keywords'];
+            $model->where("title like '%$keywords%'");
+        }
         $list = $model->paginate(null);
 
         foreach ($list as $k=>$v){
@@ -125,7 +129,6 @@ class Wallpaper extends Base
         }else{
             api_return_json(1, "删除失败");
         }
-
     }
 
 }
