@@ -32,9 +32,9 @@ class Home extends Base
         //墙纸处理
         elseif (isset($input['wallpaper_id']) && (int)$input['wallpaper_id']>0){
                 $url=DeviceWallpaperModel::where('wallpaper_id='.$input['wallpaper_id'])->value('url');
-                $new_url='uploads/home/wallpaper/'.date("Ymd")."/".time().".jpg";
+                $new_url='home/wallpaper/'.date("Ymd")."/".time().".jpg";
                 FileHelper::helper()->copyLocalFileTo($url,$new_url);
-            $data['wallpaper']=$new_url;
+            $data['wallpaper']=FileHelper::helper()->prefixDir.$new_url;
         }
 
         if (!isset($data['wallpaper'])){
