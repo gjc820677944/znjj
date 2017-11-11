@@ -25,6 +25,7 @@ class Wallpaper extends Base
             'page' => $list->render(),
             'input' => $input,
             'create_url' => url('create'),
+            'count'     =>  DeviceWallpaperModel::count()
         ];
 
         return $this->fetch('', $data);
@@ -111,9 +112,19 @@ class Wallpaper extends Base
         }else{
             $this->error("添加失败");
         }
+    }
 
-
-
+    //删除墙纸
+    function deleteqiangzhi()
+    {
+        $input = $this->request->param();
+        $wallpaper_id=$input['wallpaper_id'];
+        $info=DeviceWallpaperModel::where('wallpaper_id='.$wallpaper_id)->delete();
+        if ($info){
+            api_return_json(0,"删除成功");
+        }else{
+            api_return_json(1, "删除失败");
+        }
 
     }
 

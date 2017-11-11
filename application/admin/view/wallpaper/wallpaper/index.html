@@ -22,14 +22,6 @@
                                 <label>关键字</label>
                                 <input type="text" class="form-control" name="keywords" placeholder="墙纸名称" value="<?php echo !empty($input['keywords']) ? $input['keywords'] : ''; ?>">
                             </div>
-                            <!--<div class="form-group">-->
-                                <!--&nbsp;&nbsp;<label>状态</label>-->
-                                <!--<select class="form-control" name="status">-->
-                                    <!--<option value="">全部</option>-->
-                                    <!--<option value="1" <?php echo !empty($input['status']) && (int)$input['status'] === 1 ? 'selected' : ''; ?>>正常</option>-->
-                                    <!--<option value="2" <?php echo !empty($input['status']) && (int)$input['status'] === 4 ? 'selected' : ''; ?>>已禁用</option>-->
-                                <!--</select>-->
-                            <!--</div>-->
                             <button type="submit" class="btn btn-primary">查询</button>
                         </form>
                     </div>
@@ -69,7 +61,11 @@
                             </td>
                             <td class="text-center">
                                 <a class="btn btn-primary btn-sm" href="{:url('create',array('type'=>2,'wallpaper_id'=>$vo.wallpaper_id))}">修改</a>
-                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('deleteUserInfo', ['wallpaper_id'=>$vo.wallpaper_id])}', '您确认删除该墙纸吗？')">删除</a>
+                                {if condition="$count <= 4"}
+                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="alert('保底4张墙纸,不能删除了')">删除</a>
+                                {else /}
+                                <a href="javascript:;" class="btn btn-sm btn-primary" onclick="ajaxConfirm('{:url('deleteqiangzhi', ['wallpaper_id'=>$vo.wallpaper_id])}', '您确认删除该墙纸吗？')">删除</a>
+                                {/if}
                             </td>
                         </tr>
                         {/volist}
