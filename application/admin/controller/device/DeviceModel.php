@@ -46,6 +46,7 @@ class DeviceModel extends Base
             $v['model_cover'] = FileHelper::helper()->getWebsitePath($v['model_cover']);
             $list[$k] = $v;
         }
+
         $data = [
             'list' => $list,
             'page' => $list->render(),

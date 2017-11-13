@@ -46,7 +46,7 @@ class HomeDevice extends Base
 
     //字典
     public function Dictionaries(){
-        $data=DeviceModelModel::$device_type_texts;
+        $data=DeviceModelModel::$Dictionaries;
         api_return_json(0, $data);
     }
 
