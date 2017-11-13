@@ -272,6 +272,12 @@ class User extends  Father
                     ->where("leaguer_mobile='".$mobile['mobile']."'")
                     ->join('smart_user su','su.user_id=hl.inviter_id','left')
                     ->select();
+                foreach ($data as $d){
+                    if (strstr($d['username'],'"')){
+                        $d['username']=json_decode($d['username']);
+                    }
+                }
+
                 echo api_return_json(0, $data);
             }catch (\Exception $e){
                 echo api_return_json(1,$e->getMessage());
