@@ -34,6 +34,7 @@ class Home extends Base
                 $url=DeviceWallpaperModel::where('wallpaper_id='.$input['wallpaper_id'])->value('url');
                 $new_url='home/wallpaper/'.date("Ymd")."/".date('YmdHis').".jpg";
                 FileHelper::helper()->copyLocalFileTo($url,$new_url);
+//                echo FileHelper::helper()->prefixDir.$new_url;exit;
             $data['wallpaper']=FileHelper::helper()->prefixDir.$new_url;
         }
 

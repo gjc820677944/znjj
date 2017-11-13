@@ -96,14 +96,18 @@ class LocalHelper extends BaseHelper
     public function copyLocalFileTo($local_path, $to_path){
 
         $local_abs_path = $this->rootDir . $local_path; //文件绝对路径
+        echo $local_abs_path;exit;
         if(!file_exists($local_abs_path)){
             return false;
         }
         $to_abs_path = $this->prefixDir . $to_path; //文件绝对路径
-        $to_abs_dir = dirname($to_path); //文件目录
+
+        $to_abs_dir = dirname($to_abs_path); //文件目录
+
         if(!is_dir($to_abs_dir)){
             mkdir($to_abs_dir, 0777, true);
         }
+
         $result = copy($local_abs_path, $to_path);
         if($result){
             return true;

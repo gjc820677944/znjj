@@ -18,20 +18,21 @@ class DeviceModelModel extends Model
 
     //字典
     public static $Dictionaries=[
-        'deviceType'=>[
+        [   'name'  =>  'deviceType',
+            'options'=>[
             ['id'=>1, 'name'=>'门'],
             ['id'=>2, 'name'=>'锁'],
             ['id'=>3, 'name'=>'摄像头'],
-        ],
-        'tag'    => [
+        ],],
+        [   'name'  =>  'tag',
+            'options'    => [
             ['id'=>1,'name'=>'大厅'],
             ['id'=>2,'name'=>'卧室'],
             ['id'=>3,'name'=>'厨房'],
             ['id'=>4,'name'=>'走廊'],
             ['id'=>5,'name'=>'次卧'],
             ['id'=>6,'name'=>'卫生间'],
-        ],
-
+        ],],
     ];
 
     public static $device_type_texts = [
