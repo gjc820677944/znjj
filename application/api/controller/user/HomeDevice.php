@@ -26,7 +26,6 @@ class HomeDevice extends Base
             $tag = trim($input['tag']);
             $model->where("p.tag", $tag);
         }
-        
 
         $field = "p.*, m.model_name, m.model_number, m.model_cover, m.protocol,m.device_type";
         $list = $model->alias("p")->field($field)
@@ -158,7 +157,11 @@ class HomeDevice extends Base
             $list[$k] = $v;
         }
         api_return_json(0,$list);
+    }
 
+    //设备操作信息
+    function addDeviceLog(){
+        
     }
 
 

@@ -1,7 +1,5 @@
 <?php
 namespace app\common\model\user;
-use app\api\controller\user\User;
-use app\common\model\home\HomeLeaguerInviteModel;
 use app\common\model\home\HomeModel;
 use filehelper\FileHelper;
 use think\Model;
@@ -29,7 +27,7 @@ class UserModel extends Model
             UserLogsModel::addLog($info,1,$ip,time(),"");
 
             //如果没有家庭有创建一个家庭
-            HomeModel::createHome($info, "默认家庭");
+            HomeModel::createHome($info, "默认家庭",HomeModel::qaingzhiHandle());
             if ($info!=false){
                 $arr['token']=$data['token'];
                 $arr['username']= $data['username'];
@@ -155,24 +153,30 @@ class UserModel extends Model
     {
         $request = Request::instance();
         $ip=$request->ip();
+        Db::startTrans();
 
-        $info=UserModel::where("mobile='".$input['mobile']."'")->find();
-        //该手机号已存在
-        if (!empty($info)){
-            return 1;
-        }
+        try{
+            $info=UserModel::where("mobile='".$input['mobile']."'")->find();
+            //该手机号已存在
+            if (!empty($info)){
+                return 1;
+            }
 
-        $input['last_login_ip']=$ip;            //最后一次登录IP
-        $input['last_login_time']=time();       //最后一次登录时间
-        $input['reg_ip']=$ip;                     //注册IP
-        $input['reg_time']=time();                   //注册时间
-        $input['reg_type']=1;                        //注册类型
+            $input['last_login_ip']=$ip;            //最后一次登录IP
+            $input['last_login_time']=time();       //最后一次登录时间
+            $input['reg_ip']=$ip;                     //注册IP
+            $input['reg_time']=time();                   //注册时间
+            $input['reg_type']=1;                        //注册类型
 
-        $info=UserModel::insert($input);
-        if ($info==false){
-            return 0;
-        }else{
+            $info=UserModel::create($input);
+
+            //创建一个默认家庭
+            HomeModel::createHome($info->user_id,"默认家庭",HomeModel::qaingzhiHandle());
+            Db::commit();
             return 2;
+        }catch (\Exception $e){
+            Db::rollback();
+            return 0;
         }
     }
 
@@ -228,6 +232,7 @@ class UserModel extends Model
                     break;
                 default:
             }
+
             Db::commit();
             api_return_json(0,$data);
         }catch (\Exception $e){

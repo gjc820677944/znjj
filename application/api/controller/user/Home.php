@@ -246,6 +246,14 @@ class Home extends Base
         }else{
             api_return_json(1, "退出失败，请重新尝试");
         }
+    }
+
+    //默认家庭信息
+    function defaultHome()
+    {
+
+
 
     }
+
 }

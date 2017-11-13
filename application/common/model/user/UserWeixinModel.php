@@ -1,6 +1,7 @@
 <?php
 
 namespace app\common\model\user;
+use app\common\model\home\HomeModel;
 use \think\Db;
 use think\Model;
 
@@ -91,7 +92,7 @@ class UserWeixinModel extends Model
         return UserModel::where('user_id='.$user_id)->field('username,token')->find();
     }
 
-    //手机号以前没有绑定过QQ
+    //手机号以前没有绑定过微信
     public static function nobinding($user_id,$openid,$mobile)
     {
         $request = Request::instance();
@@ -110,13 +111,13 @@ class UserWeixinModel extends Model
         $data['reg_time']=time();
         $data['token']=UserModel::settoken();
 
-        $u_info=$user_id=UserModel::create($data);
+        $u_info=UserModel::create($data);
         $wx_data['user_id']=$user_id->user_id;
         $wx_data['wx_openid']=$openid;
         UserWeixinModel::create($wx_data);
-        //然后删除缓存的QQ信息
+        //然后删除缓存的微信信息
         UserThirdLogsModel::where("third_id='".$openid."'")->delete();
-        HomeModel::createHome($user_id->user_id, "默认家庭");
+        HomeModel::createHome($user_id->user_id, "默认家庭",HomeModel::qaingzhiHandle());
         $u_data['username']=$u_info->username;
         $u_data['token']=$u_info->token;
         return $u_data;

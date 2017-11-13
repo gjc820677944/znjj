@@ -204,9 +204,6 @@ class User extends  Father
         }
 
         UserModel::saveInfo($openid,$mobile);
-
-
-
     }
 
     //发送验证码

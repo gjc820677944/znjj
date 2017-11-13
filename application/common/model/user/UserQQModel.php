@@ -60,24 +60,23 @@ class UserQQModel extends Model
         }else{
            return UserQQModel::yesbinding($openid,$info['user_id']);
         }
-
     }
 
     //手机号以前绑定过 QQ
     public static function yesbinding($openid,$user_id)
     {
         //获取新QQ信息
-        $weixin_data=UserThirdLogsModel::where("third_id='".$openid."'")->find();
-        $weixin_data=json_decode($weixin_data['third_data'],true);
-        $avatar=getImage($weixin_data['headimgurl'],'uploads/weixin/'.date('Ymd'),time().".jpg",1);
+        $qq_data=UserThirdLogsModel::where("third_id='".$openid."'")->find();
+        $qq_data=json_decode($qq_data['third_data'],true);
+        $avatar=getImage($qq_data['headimgurl'],'uploads/weixin/'.date('Ymd'),time().".jpg",1);
         //如果存在并且没有绑定过QQ那就关联起来
         $info=UserQQModel::where("user_id=".$user_id)->find();
         if (empty($info)){
-            $wx_data['qq_openid']=$openid;
-            $wx_data['user_id']=$user_id;
-            UserQQModel::create($wx_data);
+            $q_data['qq_openid']=$openid;
+            $q_data['user_id']=$user_id;
+            UserQQModel::create($q_data);
             $u_data['avatar']=$avatar['save_path'];
-            $u_data['username']=json_encode($weixin_data['nickname'].rand(1,99));
+            $u_data['username']=json_encode($qq_data['nickname'].rand(1,99));
             $u_data['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($u_data);
         }else{
@@ -86,7 +85,7 @@ class UserQQModel extends Model
             UserQQModel::where("user_id=".$info['user_id'])->update($data);
             //修改用户信息
             $userData['avatar']=$avatar['save_path'];
-            $userData['username']=json_encode($weixin_data['nickname'].rand(1,99));
+            $userData['username']=json_encode($qq_data['nickname'].rand(1,99));
             $userData['token']=UserModel::settoken();
             UserModel::where("user_id='".$user_id."'")->update($userData);
         }
@@ -121,7 +120,7 @@ class UserQQModel extends Model
         UserQQModel::insert($data_qq);
         //然后删除缓存的QQ信息
         UserThirdLogsModel::where("third_id='".$openid."'")->delete();
-        HomeModel::createHome($u_info->user_id, "默认家庭");
+        HomeModel::createHome($u_info->user_id, "默认家庭",HomeModel::qaingzhiHandle());
         $u_data['username']=$u_info->username;
         $u_data['token']=$u_info->token;
         return $u_data;

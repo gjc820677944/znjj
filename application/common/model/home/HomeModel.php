@@ -3,6 +3,7 @@ namespace app\common\model\home;
 
 use filehelper\FileHelper;
 use think\Model;
+use app\common\model\device\DeviceWallpaperModel;
 
 class HomeModel extends Model
 {
@@ -106,6 +107,16 @@ class HomeModel extends Model
         }
         $model->commit();
         return true;
+    }
+
+    //创建默认家庭时的墙纸处理
+    public static function qaingzhiHandle()
+    {
+        $info=DeviceWallpaperModel::find();
+        $url=DeviceWallpaperModel::where('wallpaper_id='.$info['wallpaper_id'])->value('url');
+        $new_url='home/wallpaper/'.date("Ymd")."/".date('YmdHis').".jpg";
+        FileHelper::helper()->copyLocalFileTo($url,$new_url);
+        return FileHelper::helper()->prefixDir.$new_url;
     }
 
 }
