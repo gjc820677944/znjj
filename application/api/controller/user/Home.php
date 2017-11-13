@@ -117,7 +117,11 @@ class Home extends Base
             ->where("home_id", $home_id)->order("create_time desc")->select();
         foreach ($leaguers as $k=>$v){
             $v['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
+            if (strstr($v['username'],'"')){
+                $v['username']=json_decode($v['username']);
+            }
             $leaguers[$k] = $v;
+
         }
         $home['leaguers'] = $leaguers;
         api_return_json(0, $home);
