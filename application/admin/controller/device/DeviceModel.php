@@ -71,6 +71,7 @@ class DeviceModel extends Base
             'cate_id' => 0,
             'is_gateway' => 0,
             'status' => 1,
+            'device_type'=>0,
         ];
         $data = [
             'data' => $data,
@@ -79,6 +80,7 @@ class DeviceModel extends Base
             'device_type_texts' => DeviceModelModel::$device_type_texts,
             'post_url' => url('save'),
         ];
+
         return $this->fetch('edit', $data);
     }
 
