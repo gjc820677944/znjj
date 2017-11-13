@@ -11,7 +11,7 @@ use app\common\model\device\DevicePointModel;
 
 class DeviceModelPoint extends Base
 {
-    public function index(int $model_id = 0)
+    public function index($model_id = 0)
     {
         if($model_id <= 0){
             $this->error("模型ID错误");
@@ -38,7 +38,7 @@ class DeviceModelPoint extends Base
         return $this->fetch('index', $data);
     }
 
-    public function modalBody(int $model_id = 0){
+    public function modalBody($model_id = 0){
         $input = $this->request->param();
         if($model_id <= 0){
             api_return_json(100, '模型ID错误');
@@ -54,6 +54,7 @@ class DeviceModelPoint extends Base
         $model->where("status", 1);
         if (isset($input['cate_id']) && $input['cate_id'] !== ''){
             $cate_id = (int)$input['cate_id'];
+
             $model->where("p.cate_id", $cate_id);
         }
         if(isset($input['keywords']) && $input['keywords'] !== ''){
@@ -75,7 +76,7 @@ class DeviceModelPoint extends Base
         api_return_json(0, $html);
     }
 
-    public function save(int $model_id = 0){
+    public function save($model_id = 0){
         $input = $this->request->param();
         if(!isset($input['point_ids']) || empty($input['point_ids'])){
             api_return_json(101, '请选择功能点');
