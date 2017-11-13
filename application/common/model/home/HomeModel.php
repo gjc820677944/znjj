@@ -114,7 +114,7 @@ class HomeModel extends Model
     {
         $info=DeviceWallpaperModel::find();
         $url=DeviceWallpaperModel::where('wallpaper_id='.$info['wallpaper_id'])->value('url');
-        $new_url='home/wallpaper/'.date("Ymd")."/".date('YmdHis').".jpg";
+        $new_url='home/wallpaper/'.date("Ymd")."/".date('YmdHis').mt_rand(1000, 9999).".jpg";
         FileHelper::helper()->copyLocalFileTo($url,$new_url);
         return FileHelper::helper()->prefixDir.$new_url;
     }

@@ -32,7 +32,7 @@ class Home extends Base
         //墙纸处理
         elseif (isset($input['wallpaper_id']) && (int)$input['wallpaper_id']>0){
                 $url=DeviceWallpaperModel::where('wallpaper_id='.$input['wallpaper_id'])->value('url');
-                $new_url='home/wallpaper/'.date("Ymd")."/".date('YmdHis').".jpg";
+                $new_url='home/wallpaper/'.date("Ymd")."/".date('YmdHis').mt_rand(1000, 9999).".jpg";
                 FileHelper::helper()->copyLocalFileTo($url,$new_url);
             $data['wallpaper']=FileHelper::helper()->prefixDir.$new_url;
         }
@@ -246,14 +246,6 @@ class Home extends Base
         }else{
             api_return_json(1, "退出失败，请重新尝试");
         }
-    }
-
-    //默认家庭信息
-    function defaultHome()
-    {
-
-
-
     }
 
 }

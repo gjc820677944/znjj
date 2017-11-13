@@ -159,10 +159,5 @@ class HomeDevice extends Base
         api_return_json(0,$list);
     }
 
-    //设备操作信息
-    function addDeviceLog(){
-        
-    }
-
 
 }
