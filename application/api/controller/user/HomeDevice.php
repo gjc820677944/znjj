@@ -44,8 +44,8 @@ class HomeDevice extends Base
         api_return_json(0, $data);
     }
 
-    //设备类型
-    public function deviceType(){
+    //字典
+    public function Dictionaries(){
         $data=DeviceModelModel::$device_type_texts;
         api_return_json(0, $data);
     }
