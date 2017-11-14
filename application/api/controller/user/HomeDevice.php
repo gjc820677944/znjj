@@ -159,5 +159,21 @@ class HomeDevice extends Base
         api_return_json(0,$list);
     }
 
+    //修改设备参数
+    function updateDeviceConfig()
+    {
+        $input = $this->requset->param();
+        $data['product_id']=$input['product_id'];
+        $data['deviceConfig']=$input['deviceConfig'];
+        $info=HomeDeviceProductModel::update($data);
+        if ($info){
+            api_return_json(0, "修改成功");
+        }else{
+            api_return_json(1, "修改失败");
+        }
+
+
+    }
+
 
 }
