@@ -2,11 +2,11 @@
 {block name="content"}
 <section class="content-header">
     <h1>
-        角色管理
+        规则管理
         <small>The administrator list</small>
     </h1>
     <ol class="breadcrumb">
-        {include file="admin/breadcrumb"}
+        {include file="auth/rule/breadcrumb"}
         <li class="active"></li>
     </ol>
 </section>
@@ -38,7 +38,6 @@
                             <td class="text-center">规则中文名称</td>
                             <td class="text-center">规则状态（1-正常，0-禁用）</td>
                             <td class="text-center">排序</td>
-                            <td class="text-center">上级规则</td>
                             <td class="text-center">是否在菜单显示</td>
                             <td class="text-center">操作</td>
                         </tr>
@@ -47,7 +46,7 @@
                         {volist id="vo" name="list"}
                         <tr>
                             <td class="text-center">{$vo.rule_id}</td>
-                            <td class="text-center">{$vo.rule_name}</td>
+                            <td class="text-left">--{$vo.rule_name}</td>
                             <td class="text-center">{$vo.rule_title}</td>
                             <td class="text-center">
                                 {if condition="$vo.status === 1"}
@@ -57,7 +56,6 @@
                                 {/if}
                             </td>
                             <td class="text-center">{$vo.sort_by}</td>
-                            <td class="text-center">{$vo.f_rule_name}</td>
                             <td>
                                 {if condition="$vo.show_menu == 1"}
                                 显示
@@ -73,11 +71,6 @@
                         {/volist}
                         </tbody>
                     </table>
-                    {if condition="$page neq ''"}
-                    <ul class="pagination">
-                        {$page}
-                    </ul>
-                    {/if}
                 </div>
                 <!-- /.box-body -->
             </div>

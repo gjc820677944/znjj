@@ -1,11 +1,9 @@
 <?php
-namespace app\admin\controller\role;
+namespace app\admin\controller\auth;
+
 use app\admin\controller\Base;
 use app\common\model\admin\AdminAuthRuleModel;
 use app\common\model\admin\AdminRoleModel;
-use think\Request;
-use filehelper\FileHelper;
-use think\Db;
 
 class Role extends Base
 {

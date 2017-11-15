@@ -1,10 +1,8 @@
 <?php
-namespace app\admin\controller\rule;
+namespace app\admin\controller\auth;
+
 use app\admin\controller\Base;
 use app\common\model\admin\AdminAuthRuleModel;
-use think\Request;
-use filehelper\FileHelper;
-use think\Db;
 
 class Rule extends Base
 {
