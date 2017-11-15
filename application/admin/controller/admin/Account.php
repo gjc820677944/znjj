@@ -38,6 +38,8 @@ class Account extends Base
             else{
                 $v['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
             }
+            $role_names = AdminModel::getRoleNames($v['ad_id']);
+            $v['role_names'] = implode(', ', $role_names);
             $list[$k] = $v;
         }
         $data = [

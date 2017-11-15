@@ -112,4 +112,24 @@ class AdminModel extends Model
     public static function getLogignAdId(){
         return (int)session("ad_id");
     }
+
+    /**
+     * 获取管理员的角色名字
+     */
+    public static function getRoleNames($ad_id){
+        $role_ids = AdminModel::where("ad_id", $ad_id)->value('role_id');
+        $role_names = [];
+        if($ad_id === 1){
+            $role_names[] = "超级管理员";
+        }
+        if(empty($role_ids)){
+            return $role_names;
+        }
+        $role_ids = explode(',', $role_ids);
+        $names = AdminRoleModel::where('group_id', 'in', $role_ids)->column('title');
+        if($names){
+            $role_names = array_merge($role_names, $names);
+        }
+        return $role_names;
+    }
 }
