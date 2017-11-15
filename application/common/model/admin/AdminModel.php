@@ -124,7 +124,7 @@ class AdminModel extends Model
     }
 
     /**
-     * 过去管理员角色ID集合
+     * 获取管理员角色ID集合
      */
     public static function getGroupIds($ad_id){
         $group_ids = AdminAuthGroupAccessModel::where("ad_id", $ad_id)->column('group_id');
@@ -146,5 +146,56 @@ class AdminModel extends Model
             return [];
         }
         return $group_names;
+    }
+
+    /**
+     * 获取管理员关联角色的规则ID的集合
+     */
+    public static function getGroupRuleIds($ad_id){
+        $rule_list = AdminAuthGroupAccessModel::alias('ga')
+            ->join("admin_role r", "r.group_id = ga.group_id", "left")
+            ->where("ga.ad_id", $ad_id)
+            ->column("r.rule_ids");
+        if(empty($rule_list)){
+            return [];
+        }
+        $rule_ids = [];
+        foreach ($rule_list as $ids){
+            $ids = explode(',', $ids);
+            foreach ($ids as $id){
+                if((int)$id > 0){
+                    $rule_ids[] = (int)$id;
+                }
+            }
+        }
+        $rule_ids = array_flip(array_flip($rule_ids));
+        return $rule_ids;
+    }
+
+    /**
+     * 获取管理员角色的菜单列表
+     */
+    public static function getMenuList($ad_id){
+        $model = new AdminAuthRuleModel();
+        if($ad_id !== 1){
+            $rule_ids = AdminModel::getGroupRuleIds($ad_id);
+            if(empty($rule_ids)){
+                return [];
+            }
+            $model->where("rule_id", "in", $rule_ids);
+        }
+        $list = $model->where("status = 1 and show_menu = 1") ->select();
+        $list = collection($list)->toArray();
+        $list = list_to_tree($list, 'rule_id', 'parent_id', 'child');
+        foreach ($list as $k=>$v){
+            if(isset($v['child'])){
+                $v['check_child'] = true;
+            }
+            else{
+                $v['check_child'] = false;
+            }
+            $list[$k] = $v;
+        }
+        return $list;
     }
 }

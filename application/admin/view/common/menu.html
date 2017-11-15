@@ -1,5 +1,27 @@
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">MAIN NAVIGATION</li>
+
+    <!--循环遍历权限列表-->
+    {volist id="va" name="menu_list"}
+    <li class="treeview">
+        <a href="<?php echo isset($va['child']) ? 'javascript:;' : url($va['rule_name']); ?>">
+            <i class="fa {$va.icon}"></i> <span>{$va.rule_title}</span>
+            {if condition="isset($va['child'])"}
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            {/if}
+        </a>
+        {if condition="isset($va['child'])"}
+        <ul class="treeview-menu">
+            {volist id="vb" name="va.child"}
+            <li class="active"><a href="{:url($vb['rule_name'])}"><i class="fa {$vb.icon}"></i> {$vb.rule_title}</a></li>
+            {/volist}
+        </ul>
+        {/if}
+    </li>
+    {/volist}
+
     <?php
         if(in_array($controller_name, ['User.user', 'Home.home', 'Home.homeDeviceProduct'])){
             $active = "active";
@@ -9,7 +31,6 @@
             $active = "";
         }
     ?>
-
 
     <li class="treeview {$active}">   
         <a href="#">

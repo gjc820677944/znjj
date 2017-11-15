@@ -32,8 +32,9 @@ class Base extends Controller
         $this->assign("action_name", $action_name);
         $this->assign("referer_url",  $http_referer);
 
+        $menu_list = AdminModel::getMenuList($this->ad_id);
+        $this->assign("menu_list",  $menu_list);
     }
-
 
     /**
      * 执行通用验证器操作
@@ -46,15 +47,6 @@ class Base extends Controller
         $result = ValidateHelper::execValidate($class_name, $scene, $input);
         if($result !== true){
             $this->error($result);
-        }
-    }
-
-    protected function getMenulist(){
-        $ad_id = $this->ad_id;
-        $model = new AdminAuthRuleModel();
-        if($ad_id !== 1){
-            $role_ids = AdminModel::getRoleIds($ad_id);
-            //$rules = AdminAuthGroupAccessModel::
         }
     }
 }
