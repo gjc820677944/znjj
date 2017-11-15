@@ -120,7 +120,7 @@ class Rule extends Base
         $subs=array();//存放子孙数组
         foreach ($data as $v){
             if ($v['parent_id']==$j){
-                $v['length']=str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;',$lev);
+                $v['length']=str_repeat('----',$lev);
                 $subs[]=$v;
                 $subs=array_merge($subs,$this->digui($data,$v['rule_id'],$lev+1 ));
             }
