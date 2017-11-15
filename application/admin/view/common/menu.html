@@ -1,3 +1,4 @@
+
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">MAIN NAVIGATION</li>
     <?php
@@ -10,6 +11,7 @@
         }
     ?>
 
+
     <li class="treeview {$active}">
         <a href="#">
             <i class="fa fa-user"></i> <span>用户信息</span>
@@ -18,11 +20,13 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class="active"><a href="{:url('user.user/index')}"><i class="fa fa-circle-o"></i> 用户管理</a></li>
+
+
+            <li class="active"><a href="{:url('user.user/index')}"><i class="fa fa-circle-o"></i> </a></li>
             <li class="active"><a href="{:url('home.home/index')}"><i class="fa fa-circle-o"></i> 用户家庭信息管理</a></li></ul>
     </li>
 
-    <li class="treeview {$active}" >
+    <li class="treeview {$active}">
         <a href="#">
             <i class="fa fa-hourglass-1"></i> <span>权限管理</span>
             <span class="pull-right-container">
@@ -30,6 +34,8 @@
             </span>
         </a>
         <ul class="treeview-menu">
+
+
             <li class="active"><a href="{:url('role.role/index')}"><i class="fa fa-circle-o"></i> 角色管理</a></li>
             <li class="active"><a href="{:url('rule.rule/index')}"><i class="fa fa-circle-o"></i> 规则管理</a></li>
         </ul>
@@ -47,7 +53,8 @@
             $active = "";
         }
     ?>
-    <li class="treeview {$active}" >
+
+    <li class="treeview {$active}">
         <a href="#">
             <i class="fa fa-wifi"></i> <span>智能设备</span>
             <span class="pull-right-container">
@@ -56,15 +63,19 @@
         </a>
         <ul class="treeview-menu">
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+
+
                 <a href="{:url('device.deviceModel/index')}"><i class="fa fa-circle-o"></i> 设备模型列表</a>
             </li>
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+
                 <a href="{:url('device.deviceModelCategory/index')}"><i class="fa fa-circle-o"></i> 设备模型分类</a>
             </li>
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
                 <a href="{:url('device.devicePoint/index')}"><i class="fa fa-circle-o"></i> 功能点列表</a>
             </li>
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+
                 <a href="{:url('device.devicePointCategory/index')}"><i class="fa fa-circle-o"></i> 功能点分类</a>
             </li>
         </ul>
@@ -87,16 +98,23 @@
         </a>
         <ul class="treeview-menu">
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
+
                 <a href="{:url('admin.account/index')}"><i class="fa fa-circle-o"></i> 管理员列表</a>
             </li>
             <li class="<?php echo $action_name === 'create' ? 'active' : '';?>">
+
                 <a href="{:url('admin.account/create')}"><i class="fa fa-circle-o"></i> 添加管理员</a>
             </li>
         </ul>
     </li>
 
+
+
+
+
     <li><a href="{:url('logs/index')}"><i class="fa fa-file-text-o"></i> <span>后台操作日志</span></a></li>
     <li><a href="{:url('config.webconfig/index')}"><i class="fa fa-cogs"></i> <span>网站全局配置</span></a></li>
+
 
     <li><a href="{:url('edition.edition/index')}"><i class="fa fa-hourglass-1"></i> <span>版本控制</span></a></li>
     <li><a href="{:url('wallpaper.wallpaper/index')}"><i class="fa fa-map-o"></i> <span>墙纸管理</span></a></li>
