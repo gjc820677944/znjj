@@ -4,7 +4,7 @@
     <!--循环遍历权限列表-->
     {volist id="va" name="menu_list"}
     <li class="treeview">
-        <a href="<?php echo isset($va['child']) ? 'javascript:;' : url($va['rule_name']); ?>">
+        <a href="<?php echo isset($va['child']) ? '#' : url($va['rule_name']); ?>">
             <i class="fa {$va.icon}"></i> <span>{$va.rule_title}</span>
             {if condition="isset($va['child'])"}
             <span class="pull-right-container">
@@ -21,7 +21,7 @@
         {/if}
     </li>
     {/volist}
-
+    <li class="treeview"><a href="#">--------------</a></li>
     <?php
         if(in_array($controller_name, ['User.user', 'Home.home', 'Home.homeDeviceProduct'])){
             $active = "active";
