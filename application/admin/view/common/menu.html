@@ -1,6 +1,7 @@
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">MAIN NAVIGATION</li>
     <?php
+
         if(in_array($controller_name, ['User.user', 'Home.home', 'Home.homeDeviceProduct'])){
             $active = "active";
         }
@@ -8,6 +9,7 @@
             $active = "";
         }
     ?>
+
     <li class="treeview {$active}">
         <a href="#">
             <i class="fa fa-user"></i> <span>用户信息</span>
@@ -16,7 +18,7 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class="active"><a href="{:url('user.user/index')}"><i class="fa fa-circle-o"></i> 用户管理</a></li>
+            <li class="active"><a href="{:url('user.user/index')}"><i class="fa fa-circle-o"></i> </a></li>
             <li class="active"><a href="{:url('home.home/index')}"><i class="fa fa-circle-o"></i> 用户家庭信息管理</a></li></ul>
     </li>
 

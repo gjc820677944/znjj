@@ -59,6 +59,14 @@
                             </label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label>权限</label>
+                        <div class="auth-two">
+                            {volist id="vo" name="role"}
+                                <label class="checkbox-inline"><input name="role_id[]" type="checkbox" value="{$vo.group_id}" <?php echo in_array($vo['group_id'],$js)?'checked':'' ?>/>{$vo.title} </label>
+                            {/volist}
+                        </div>
+                    </div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">

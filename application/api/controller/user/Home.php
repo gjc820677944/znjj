@@ -7,6 +7,7 @@ use app\common\model\device\DeviceWallpaperModel;
 use app\common\model\home\HomeDeviceProductModel;
 use app\common\model\home\HomeLeaguerModel;
 use app\common\model\home\HomeModel;
+use app\common\model\user\UserModel;
 use filehelper\FileHelper;
 use think\Request;
 

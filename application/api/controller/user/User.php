@@ -323,5 +323,19 @@ class User extends  Father
         }
     }
 
+    //自动登录
+    function automaticLogin()
+    {
+        $token=UserModel::getToken();
+        $data['token']=UserModel::settoken();
+        $info=UserModel::where("token='".$token."'")->update($data);
+        if ($info){
+            echo api_return_json(0,$data );
+        }else{
+            echo api_return_json(1,"登录失败" );
+        }
+
+    }
+
 
 }

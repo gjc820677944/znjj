@@ -46,6 +46,7 @@ class Rule extends Base
                 'sort_by' => 1,
                 'parent_id' => '',
                 'show_menu'     =>  -1,
+                'icon'      =>'',
             ];
         } else {
             $rule_info = AdminAuthRuleModel::where('rule_id=' . $input['rule_id'])->find();

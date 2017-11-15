@@ -5,6 +5,7 @@ namespace app\admin\controller\admin;
 use app\admin\controller\Base;
 use app\common\model\admin\AdminModel;
 use app\common\model\admin\AdminOperationLogsModel;
+use app\common\model\admin\AdminRoleModel;
 use app\common\validate\ValidateHelper;
 use filehelper\FileHelper;
 use helper\Helper;
@@ -62,8 +63,11 @@ class Account extends Base
         ];
         $data = [
             'data' => $data,
+            'role'  =>  AdminRoleModel::where('status=1')->select(),
+            'js'    =>  array(),
             'post_url' => url('save'),
         ];
+
         return $this->fetch('edit', $data);
     }
 
@@ -71,6 +75,11 @@ class Account extends Base
     public function save()
     {
         $input = $this->request->post();
+
+        if (isset($input['role_id'])){
+            $input['role_id']=implode(',',$input['role_id']);
+        }
+
         $referer_url = $this->request->param('referer_url');
         unset($input['ad_id']);unset($input['referer_url']);
         $this->execValidate('Admin', 'create', $input);
@@ -99,8 +108,12 @@ class Account extends Base
             $this->error("管理员不存在，请重新选择");
         }
         $data['avatar'] = FileHelper::helper()->getWebsitePath($data['avatar']);
+        $js=explode(',',$data['role_id']);
+
         $data = [
             'data' => $data,
+            'role'  =>  AdminRoleModel::where('status=1')->select(),
+            'js'    =>  $js,
             'post_url' => url('update'),
         ];
         return $this->fetch('edit', $data);
@@ -110,6 +123,9 @@ class Account extends Base
     public function update()
     {
         $input = $this->request->post();
+        if (isset($input['role_id'])){
+            $input['role_id']=implode(',',$input['role_id']);
+        }
         $referer_url = $this->request->param('referer_url');
         unset($input['referer_url']);
         if(empty($input['password'])) unset($input['password']);
