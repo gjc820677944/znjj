@@ -50,7 +50,7 @@ class Login extends Controller
         $menu=$this->getMenu($admin['ad_id']);
         $ad_id = $admin['ad_id'];
         session('ad_id', $ad_id);
-        session($ad_id, $menu);
+        session('menu', $menu);
         AdminLogsModel::log($ad_id, 1);
         $this->success("登录成功", url("/admin/index"));
     }
