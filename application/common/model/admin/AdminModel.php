@@ -49,7 +49,7 @@ class AdminModel extends Model
      * @param array $input 输入数据
      * @return object
      */
-    public static function createOrUpdate(int $ad_id, array $input){
+    public static function createOrUpdate($ad_id, $input){
         if($ad_id === 0){ //插入管理员
             if(isset($input['ad_id'])) unset($input['ad_id']);
             $salt = Helper::random(6);

@@ -29,6 +29,8 @@ class Base extends Controller
         $this->assign("controller_name", $controller_name);
         $this->assign("action_name", $action_name);
         $this->assign("referer_url",  $http_referer);
+
+
     }
 
 
@@ -44,5 +46,9 @@ class Base extends Controller
         if($result !== true){
             $this->error($result);
         }
+    }
+
+    protected function getMenulist(){
+
     }
 }
