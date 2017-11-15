@@ -82,8 +82,6 @@ class Login extends Controller
 
 
 
-
-
     public function logout(){
         if(empty(session('ad_id'))){
             $this->success('用户未进行登录操作，无法登出');

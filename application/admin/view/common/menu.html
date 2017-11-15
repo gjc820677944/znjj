@@ -1,12 +1,11 @@
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">MAIN NAVIGATION</li>
     <?php
-
         if(in_array($controller_name, ['User.user', 'Home.home', 'Home.homeDeviceProduct'])){
             $active = "active";
         }
         else{
-            $active = "";    
+            $active = "";
         }
     ?>
 
@@ -19,7 +18,8 @@
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class="active"><a href="{:url('user.user/index')}"><i class="fa fa-circle-o"></i> 用户管理</a></li>            <li class="active"><a href="{:url('home.home/index')}"><i class="fa fa-circle-o"></i> 用户家庭信息管理</a></li></ul>
+            <li class="active"><a href="{:url('user.user/index')}"><i class="fa fa-circle-o"></i> 用户管理</a></li>
+            <li class="active"><a href="{:url('home.home/index')}"><i class="fa fa-circle-o"></i> 用户家庭信息管理</a></li></ul>
     </li>
 
     <li class="treeview {$active}">
@@ -30,8 +30,6 @@
             </span>
         </a>
         <ul class="treeview-menu">
-
-
             <li class="active"><a href="{:url('role.role/index')}"><i class="fa fa-circle-o"></i> 角色管理</a></li>
             <li class="active"><a href="{:url('rule.rule/index')}"><i class="fa fa-circle-o"></i> 规则管理</a></li>
         </ul>
@@ -59,19 +57,15 @@
         </a>
         <ul class="treeview-menu">
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
-
-
                 <a href="{:url('device.deviceModel/index')}"><i class="fa fa-circle-o"></i> 设备模型列表</a>
             </li>
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
-
                 <a href="{:url('device.deviceModelCategory/index')}"><i class="fa fa-circle-o"></i> 设备模型分类</a>
             </li>
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
                 <a href="{:url('device.devicePoint/index')}"><i class="fa fa-circle-o"></i> 功能点列表</a>
             </li>
             <li class="<?php echo $action_name === 'index' ? 'active' : '';?>">
-
                 <a href="{:url('device.devicePointCategory/index')}"><i class="fa fa-circle-o"></i> 功能点分类</a>
             </li>
         </ul>
