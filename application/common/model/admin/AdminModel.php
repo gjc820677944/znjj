@@ -50,6 +50,12 @@ class AdminModel extends Model
      * @return object
      */
     public static function createOrUpdate($ad_id, $input){
+        $group_ids = []; //管理员角色ID集合
+        if(isset($input['group_ids'])){
+            $group_ids = $input['group_ids'];
+            unset($input['group_ids']);
+        }
+
         if($ad_id === 0){ //插入管理员
             if(isset($input['ad_id'])) unset($input['ad_id']);
             $salt = Helper::random(6);
@@ -67,6 +73,10 @@ class AdminModel extends Model
                 unset($input['password']);
             }
             $result = AdminModel::update($input);
+        }
+        if($result){
+            //保存管理员角色
+            AdminAuthGroupAccessModel::saveGroupIds($result['ad_id'], $group_ids);
         }
         return $result;
     }
@@ -114,22 +124,27 @@ class AdminModel extends Model
     }
 
     /**
-     * 获取管理员的角色名字
+     * 过去管理员角色ID集合
      */
-    public static function getRoleNames($ad_id){
-        $role_ids = AdminModel::where("ad_id", $ad_id)->value('role_id');
-        $role_names = [];
-        if($ad_id === 1){
-            $role_names[] = "超级管理员";
+    public static function getGroupIds($ad_id){
+        $group_ids = AdminAuthGroupAccessModel::where("ad_id", $ad_id)->column('group_id');
+        if(empty($group_ids)){
+            return [];
         }
-        if(empty($role_ids)){
-            return $role_names;
+        return $group_ids;
+    }
+
+    /**
+     * 获取管理员的角色名字集合
+     */
+    public static function getGroupNames($ad_id){
+        $group_names = AdminAuthGroupAccessModel::alias('ga')
+            ->join("admin_role r", "r.group_id = ga.group_id", "left")
+            ->where("ga.ad_id", $ad_id)
+            ->column("r.title");
+        if(empty($group_names)){
+            return [];
         }
-        $role_ids = explode(',', $role_ids);
-        $names = AdminRoleModel::where('group_id', 'in', $role_ids)->column('title');
-        if($names){
-            $role_names = array_merge($role_names, $names);
-        }
-        return $role_names;
+        return $group_names;
     }
 }

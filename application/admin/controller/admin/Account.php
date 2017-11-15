@@ -3,12 +3,11 @@
 namespace app\admin\controller\admin;
 
 use app\admin\controller\Base;
+use app\common\model\admin\AdminAuthGroupAccessModel;
 use app\common\model\admin\AdminModel;
 use app\common\model\admin\AdminOperationLogsModel;
 use app\common\model\admin\AdminRoleModel;
-use app\common\validate\ValidateHelper;
 use filehelper\FileHelper;
-use helper\Helper;
 use think\Request;
 
 class Account extends Base
@@ -38,8 +37,8 @@ class Account extends Base
             else{
                 $v['avatar'] = FileHelper::helper()->getWebsitePath($v['avatar']);
             }
-            $role_names = AdminModel::getRoleNames($v['ad_id']);
-            $v['role_names'] = implode(', ', $role_names);
+            $group_names = AdminModel::getGroupNames($v['ad_id']);
+            $v['group_names'] = implode(', ', $group_names);
             $list[$k] = $v;
         }
         $data = [
@@ -62,11 +61,11 @@ class Account extends Base
             'ad_name' => '',
             'email' => '',
             'status' => 1,
+            'group_ids' => [],
         ];
         $data = [
             'data' => $data,
-            'role'  =>  AdminRoleModel::where('status=1')->select(),
-            'js'    =>  array(),
+            'roles'  =>  AdminRoleModel::where('status=1')->select(),
             'post_url' => url('save'),
         ];
 
@@ -77,11 +76,6 @@ class Account extends Base
     public function save()
     {
         $input = $this->request->post();
-
-        if (isset($input['role_id'])){
-            $input['role_id']=implode(',',$input['role_id']);
-        }
-
         $referer_url = $this->request->param('referer_url');
         unset($input['ad_id']);unset($input['referer_url']);
         $this->execValidate('Admin', 'create', $input);
@@ -91,6 +85,7 @@ class Account extends Base
             $input['avatar'] = FileHelper::helper()
                 ->saveUploadFile($file->getInfo(), 'admin/avatar');
         }
+
         //保存管理员信息
         $result = AdminModel::createOrUpdate(0, $input);
         if($result){
@@ -110,12 +105,11 @@ class Account extends Base
             $this->error("管理员不存在，请重新选择");
         }
         $data['avatar'] = FileHelper::helper()->getWebsitePath($data['avatar']);
-        $js=explode(',',$data['role_id']);
+        $data['group_ids'] = AdminModel::getGroupIds($id);
 
         $data = [
             'data' => $data,
-            'role'  =>  AdminRoleModel::where('status=1')->select(),
-            'js'    =>  $js,
+            'roles'  =>  AdminRoleModel::where('status=1')->select(),
             'post_url' => url('update'),
         ];
         return $this->fetch('edit', $data);

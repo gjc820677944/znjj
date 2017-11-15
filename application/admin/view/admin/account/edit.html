@@ -62,8 +62,8 @@
                     <div class="form-group">
                         <label>权限</label>
                         <div class="auth-two">
-                            {volist id="vo" name="role"}
-                                <label class="checkbox-inline"><input name="role_id[]" type="checkbox" value="{$vo.group_id}" <?php echo in_array($vo['group_id'],$js)?'checked':'' ?>/>{$vo.title} </label>
+                            {volist id="vo" name="roles"}
+                                <label class="checkbox-inline"><input name="group_ids[]" type="checkbox" value="{$vo.group_id}" <?php echo in_array($vo['group_id'], $data['group_ids'])?'checked':'' ?>/>{$vo.title} </label>
                             {/volist}
                         </div>
                     </div>

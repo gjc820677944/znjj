@@ -1,6 +1,8 @@
 <?php
 namespace app\admin\controller;
 
+use app\common\model\admin\AdminAuthGroupAccessModel;
+use app\common\model\admin\AdminAuthRuleModel;
 use app\common\model\admin\AdminModel;
 use app\common\validate\ValidateHelper;
 use think\Controller;
@@ -30,7 +32,6 @@ class Base extends Controller
         $this->assign("action_name", $action_name);
         $this->assign("referer_url",  $http_referer);
 
-
     }
 
 
@@ -49,6 +50,11 @@ class Base extends Controller
     }
 
     protected function getMenulist(){
-
+        $ad_id = $this->ad_id;
+        $model = new AdminAuthRuleModel();
+        if($ad_id !== 1){
+            $role_ids = AdminModel::getRoleIds($ad_id);
+            //$rules = AdminAuthGroupAccessModel::
+        }
     }
 }
