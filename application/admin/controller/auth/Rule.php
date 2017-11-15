@@ -1,10 +1,8 @@
 <?php
-namespace app\admin\controller\rule;
+namespace app\admin\controller\auth;
+
 use app\admin\controller\Base;
 use app\common\model\admin\AdminAuthRuleModel;
-use think\Request;
-use filehelper\FileHelper;
-use think\Db;
 
 class Rule extends Base
 {
@@ -18,12 +16,11 @@ class Rule extends Base
             $model->where("aa.rule_title like '%$keywords%'");
         }
 
-        $list = $model->alias('aa')->field('aa.rule_id,aa.rule_name,aa.rule_title,aa.status,aa.sort_by,aa.parent_id,aa.show_menu,sa.rule_name as f_rule_name')
-            ->join('smart_admin_auth_rule sa','aa.parent_id=sa.rule_id','left')
-                ->paginate(null);
+        $list = $model->alias('aa')->field('aa.rule_id,aa.rule_name,aa.rule_title,aa.status,aa.sort_by,aa.parent_id,aa.show_menu')->select();
+        $list = collection($list)->toArray();
+        $list = list_to_levellist($list, 'rule_id', 'parent_id');
         $data = [
             'list' => $list,
-            'page' => $list->render(),
             'input' => $input,
             'create_url' => url('create'),
         ];

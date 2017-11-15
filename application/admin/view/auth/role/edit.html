@@ -39,7 +39,7 @@
             {/if}
     </h1>
     <ol class="breadcrumb">
-        {include file="admin/breadcrumb"}
+        {include file="auth/role/breadcrumb"}
     </ol>
 </section>
 <section class="content">
@@ -103,7 +103,32 @@
 <script>
     $(function () {
         $('#rules input[type="checkbox"]').on('change', function() {
-            alert("checked");
+            var checked = $(this).prop('checked');
+            var divClsName = $(this).closest('div').attr('class');
+            if(checked === true){ //选中父规则，以及下面所有子规则
+                if(divClsName === 'auth-three'){
+                    $(this).closest('div.auth-two')
+                        .children('label.label-two')
+                        .find('input[type="checkbox"]')
+                        .prop('checked', checked);
+                    $(this).closest('div.auth-one')
+                        .find('label.label-one')
+                        .children('input[type="checkbox"]')
+                        .prop('checked', checked);
+                }
+                else if(divClsName === 'auth-two'){
+                    $(this).closest('div.auth-one')
+                        .find('label.label-one')
+                        .find('input[type="checkbox"]')
+                        .prop('checked', checked);
+                }
+            }
+            if(divClsName != 'auth-three'){
+                //同步所有子规则选中状态
+                $(this).closest('div')
+                    .find('input[type="checkbox"]')
+                    .prop('checked', checked);
+            }
         });
     });
 </script>
