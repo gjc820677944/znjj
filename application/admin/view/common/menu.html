@@ -3,7 +3,8 @@
 
     <!--循环遍历权限列表-->
     {volist id="va" name="menu_list"}
-    <li class="treeview">
+    <?php $active = ($va['rule_id'] === $rule_level_ids['one'] ? 'active' : ''); ?>
+    <li class="treeview {$active}">
         <a href="<?php echo isset($va['child']) ? '#' : url($va['rule_name']); ?>">
             <i class="fa {$va.icon}"></i> <span>{$va.rule_title}</span>
             {if condition="isset($va['child'])"}
@@ -15,7 +16,8 @@
         {if condition="isset($va['child'])"}
         <ul class="treeview-menu">
             {volist id="vb" name="va.child"}
-            <li class="active"><a href="{:url($vb['rule_name'])}"><i class="fa {$vb.icon}"></i> {$vb.rule_title}</a></li>
+            <?php $active = ($vb['rule_id'] === $rule_level_ids['two'] ? 'active' : ''); ?>
+            <li class="{$active}"><a href="{:url($vb['rule_name'])}"><i class="fa {$vb.icon}"></i> {$vb.rule_title}</a></li>
             {/volist}
         </ul>
         {/if}

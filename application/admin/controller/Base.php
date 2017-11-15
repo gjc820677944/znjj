@@ -32,8 +32,16 @@ class Base extends Controller
         $this->assign("action_name", $action_name);
         $this->assign("referer_url",  $http_referer);
 
-        $menu_list = AdminModel::getMenuList($this->ad_id);
-        $this->assign("menu_list",  $menu_list);
+        //管理员菜单
+        if(empty(session('menu_list'))){
+            $menu_list = AdminModel::getMenuList($this->ad_id);
+            session('menu_list', $menu_list);
+        }
+        $this->assign("menu_list",  session('menu_list'));
+
+        //管理员当前路由ID
+        $rule_level_ids = AdminAuthRuleModel::getLevelIds();
+        $this->assign("rule_level_ids",  $rule_level_ids);
     }
 
     /**
