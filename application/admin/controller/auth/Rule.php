@@ -48,11 +48,14 @@ class Rule extends Base
         } else {
             $rule_info = AdminAuthRuleModel::where('rule_id=' . $input['rule_id'])->find();
         }
-            $rule= $data=AdminAuthRuleModel::where('show_menu=1')->select();
-            $arr=$this->digui($data);
+        if(empty($input['rule_id'])){
+            $input['rule_id'] = 0;
+        }
+        $rule = AdminAuthRuleModel::where('rule_id !=' . $input['rule_id'])->select();
+        $rule = $this->digui($rule);
         $data = [
             'data' => $rule_info,
-            'rule' =>$arr,
+            'rule' =>$rule,
             'post_url' => url('save'),
             'type' => $input['type'],
         ];
@@ -117,11 +120,10 @@ class Rule extends Base
         $subs=array();//存放子孙数组
         foreach ($data as $v){
             if ($v['parent_id']==$j){
-                $v['length']=str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;',$lev);
+                $v['length']=str_repeat('----',$lev);
                 $subs[]=$v;
                 $subs=array_merge($subs,$this->digui($data,$v['rule_id'],$lev+1 ));
             }
-
         }
         return $subs;
     }
