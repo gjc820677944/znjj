@@ -48,17 +48,15 @@ class Login extends Controller
         }
 
         $menu=$this->getMenu($admin['ad_id']);
-
         $ad_id = $admin['ad_id'];
         session('ad_id', $ad_id);
-        session('menu', $menu);
+        session($ad_id, $menu);
         AdminLogsModel::log($ad_id, 1);
         $this->success("登录成功", url("/admin/index"));
     }
 
     //获取用户菜单栏目并返回
     function getMenu($ad_id){
-
         $arr=array();//用来装去重之后的权限ID；
         //先获取角色
         $role_id=AdminModel::where('ad_id='.$ad_id)->value('role_id');
@@ -78,25 +76,12 @@ class Login extends Controller
         }
         $arr=implode(',',$arr);
         $data=AdminAuthRuleModel::where('rule_id in ('.$arr.') and show_menu=1')->select();
-        $info=$this->digui($data,0);
-        return $info;
-
-
+        return $data;
     }
 
-    //获取栏目
-    //递归获取权限等级
-    function digui($data,$j=0)
-    {
-        $subs=array();//存放子孙数组
-        foreach ($data as $v){
-            if ($v['parent_id']==$j){
-                $v['zi']=$this->digui($data,$v['rule_id'] );
-                $subs[]=$v;
-            }
-        }
-        return $subs;
-    }
+
+
+
 
 
     public function logout(){
