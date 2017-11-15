@@ -3,20 +3,24 @@
 <style>
 .auth-one{
     margin-left: 5px;
-    font-size: 15px;
+    margin-bottom: 15px;
+}
+.auth-one .label-one{
+    font-size: 16px;
 }
 .auth-two{
     margin-left: 25px;
-    font-size: 12px;
+    margin-bottom: 10px;
 }
-.auth-two .label{
-    font-weight: bold !important;
+.auth-two .label-two{
+    font-weight: bold;
+    font-size: 14px;
 }
 .auth-three{
     margin-left: 45px;
-    font-size: 9px;
 }
-.auth-three label{
+.auth-three .label-three{
+    font-size: 12px;
     font-weight: normal;
 }
 
@@ -53,18 +57,17 @@
                             <label>角色名<span style="font-size: 2px">(user.user/index)</span></label>
                             <input type="text" name="title" class="form-control" value="{$data.title}">
                         </div>
-                        <div class="form-group">
-                            <input style="text" disabled hidden="hidden">
+                        <div id="rules" class="form-group">
                             <label>权限<span style="font-size: 2px"></span></label><br>
                             {volist id="vo" name="rule"}
                             <div class="auth-one">
-                               <label><input name="Fruit[]" type="checkbox" value="{$vo.rule_id}" <?php echo in_array($vo['rule_id'],$gz)?'checked':'' ?> />{$vo.rule_title} </label>
+                               <label class="label-one"><input name="Fruit[]" type="checkbox" value="{$vo.rule_id}" <?php echo in_array($vo['rule_id'],$gz)?'checked':'' ?> />{$vo.rule_title} </label>
                                {volist id="vi" name="vo.zi"}
                                 <div class="auth-two">
-                                    <label class="checkbox-inline"><input name="Fruit[]" type="checkbox" value="{$vi.rule_id}" <?php echo in_array($vi['rule_id'],$gz)?'checked':'' ?> />{$vi.rule_title} </label>
+                                    <label class="checkbox-inline label-two"><input name="Fruit[]" type="checkbox" value="{$vi.rule_id}" <?php echo in_array($vi['rule_id'],$gz)?'checked':'' ?> />{$vi.rule_title} </label>
                                     <div class="auth-three">
                                         {volist id="vp" name="vi.zi"}
-                                        <label class="checkbox-inline"><input name="Fruit[]" type="checkbox" value="{$vp.rule_id}" <?php echo in_array($vp['rule_id'],$gz)?'checked':'' ?> />{$vp.rule_title} </label>
+                                        <label class="checkbox-inline label-three"><input name="Fruit[]" type="checkbox" value="{$vp.rule_id}" <?php echo in_array($vp['rule_id'],$gz)?'checked':'' ?> />{$vp.rule_title} </label>
                                         {/volist}
                                     </div>
                                 </div>
@@ -97,14 +100,11 @@
 </section>
 {/block}
 {block name="foot"}
-<!--<script>-->
-    <!--$(document).ready(function () {-->
-        <!--$('label').click(function () {-->
-            <!--console.log($(this).parentsUntil(".auth-one").html());-->
-        <!--});-->
-    <!--});-->
-
-
-<!--</script>-->
-
+<script>
+    $(function () {
+        $('#rules input[type="checkbox"]').on('change', function() {
+            alert("checked");
+        });
+    });
+</script>
 {/block}
