@@ -108,10 +108,18 @@ class Rule extends Base
     //删除规则
     function deleteRuleInfo(){
         $input = $this->request->param();
-        $user_id=$input['rule_id'];
-        AdminAuthRuleModel::where('')->delete();
+        $rule_id=$input['rule_id'];
 
-
+        $info=AdminAuthRuleModel::where('parent_id='.$rule_id)->select();
+        if (!empty($info)){
+            api_return_json(1, "请先删除子规则");
+        }
+        $info=AdminAuthRuleModel::where('rule_id='.$rule_id)->delete();
+        if ($info){
+            api_return_json(0, "删除成功");
+        }else{
+            api_return_json(1, "删除失败");
+        }
     }
 
     //递归获取权限等级
