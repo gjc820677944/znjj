@@ -124,7 +124,6 @@ class Rule extends Base
                 $subs[]=$v;
                 $subs=array_merge($subs,$this->digui($data,$v['rule_id'],$lev+1 ));
             }
-
         }
         return $subs;
     }
