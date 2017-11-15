@@ -156,6 +156,7 @@ class User extends  Father
         }
         $data['avatar'] = $input['avatar'];
         $info = UserModel::where("token='" . $token . "'")->update($data);
+        $data['avatar']=FileHelper::helper()->getWebsitePath($input['avatar']);
         if ($info === false) {
             echo api_return_json(125, "头像修改失败，请重新尝试");
         } else {
