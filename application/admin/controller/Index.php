@@ -5,6 +5,6 @@ class Index extends Base
 {
     public function index()
     {
-        return redirect(url("device.deviceModel/index"));
+        return redirect("device.deviceModel/index");
     }
 }
