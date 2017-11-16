@@ -21,7 +21,6 @@ class Home extends Father
         $home_id=input('home_id');  //家庭ID
         $mobile=input('mobile');//被邀请人手机号
         $user_id=UserModel::getTokenId();
-
         if ($home_id==''){
             echo api_return_json(1,'家庭ID不能为空');
         }
@@ -59,13 +58,14 @@ class Home extends Father
         if (!empty($if_exist)){
             echo api_return_json(1,'已经邀请过了');
         }
+
         try{
             $data['leaguer_mobile']=$mobile;
             $data['home_id']=$home_id;
             $data['create_time']=time();
             $data['inviter_id']=$user_id;
             $info=HomeLeaguerInviteModel::insert($data);
-
+            $this->sendMessage($mobile,$user_id,$home_id);      //消息推送
             echo api_return_json(0,'邀请成功');
         }catch (\Exception $e){
             echo api_return_json(1,$e->getMessage());
@@ -73,23 +73,33 @@ class Home extends Father
     }
 
     //给被邀请的人发消息
-    function sendMessage()
+    function sendMessage($mobile,$user_id,$home_id)
     {
+        //获取邀请人信息
+        $inviter=UserModel::where('user_id='.$user_id)->find();
+        if (empty($inviter)){
+            return;
+        }
        // 给被邀请的人发送短信
-        $mobile=input('mobile');
-        //给app推送消息
 
+        //给app推送消息
         //获取该手机用户的信息
         $info=UserModel::where("mobile='".$mobile."'")->find();
+        $mes['ticker']="hei";
+        $mes['title']="邀请信";
+        $mes['text']=$inviter['username']."(".$inviter['mobile']."）邀请你加入".$inviter['username']."的‘家’";
+        $custom['me_type']=1;//自定义参数
+        $custom['home_id']=$home_id;
+        $custom['text']=$inviter['username']."(".$inviter['mobile']."）邀请你加入".$inviter['username']."的‘家’";
         //如果用户信息不为空 就去找该用户设备的token
         if (!empty($info)){
             //获取该用户的设备token
             $device_token=UserUmeng::where('user_id='.$info['user_id'])->find();
             if (!empty($device_token)){
                 if ($device_token['android_device_token']!=''){
-                    Umeng::sendUnicast($device_token['android_device_token'],'测试消息',1);
+                    Umeng::sendUnicast($device_token['android_device_token'],$mes,1,$custom);
                 }else{
-                    Umeng::sendUnicast($device_token['ios_device_token'],'测试消息',2);
+                    Umeng::sendUnicast($device_token['ios_device_token'],$mes,2,$custom);
                 }
             }
         }

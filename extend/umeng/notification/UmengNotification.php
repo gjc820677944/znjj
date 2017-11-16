@@ -72,7 +72,7 @@ abstract class UmengNotification {
     	$this->isComplete();
         $url = $this->host . $this->postPath;
         $postBody = json_encode($this->data);
-//        echo $postBody;exit;
+//        var_dump($postBody);exit;
         $sign = md5("POST" . $url . $postBody . $this->appMasterSecret);
         $url = $url . "?sign=" . $sign;
 

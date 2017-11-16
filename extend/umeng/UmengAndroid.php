@@ -16,8 +16,8 @@ require_once(dirname(__FILE__) . '/' . 'notification/android/AndroidCustomizedca
 class UmengAndroid
 {
     protected static $helper = null;
-    protected $appkey = "5962d002677baa03720008aa";
-    protected $appMasterSecret = "impu2lplhphqkaaplekuiwwilxovu6vg";
+    protected $appkey = null;
+    protected $appMasterSecret = null;
     protected $timestamp = null;
     protected $validation_token = null;
 
@@ -50,9 +50,10 @@ class UmengAndroid
             // Set your device tokens here
             $unicast->setPredefinedKeyValue("device_tokens",    $device_tokens);
             $unicast->setPredefinedKeyValue("expire_time", date('Y-m-d H:i:s',time()+3600));
-            $unicast->setPredefinedKeyValue("ticker",           $ticker);
-            $unicast->setPredefinedKeyValue("title",            $ticker);
-            $unicast->setPredefinedKeyValue("text",             $ticker);
+            $unicast->setPredefinedKeyValue("ticker",           $ticker['ticker']);
+            $unicast->setPredefinedKeyValue("title",            $ticker['title']);
+            $unicast->setPredefinedKeyValue("text",             $ticker['text']);
+
             $unicast->setPredefinedKeyValue("after_open",       "go_custom");
             $unicast->setPredefinedKeyValue("custom", $custom);
             // Set 'production_mode' to 'false' if it's a test device.

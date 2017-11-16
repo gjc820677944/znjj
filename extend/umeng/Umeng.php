@@ -10,10 +10,10 @@ class Umeng{
      * @param int $type 设备类型 1-Android 2-IOS
      * @return bool
      */
-    public static function sendUnicast($device_token, $message, $type = 1){
+    public static function sendUnicast($device_token, $message, $type = 1,$custom){
         if($type === 1){
             $result = UmengAndroid::instance()
-                ->sendAndroidUnicast($device_token, $message,'');
+                ->sendAndroidUnicast($device_token, $message,$custom);
         }
         else{
             $result = UmengIOS::instance()
