@@ -1,10 +1,10 @@
 <?php
 namespace app\admin\controller;
 
-use app\common\model\admin\AdminAuthGroupAccessModel;
 use app\common\model\admin\AdminAuthRuleModel;
 use app\common\model\admin\AdminModel;
 use app\common\validate\ValidateHelper;
+use helper\AdminAuth;
 use think\Controller;
 use think\Request;
 
@@ -39,6 +39,17 @@ class Base extends Controller
         }
         $this->assign("menu_list",  session('menu_list'));
 
+        //校验用户权限
+        $auth = new AdminAuth();
+        $curr_rule = AdminAuthRuleModel::getCurrRule();
+        if($this->ad_id !== 1 && !$auth->check($curr_rule, $this->ad_id)){
+            if($this->request->isAjax()){
+                api_return_json(21, '权限不足，无法访问');
+            }
+            else{
+                $this->error("权限不足，无法访问");
+            }
+        }
         //管理员当前路由ID
         $rule_level_ids = AdminAuthRuleModel::getLevelIds();
         $this->assign("rule_level_ids",  $rule_level_ids);

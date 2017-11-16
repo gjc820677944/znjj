@@ -10,16 +10,24 @@ class AdminAuthRuleModel extends Model
     protected $name = "admin_auth_rule";
 
     /**
+     * 获取当前路由规则
+     */
+    public static function getCurrRule(){
+        $request = Request::instance();
+        $url = $request->controller().'/'.$request->action();
+        $rule_name = strtolower(substr($url, 0, 1)).substr($url, 1);
+        return $rule_name;
+    }
+
+    /**
      * 获取规则表的3级ID
      */
     public static function getLevelIds(){
         $level_ids = [
             'one'=>0, 'two'=>0
         ];
-        $request = Request::instance();
-        $url = $request->controller().'/'.$request->action();
-        $rule_name = strtolower(substr($url, 0, 1)).substr($url, 1);
-        $rule = AdminAuthRuleModel::where("rule_name", $rule_name)
+        $curr_rule = self::getCurrRule();
+        $rule = AdminAuthRuleModel::where("rule_name", $curr_rule)
             ->field("rule_id, parent_id")->find();
         if(empty($rule)){
             return $level_ids;
