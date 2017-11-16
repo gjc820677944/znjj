@@ -102,6 +102,7 @@ class Role extends Base
         if ($info===false){
             $this->error("修改失败");
         }else{
+            AdminOperationLogsModel::log("修改角色[id:".$input['group_id']."]");
             $this->success("修改成功",$input['referer_url']);
         }
     }
@@ -115,6 +116,7 @@ class Role extends Base
         $data['rule_ids']=$rule;
         $info=AdminRoleModel::create($data);
         if ($info!=false){
+            AdminOperationLogsModel::log("添加角色[id:".$info->group_id."]");
             $this->success("添加成功",$input['referer_url']);
         }else{
             $this->error("添加失败");
@@ -124,7 +126,7 @@ class Role extends Base
     //删除角色
     function deleteRoleInfo(){
         $input = $this->request->param();
-        $info=AdminRoleModel::where('group_id='.$input['group_id'])->delete();
+        $info=AdminRoleModel::where('删除角色'.$input['group_id'])->delete();
         if ($info!==false){
             api_return_json(0, "删除成功");
         }else{

@@ -81,8 +81,9 @@ class Rule extends Base
         $referer_url=$input['referer_url'];
         unset($input['rule_id']);
         unset($input['referer_url']);
-        $info=AdminAuthRuleModel::insert($input);
+        $info=AdminAuthRuleModel::create($input);
         if ($info){
+            AdminOperationLogsModel::log("添加权限[id:".$info->rule_id."]");
             $this->success("添加成功",$referer_url);
         }else{
             $this->error("手机号已存在");
@@ -98,7 +99,8 @@ class Rule extends Base
         unset($input['rule_id']);
         unset($input['referer_url']);
         $info=AdminAuthRuleModel::where('rule_id='.$rule_id)->update($input);
-        if ($info){
+        if ($info!==false){
+            AdminOperationLogsModel::log("修改权限[id:".$rule_id."]");
             $this->success("修改成功",$referer_url);
         }else{
             $this->error("修改失败");
@@ -115,7 +117,8 @@ class Rule extends Base
             api_return_json(1, "请先删除子规则");
         }
         $info=AdminAuthRuleModel::where('rule_id='.$rule_id)->delete();
-        if ($info){
+        if ($info!==false){
+            AdminOperationLogsModel::log("删除权限[id:".$rule_id."]");
             api_return_json(0, "删除成功");
         }else{
             api_return_json(1, "删除失败");
