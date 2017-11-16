@@ -42,7 +42,12 @@ class Base extends Controller
         //校验用户权限
         $auth = new AdminAuth();
         $curr_rule = AdminAuthRuleModel::getCurrRule();
-        if($this->ad_id !== 1 && !$auth->check($curr_rule, $this->ad_id)){
+        if(
+            $this->ad_id !== 1 &&
+            $curr_rule !== 'index/index' &&
+            $curr_rule !== 'device.deviceModel/index' &&
+            !$auth->check($curr_rule, $this->ad_id)
+        ){
             if($this->request->isAjax()){
                 api_return_json(21, '权限不足，无法访问');
             }
