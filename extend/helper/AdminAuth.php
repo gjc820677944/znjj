@@ -1,13 +1,6 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2011 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: luofei614 <weibo.com/luofei614>　
-// +----------------------------------------------------------------------
+namespace helper;
+
 /**
  * 权限认证类
  * 功能特性：
@@ -31,7 +24,7 @@ class AdminAuth{
     protected $_config = array(
         'AUTH_ON' => true, //认证开关
         'AUTH_TYPE' => 1, // 认证方式，1为时时认证；2为登录认证。
-        'AUTH_GROUP' => 'admin_auth_group', //用户组数据表名
+        'AUTH_GROUP' => 'smart_admin_role', //用户组数据表名
         'AUTH_GROUP_ACCESS' => 'admin_auth_group_access', //用户组明细表
         'AUTH_RULE' => 'admin_auth_rule', //权限规则表
         'AUTH_USER' => 'admin'//用户信息表
