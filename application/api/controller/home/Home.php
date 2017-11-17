@@ -153,23 +153,23 @@ class Home extends Father
         }
     }
 
-//    //家庭列表
-//    public function getHomeInfo()
-//    {
-//        $token=UserModel::getToken();
-//
-//        try{
-//            $data=UserModel::where("token='".$token."'")->find();
-//            $home=HomeModel::where('creater_id='.$data['user_id'])->select();
-//            $count=count($home);
-//            for ($i=0;$i<$count;$i++){
-//                $home[$i]['tag']=HomeDeviceProductModel::where('home_id='.$home[$i]['home_id'])->column('tag');
-//            }
-//        }catch (\Exception $e){
-//            echo api_return_json(1,$e->getMessage());
-//        }
-//        echo api_return_json(0,$home);
-//    }
+    //家庭列表
+    public function getHomeInfo()
+    {
+        $token=UserModel::getToken();
+
+        try{
+            $data=UserModel::where("token=".$token)->find();
+            $home=HomeModel::where('creater_id='.$data['user_id'])->select();
+            $count=count($home);
+            for ($i=0;$i<$count;$i++){
+                $home[$i]['tag']=HomeDeviceProductModel::where('home_id='.$home[$i]['home_id'])->column('tag');
+            }
+        }catch (\Exception $e){
+            echo api_return_json(1,$e->getMessage());
+        }
+        echo api_return_json(0,$home);
+    }
 //
 //    //家庭成员列表
 //    public function getHomeMember()
