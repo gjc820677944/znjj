@@ -3,6 +3,7 @@ namespace app\admin\controller\auth;
 
 use app\admin\controller\Base;
 use app\common\model\admin\AdminAuthRuleModel;
+use app\common\model\admin\AdminOperationLogsModel;
 
 class Rule extends Base
 {
