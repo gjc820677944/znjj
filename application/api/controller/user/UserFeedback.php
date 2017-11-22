@@ -41,7 +41,7 @@ class UserFeedback extends  Father
         if (isset($input['pic']) && $input['pic']!=''){
             $token=UserModel::getToken();
             $pic_data=cache($token);//已经上传的图片
-            $new_pic=explode(',',$input['pic']);//用户筛选过的图片
+            $new_pic=$input['pic'];//用户筛选过的图片
             $count=count($pic_data);
             for($i=0;$i<$count;$i++){
                 $path_pic=FileHelper::helper()->getWebsitePath($pic_data[$i]);
