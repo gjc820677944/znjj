@@ -1,13 +1,13 @@
 <?php
 namespace app\api\controller;
-use app\common\model\user\UserModel;
 use think\Db;
 use think\Request;
 class Father
 {
+    protected $requset;
     function __construct()
     {
-
+        $this->requset = Request::instance();
         $info = Request::instance()->header();  //获取请求头信息
         $url=$_SERVER['REQUEST_URI'];
         $array=array('thirdPartyLogin','login','getv_code','bindingPhone','addces');//$url[count($url)-1]
