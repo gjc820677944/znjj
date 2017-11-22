@@ -51,7 +51,6 @@ class UserFeedback extends  Father
                 }
             }
             $input['pic']=json_encode(implode(',',$pic_data));
-            cache($token,null);
         }
 
         //字符不能大于251 数据库是255
@@ -63,6 +62,7 @@ class UserFeedback extends  Father
         $input['user_id']=UserModel::getTokenId();
         try{
             $info=UserFeedbackModel::create($input);
+            cache($token,null);
             echo api_return_json(0, '反馈成功');
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
