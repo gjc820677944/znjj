@@ -13,11 +13,11 @@ class UserFeedback extends  Father
         $file = Request::instance()->file('pic'); //获取上传的图片);
         $token=UserModel::getToken();
         $pic_data=cache($token);
-        if (!empty($pic_data)){
-            if (count($pic_data)>=9){
-                echo api_return_json(1, '只能上传9张图片');
-            }
-        }
+//        if (!empty($pic_data)){
+//            if (count($pic_data)>=9){
+//                echo api_return_json(1, '只能上传9张图片');
+//            }
+//        }
 
         if (!empty($file)) {
             //保存图片到本地并拿到返回的存储地址
@@ -59,7 +59,6 @@ class UserFeedback extends  Father
         if (isset($input['content']) && strlen($input['content'])>251){
             echo api_return_json(1, '最多只能输入251个字符');
         }
-
 
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
