@@ -23,7 +23,6 @@ class UserFeedback extends  Father
             //保存图片到本地并拿到返回的存储地址
             $path= FileHelper::helper()->saveUploadFile($file->getInfo(), 'user/feedback/' . date("Ymd"));
             $pic_data[]=$path;
-            cache($token,$pic_data,3600);
             $data['pic']=FileHelper::helper()->getWebsitePath($path);
             echo api_return_json(0, $data);
         }
