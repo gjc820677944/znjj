@@ -242,6 +242,16 @@ function list_to_levellist($list, $selfkey = 'id', $parentkey = 'parent_id', $ro
     return $listtree;
 }
 
+/**
+ * 获取网站常用配置信息
+ * @param string 配置键
+ * @return string 配置值
+ */
+function web_config($key)
+{
+    \think\Config::load(APP_PATH . 'config/web.php');
+    return config("web_config.$key");
+}
 
 
 
