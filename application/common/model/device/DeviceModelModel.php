@@ -3,12 +3,14 @@
 namespace app\common\model\device;
 
 use filehelper\FileHelper;
+use think\Config;
 use think\Model;
 
 class DeviceModelModel extends Model
 {
     protected $name = "device_model";
     protected $autoWriteTimestamp = true;
+
 
     public static $protocol_texts = [
         1 => 'zigbee',
@@ -17,6 +19,7 @@ class DeviceModelModel extends Model
     ];
 
     //字典
+//    protected $phone=Config::get('feedback_phone');
     public static $Dictionaries=[
         [   'name'  =>  'deviceType',
             'options'=>[
