@@ -249,7 +249,8 @@ function list_to_levellist($list, $selfkey = 'id', $parentkey = 'parent_id', $ro
  */
 function web_config($key)
 {
-    \think\Config::load(APP_PATH . 'config/web.php');
+//    echo APP_PATH . 'config/web.php';exit;
+    \think\Config::load(APP_PATH . 'common/config/web.php');
     return config("web_config.$key");
 }
 

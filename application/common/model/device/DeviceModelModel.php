@@ -19,7 +19,6 @@ class DeviceModelModel extends Model
     ];
 
     //字典
-//    protected $phone=Config::get('feedback_phone');
     public static $Dictionaries=[
         [   'name'  =>  'deviceType',
             'options'=>[

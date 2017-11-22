@@ -4,13 +4,12 @@ use app\api\controller\Father;
 use app\common\model\user\UserFeedbackModel;
 use app\common\model\user\UserModel;
 use filehelper\FileHelper;
-use think\Config;
 use think\Request;
 class UserFeedback extends  Father
 {
     //记录用户反馈
     function feedback(){
-        echo web_config('site_name');exit;
+//        echo web_config('feedback_phone');exit;
         $input = $this->requset->param();
         $file = Request::instance()->file('pic'); //获取上传的头像);
         //不能全部为空
@@ -51,5 +50,10 @@ class UserFeedback extends  Father
         }
     }
 
+    public function feedback_phone(){
+        $phone=web_config('feedback_phone')==false?'000-00000':web_config('feedback_phone');
+        $data['phone']=web_config('feedback_phone');
+        echo api_return_json(0, $data);
+    }
 
 }
