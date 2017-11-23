@@ -53,7 +53,7 @@
                             </td>
                             <td class="text-center">
                                 <a class="btn btn-primary btn-sm" href="{:url('detailed',array('feedback_id'=>$vo.feedback_id))}">详情</a>
-                                <a href="javascript:;" class="btn btn-primary btn-sm" onclick="ajaxConfirm('{:url('deleteUserInfo', ['feedback_id'=>$vo.feedback_id])}', '您确认删除该用户吗？')">删除</a>
+                                <a href="javascript:;" class="btn btn-primary btn-sm" onclick="ajaxConfirm('{:url('delete', ['feedback_id'=>$vo.feedback_id])}', '您确认删除该用户吗？')">删除</a>
                             </td>
                         </tr>
                         {/volist}

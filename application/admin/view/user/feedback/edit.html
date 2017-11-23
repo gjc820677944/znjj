@@ -17,26 +17,29 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>用户名字</label>
-                            <input type="text" name="username" class="form-control" value='{$data.username}'>
+                            <input type="text" name="username" class="form-control" value='{$data.username}' disabled>
                         </div>
                         <div class="form-group">
                             <label>手机号</label>
-                            <input type="text" name="mobile" class="form-control" value="{$data.mobile}">
+                            <input type="text" name="mobile" class="form-control" value="{$data.mobile}" disabled>
                         </div>
                         <div class="form-group">
                             <label>反馈内容</label>
-                            <input type="email" name="email" class="form-control" placeholder="Enter email" value="{$data.content}">
+                            <textarea class="form-control" disabled>{$data.content}</textarea>
                         </div>
                         <div class="form-group">
-                            <label>反馈图片</label>
+                            <label>反馈图片</label><br>
                             {volist id="vo" name="$data.pic" key='k'}
-                            <p><img src="{$vo}" class="img-read"></p>
+                            <img src="{$vo}" class="img-read">
                             {/volist}
                         </div>
                         <div class="form-group">
                             <label>反馈时间</label>
-                            <input type="email" name="email" class="form-control" placeholder="Enter email" value="{$data.times}">
+                            <input type="email" name="email" class="form-control" placeholder="Enter email" value="{$data.times}" disabled>
                         </div>
+                    </div>
+                    <div class="box-footer">
+                        <a class="btn btn-primary ml-10" href="{$referer_url}">Return</a>
                     </div>
                 </form>
             </div>
