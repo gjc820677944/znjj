@@ -13,17 +13,12 @@ class UserFeedback extends  Father
         $file = Request::instance()->file('pic'); //获取上传的图片);
         $token=UserModel::getToken();
         $pic_data=cache($token);
-//        if (!empty($pic_data)){
-//            if (count($pic_data)>=9){
-//                echo api_return_json(1, '只能上传9张图片');
-//            }
-//        }
-
         if (!empty($file)) {
             //保存图片到本地并拿到返回的存储地址
             $path= FileHelper::helper()->saveUploadFile($file->getInfo(), 'user/feedback/' . date("Ymd"));
             $pic_data[]=$path;
             $data['pic']=FileHelper::helper()->getWebsitePath($path);
+            cache($token,$pic_data);
             echo api_return_json(0, $data);
         }
         echo api_return_json(1, '请上传图片');
@@ -31,6 +26,7 @@ class UserFeedback extends  Father
 
     //记录用户反馈
     function feedback(){
+
         $input = $this->requset->param();
         //不能全部为空
         if (!isset($input['pic']) && !isset($input['content'])){
@@ -40,7 +36,7 @@ class UserFeedback extends  Father
         if (isset($input['pic']) && $input['pic']!=''){
             $token=UserModel::getToken();
             $pic_data=cache($token);//已经上传的图片
-            $new_pic=$input['pic'];//用户筛选过的图片
+            $new_pic=explode(',',$input['pic']);//用户筛选过的图片
             $count=count($pic_data);
             for($i=0;$i<$count;$i++){
                 $path_pic=FileHelper::helper()->getWebsitePath($pic_data[$i]);
@@ -50,9 +46,8 @@ class UserFeedback extends  Father
                     unset($pic_data[$i]);
                 }
             }
-            $input['pic']=json_encode(implode(',',$pic_data));
+            $input['pic']=implode(',',$pic_data);
         }
-
         //字符不能大于251 数据库是255
         if (isset($input['content']) && strlen($input['content'])>251){
             echo api_return_json(1, '最多只能输入251个字符');
@@ -61,7 +56,7 @@ class UserFeedback extends  Father
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
         try{
-            $info=UserFeedbackModel::create($input);
+            UserFeedbackModel::create($input);
             cache($token,null);
             echo api_return_json(0, '反馈成功');
         }catch (\Exception $e){
