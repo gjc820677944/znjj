@@ -64,6 +64,7 @@ class Feedback extends Base
             $this->error("要删除的ID不能为空");
         }
         $info=UserFeedbackModel::where('feedback_id='.$input['feedback_id'])->find();
+        //删除服务器的图片
         if ($info['pic']!=''){
             $pic=explode(',',$info['pic']);
             foreach ($pic as $p){
