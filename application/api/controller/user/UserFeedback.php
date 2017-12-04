@@ -45,11 +45,11 @@ class UserFeedback extends  Father
                 //删除用户删除的图片
                 if (!in_array($path_pic,$new_pic)){
                     FileHelper::helper()->unlink($pic_data[$i]);
-                    $arr[]=$pic_data[$i];
                     unset($pic_data[$i]);
                 }
             }
             $input['pic']=implode(',',$pic_data);
+            unset($input['token']);
         }
         //字符不能大于251 数据库是255
         if (isset($input['content']) && strlen($input['content'])>251){
@@ -58,11 +58,10 @@ class UserFeedback extends  Father
 
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
-        unset($input['token']);
         try{
             UserFeedbackModel::create($input);
             cache($token,null);
-            echo api_return_json(0,$arr);
+            echo api_return_json(0,"反馈成功");
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
         }
