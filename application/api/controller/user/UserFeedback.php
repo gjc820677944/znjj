@@ -28,6 +28,7 @@ class UserFeedback extends  Father
     function feedback(){
         $arr=array();
         $input = $this->requset->param();
+        $aaa=$input['pic'];
         //不能全部为空
         if ($input['pic']=='' && $input['content']==''){
             echo api_return_json(1, '反馈内容和反馈图片必填一项');
@@ -67,7 +68,7 @@ class UserFeedback extends  Father
         try{
             UserFeedbackModel::create($input);
 
-            echo api_return_json(0,"反馈成功");
+            echo api_return_json(0,$aaa);
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
         }
