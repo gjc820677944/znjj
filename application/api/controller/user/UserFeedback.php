@@ -28,17 +28,15 @@ class UserFeedback extends  Father
     function feedback(){
         $arr=array();
         $input = $this->requset->param();
-        $aaa=$input['pic'];
         //不能全部为空
         if ($input['pic']=='' && $input['content']==''){
             echo api_return_json(1, '反馈内容和反馈图片必填一项');
         }
         //删除图片
         if (isset($input['pic']) && $input['pic']!=''){
-            $token=UserModel::getToken();
-            $pic_data=cache($token);//已经上传的图片
-            //如果是ios传的 就不执行以下操作了
             if (!isset($input['type'])){
+                $token=UserModel::getToken();
+                $pic_data=cache($token);//已经上传的图片
                 $qian=array(" ","　","\t","\n","\r");
                 $input['pic']=str_replace($qian, '', $input['pic']);    //清除前面传过来的数据里面的空格 换行
                 $new_pic=explode(',',$input['pic']);//用户筛选过的图片
@@ -51,25 +49,25 @@ class UserFeedback extends  Father
                         unset($pic_data[$i]);
                     }
                 }
+                $input['pic']=implode(',',$pic_data);
+            }else{
+                $input['pic']= str_replace("http://192.168.31.227","",$input['pic']);
             }
+
+            unset($input['token']);
             unset($input['type']);
-            echo api_return_json(0,$pic_data);
-            $input['pic']=implode(',',$pic_data);
-            cache($token,null);
         }
         //字符不能大于251 数据库是255
         if (isset($input['content']) && strlen($input['content'])>251){
             echo api_return_json(1, '最多只能输入251个字符');
         }
 
-        unset($input['token']);
-
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
         try{
             UserFeedbackModel::create($input);
-
-
+            cache($token,null);
+            echo api_return_json(0,"反馈成功");
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
         }
