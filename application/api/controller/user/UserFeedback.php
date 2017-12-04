@@ -43,7 +43,7 @@ class UserFeedback extends  Father
                 //删除用户删除的图片
                 if (!in_array($path_pic,$new_pic)){
                     FileHelper::helper()->unlink($pic_data[$i]);
-                    unset($pic_data[$i]);
+//                    unset($pic_data[$i]);
                 }
             }
             $input['pic']=implode(',',$pic_data);
