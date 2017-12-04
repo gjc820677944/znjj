@@ -43,7 +43,7 @@ class UserFeedback extends  Father
                 //删除用户删除的图片
                 if (!in_array($path_pic,$new_pic)){
                     FileHelper::helper()->unlink($pic_data[$i]);
-//                    unset($pic_data[$i]);
+                    unset($pic_data[$i]);
                 }
             }
             $input['pic']=implode(',',$pic_data);
@@ -59,7 +59,7 @@ class UserFeedback extends  Father
         try{
             UserFeedbackModel::create($input);
             cache($token,null);
-            echo api_return_json(0, $pic_data);
+            echo api_return_json(0,"反馈成功");
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
         }
