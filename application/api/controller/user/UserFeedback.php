@@ -34,9 +34,9 @@ class UserFeedback extends  Father
         }
         //删除图片
         if (isset($input['pic']) && $input['pic']!=''){
+            $token=UserModel::getToken();
+            $pic_data=cache($token);//已经上传的图片
             if (!isset($input['type'])){
-                $token=UserModel::getToken();
-                $pic_data=cache($token);//已经上传的图片
                 $qian=array(" ","　","\t","\n","\r");
                 $input['pic']=str_replace($qian, '', $input['pic']);    //清除前面传过来的数据里面的空格 换行
                 $new_pic=explode(',',$input['pic']);//用户筛选过的图片
