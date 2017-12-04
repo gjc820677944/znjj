@@ -1,7 +1,6 @@
 <?php
 
 namespace app\api\controller;
-
 use app\common\model\device\DeviceLogModel;
 use app\common\model\device\DeviceModelModel;
 use app\common\model\user\UserModel;
@@ -27,7 +26,7 @@ class DeviceModel extends Base
     }
 
 
-    //设备操作记录
+    //记录设备操作
     function logRecord(){
         $input = $this->requset->param();
         $input['times']=time();                 //操作时间
@@ -39,7 +38,19 @@ class DeviceModel extends Base
         }else{
             echo api_return_json(1,"记录失败" );
         }
+    }
 
+    //设备操作日志列表
+    function logRecordList(){
+        $input = $this->requset->param();
+
+        $type=$input['type'];
+        if ($type=='all'){
+            $data=DeviceLogModel::where('home_id='.$input['home_id'])->select();
+        }else{
+            $data=DeviceLogModel::where('home_id='.$input['home_id'])->order('log_id desc')->limit('0,10')->select();
+        }
+        echo api_return_json(0,$data );
     }
 
 }

@@ -60,7 +60,7 @@ class Feedback extends Base
     //删除反馈
     function delete(){
         $input = $this->request->param();
-        if (!isset($input['feedback_id']) && $input['feedback_id']==''){
+        if ($input['feedback_id']==''){
             $this->error("要删除的ID不能为空");
         }
         $info=UserFeedbackModel::where('feedback_id='.$input['feedback_id'])->find();

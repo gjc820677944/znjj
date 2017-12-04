@@ -29,7 +29,7 @@ class UserFeedback extends  Father
 
         $input = $this->requset->param();
         //不能全部为空
-        if (!isset($input['pic']) && !isset($input['content'])){
+        if ($input['pic']=='' && $input['content']==''){
             echo api_return_json(1, '反馈内容和反馈图片必填一项');
         }
         //删除图片
@@ -55,6 +55,7 @@ class UserFeedback extends  Father
 
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
+        unset($input['token']);
         try{
             UserFeedbackModel::create($input);
             cache($token,null);
@@ -64,6 +65,7 @@ class UserFeedback extends  Father
         }
     }
 
+    //返回联系号码
     public function feedback_phone(){
         $phone=web_config('feedback_phone')==false?'000-00000':web_config('feedback_phone');
         $data['phone']=web_config('feedback_phone');
