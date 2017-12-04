@@ -36,7 +36,6 @@ class UserFeedback extends  Father
         if (isset($input['pic']) && $input['pic']!=''){
             $token=UserModel::getToken();
             $pic_data=cache($token);//已经上传的图片
-            var_dump($pic_data);exit;
             $new_pic=explode(',',$input['pic']);//用户筛选过的图片
             $count=count($pic_data);
             for($i=0;$i<$count;$i++){
@@ -44,7 +43,7 @@ class UserFeedback extends  Father
                 //删除用户删除的图片
                 if (!in_array($path_pic,$new_pic)){
                     FileHelper::helper()->unlink($pic_data[$i]);
-                    unset($pic_data[$i]);
+//                    unset($pic_data[$i]);
                 }
             }
             $input['pic']=implode(',',$pic_data);
