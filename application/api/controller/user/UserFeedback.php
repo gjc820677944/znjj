@@ -59,7 +59,7 @@ class UserFeedback extends  Father
         try{
             UserFeedbackModel::create($input);
             cache($token,null);
-            echo api_return_json(0, '反馈成功');
+            echo api_return_json(0, $pic_data);
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
         }
