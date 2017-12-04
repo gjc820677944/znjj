@@ -20,7 +20,19 @@ class HomeGateway extends Father
        $data['port']=$input['port'];        //网关端口
        $data['home_id']=$input['home_id'];   //要设置的家庭
 
-       $info=HomeGatewayModel::create($data);
+       if (isset($input['name'])){
+           $data['name']=$input['name'];   //网关名称
+       }
+
+       //如果这个家庭已有网关那就修改
+       $info=HomeGatewayModel::where('home_id='.$input['home_id'])->find();
+       if (empty($info)){
+           $info=HomeGatewayModel::create($data);
+       }else{
+           $info=HomeGatewayModel::where('home_id='.$input['home_id'])->update($data);
+       }
+
+
         if ($info){
              api_return_json(0, '添加成功');
         }else{
@@ -35,7 +47,7 @@ class HomeGateway extends Father
     function getHomeGateway()
     {
         $input = $this->requset->param();
-        $data=HomeGatewayModel::where('home_id='.$input['home_id'])->field('gateway_id,ip,port,home_id')->find();
+        $data=HomeGatewayModel::where('home_id='.$input['home_id'])->field('gateway_id,ip,port,home_id,name')->find();
         if (!empty($data)){
             api_return_json(0, $data);
         }else{
