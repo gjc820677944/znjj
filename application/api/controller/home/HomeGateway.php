@@ -62,6 +62,7 @@ class HomeGateway extends Father
     function getMqttServer()
     {
         $data['mqtt_server']=web_config('mqtt_server');
+        $data['mqtt_port']=web_config('mqtt_port');
         echo api_return_json(0, $data);
 
     }
