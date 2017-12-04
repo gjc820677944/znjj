@@ -67,7 +67,7 @@ class UserFeedback extends  Father
 
     //返回联系号码
     public function feedback_phone(){
-        $phone=web_config('feedback_phone')==false?'000-00000':web_config('feedback_phone');
+//        $phone=web_config('feedback_phone')==false?'000-00000':web_config('feedback_phone');
         $data['phone']=web_config('feedback_phone');
         echo api_return_json(0, $data);
     }
