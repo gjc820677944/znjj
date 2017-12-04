@@ -53,6 +53,7 @@ class UserFeedback extends  Father
                 }
             }
             unset($input['type']);
+            echo api_return_json(0,$pic_data);
             $input['pic']=implode(',',$pic_data);
             cache($token,null);
         }
@@ -68,7 +69,7 @@ class UserFeedback extends  Father
         try{
             UserFeedbackModel::create($input);
 
-            echo api_return_json(0,$aaa);
+
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
         }
