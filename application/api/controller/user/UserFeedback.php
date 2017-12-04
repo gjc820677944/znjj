@@ -26,7 +26,7 @@ class UserFeedback extends  Father
 
     //记录用户反馈
     function feedback(){
-
+        $arr=array();
         $input = $this->requset->param();
         //不能全部为空
         if ($input['pic']=='' && $input['content']==''){
@@ -45,6 +45,7 @@ class UserFeedback extends  Father
                 //删除用户删除的图片
                 if (!in_array($path_pic,$new_pic)){
                     FileHelper::helper()->unlink($pic_data[$i]);
+                    $arr[]=$pic_data[$i]
                     unset($pic_data[$i]);
                 }
             }
@@ -61,7 +62,7 @@ class UserFeedback extends  Father
         try{
             UserFeedbackModel::create($input);
             cache($token,null);
-            echo api_return_json(0,"反馈成功");
+            echo api_return_json(0,$arr);
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
         }
