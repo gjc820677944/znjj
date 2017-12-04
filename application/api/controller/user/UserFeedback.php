@@ -34,14 +34,14 @@ class UserFeedback extends  Father
         }
         //删除图片
         if (isset($input['pic']) && $input['pic']!=''){
-            $token=UserModel::getToken();
-            $pic_data=cache($token);//已经上传的图片
-            $qian=array(" ","　","\t","\n","\r");
-            $input['pic']=str_replace($qian, '', $input['pic']);    //清除前面传过来的数据里面的空格 换行
-            $new_pic=explode(',',$input['pic']);//用户筛选过的图片
-            $count=count($pic_data);
-            //如果是ios传的就不去循环了  会出现超自然现象
             if (!isset($input['type'])){
+                $token=UserModel::getToken();
+                $pic_data=cache($token);//已经上传的图片
+                $qian=array(" ","　","\t","\n","\r");
+                $input['pic']=str_replace($qian, '', $input['pic']);    //清除前面传过来的数据里面的空格 换行
+                $new_pic=explode(',',$input['pic']);//用户筛选过的图片
+                $count=count($pic_data);
+                //如果是ios传的就不去循环了  会出现超自然现象
                 for($i=0;$i<$count;$i++){
                     $path_pic=FileHelper::helper()->getWebsitePath($pic_data[$i]);
                     //删除用户删除的图片
@@ -51,11 +51,9 @@ class UserFeedback extends  Father
                     }
                 }
             }
-
+            unset($input['type']);
             $input['pic']=implode(',',$pic_data);
             cache($token,null);
-
-
         }
         //字符不能大于251 数据库是255
         if (isset($input['content']) && strlen($input['content'])>251){
@@ -63,7 +61,7 @@ class UserFeedback extends  Father
         }
 
         unset($input['token']);
-        unset($input['type']);
+
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
         try{
