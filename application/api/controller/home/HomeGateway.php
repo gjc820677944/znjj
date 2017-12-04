@@ -56,6 +56,17 @@ class HomeGateway extends Father
     }
 
 
+    /**
+     * 返回mqtt域名
+     */
+    function getMqttServer()
+    {
+        $phone=web_config('mqtt_server')==false?'000-00000':web_config('mqtt_server');
+        $data['phone']=web_config('mqtt_server');
+        echo api_return_json(0, $data);
+
+    }
+
 
 }
 
