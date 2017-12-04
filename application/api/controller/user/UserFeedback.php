@@ -53,18 +53,22 @@ class UserFeedback extends  Father
             }
 
             $input['pic']=implode(',',$pic_data);
-            unset($input['token']);
+            cache($token,null);
+
+
         }
         //字符不能大于251 数据库是255
         if (isset($input['content']) && strlen($input['content'])>251){
             echo api_return_json(1, '最多只能输入251个字符');
         }
 
+        unset($input['token']);
+        unset($input['type']);
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
         try{
             UserFeedbackModel::create($input);
-            cache($token,null);
+
             echo api_return_json(0,"反馈成功");
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
