@@ -122,7 +122,6 @@ class Home extends Base
                 $v['leaguer_name']=json_decode($v['leaguer_name']);
             }
             $leaguers[$k] = $v;
-
         }
         $home['leaguers'] = $leaguers;
         api_return_json(0, $home);
