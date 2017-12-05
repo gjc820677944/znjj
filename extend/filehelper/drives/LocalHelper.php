@@ -9,7 +9,7 @@ class LocalHelper extends BaseHelper
 {
     public $prefixDir = "uploads/"; //文件存储的前置目录（默认文件都存储在前置目录下）
     protected $rootDir = "";   //文件允许保存的根目录（默认为当前目录,不包含前置目录）
-    protected $siteUrl = "http://192.168.31.227";   //访问文件的网站地址
+    public $siteUrl = "http://192.168.31.227";   //访问文件的网站地址
 
     /**
      * 存储上传的普通文件
