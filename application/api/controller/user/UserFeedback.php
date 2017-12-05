@@ -28,7 +28,7 @@ class UserFeedback extends  Father
     function feedback(){
         $input = $this->requset->param();
         //不能全部为空
-        if ($input['pic']=='' && $input['content']==''){
+        if ((isset($input['pic']) && $input['pic']=='') && $input['content']==''){
             echo api_return_json(1, '反馈内容和反馈图片必填一项');
         }
         /****
