@@ -66,7 +66,7 @@ class UserFeedback extends  Father
         $input['user_id']=UserModel::getTokenId();
 
         $content=json_encode($input['content']);
-        $content=preg_replace("#(\\\ud[0-9a-f]{3})|(\\\ue[0-9a-f]{3})#ie","",$content);
+        $content=preg_replace("/\\\u[ed][0-9a-f]{3}\\\u[ed][0-9a-f]{3}/","",$content);
 
         $input['content']=json_decode($content);
         try{
