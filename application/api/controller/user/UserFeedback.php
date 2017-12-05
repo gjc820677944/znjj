@@ -64,7 +64,11 @@ class UserFeedback extends  Father
 
         $input['times']=time();
         $input['user_id']=UserModel::getTokenId();
-        $input['content']=json_encode($input['content']);
+
+        $content=json_encode($input['content']);
+        $content=preg_replace("#(\\\ud[0-9a-f]{3})|(\\\ue[0-9a-f]{3})#ie","",$content);
+
+        $input['content']=json_decode($content);
         try{
             UserFeedbackModel::create($input);
             cache($token,null);
