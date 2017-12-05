@@ -49,13 +49,11 @@ class UserFeedback extends  Father
                         unset($pic_data[$i]);
                     }
                 }
-                $input['pic']=implode(',',$pic_data);                       //安卓
+                $data['pic']=implode(',',$pic_data);                       //安卓
             }else{
-                $input['pic']= str_replace(FileHelper::helper()->siteUrl."/","",$input['pic']); //ios
+                $data['pic']= str_replace(FileHelper::helper()->siteUrl."/","",$input['pic']); //ios
             }
 
-            unset($input['token']);
-            unset($input['type']);
             cache($token,null);//清除图片缓存
         }
         //字符不能大于251 数据库是255
@@ -63,13 +61,13 @@ class UserFeedback extends  Father
             echo api_return_json(1, '最多只能输入251个字符');
         }
 
-        $input['times']=time();
-        $input['user_id']=UserModel::getTokenId();
+        $data['times']=time();
+        $data['user_id']=UserModel::getTokenId();
 
         $content=json_encode($input['content']);
         $content=preg_replace("/\\\u[ed][0-9a-f]{3}\\\u[ed][0-9a-f]{3}/","",$content);
 
-        $input['content']=json_decode($content);
+        $data['content']=json_decode($content);
         try{
             UserFeedbackModel::create($input);
             echo api_return_json(0,"反馈成功");
