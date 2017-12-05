@@ -87,7 +87,7 @@ class User extends  Father
             echo api_return_json(112, "用户名格式不正确");
         }
 
-        if(strlen($username)<3 || strlen($username)>11){
+        if(strlen($username)<3 || strlen($username)>31){
             echo api_return_json(112, "用户名长度3-11");
         }
 
