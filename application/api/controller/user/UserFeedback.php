@@ -26,13 +26,15 @@ class UserFeedback extends  Father
 
     //记录用户反馈
     function feedback(){
-        $arr=array();
         $input = $this->requset->param();
         //不能全部为空
         if ($input['pic']=='' && $input['content']==''){
             echo api_return_json(1, '反馈内容和反馈图片必填一项');
         }
-        //删除图片
+        /****
+         * 安卓上传是每次点击图片 都会上传到服务器，所以要缓存记录每次的图片和最后的图片比较，然后删除没有那些没有最后保存的图片
+         * ios是在本地选择好图片 ，最好上传 不用缓存比较 type=1就是ios上传
+         */
         if (isset($input['pic']) && $input['pic']!=''){
             $token=UserModel::getToken();
             $pic_data=cache($token);//已经上传的图片
@@ -47,9 +49,9 @@ class UserFeedback extends  Father
                         unset($pic_data[$i]);
                     }
                 }
-                $input['pic']=implode(',',$pic_data);
+                $input['pic']=implode(',',$pic_data);                       //安卓
             }else{
-                $input['pic']= str_replace(FileHelper::helper()->siteUrl."/","",$input['pic']);
+                $input['pic']= str_replace(FileHelper::helper()->siteUrl."/","",$input['pic']); //ios
             }
 
             unset($input['token']);
