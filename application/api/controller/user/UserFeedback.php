@@ -56,6 +56,7 @@ class UserFeedback extends  Father
 
             unset($input['token']);
             unset($input['type']);
+            cache($token,null);//清除图片缓存
         }
         //字符不能大于251 数据库是255
         if (isset($input['content']) && strlen($input['content'])>251){
@@ -71,7 +72,6 @@ class UserFeedback extends  Father
         $input['content']=json_decode($content);
         try{
             UserFeedbackModel::create($input);
-            cache($token,null);
             echo api_return_json(0,"反馈成功");
         }catch (\Exception $e){
             echo api_return_json(1, $e->getMessage());
