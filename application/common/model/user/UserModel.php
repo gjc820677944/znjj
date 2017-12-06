@@ -14,7 +14,7 @@ class UserModel extends Model
         $ip=$request->ip();
         $info=UserModel::where("mobile='".$mobile."'")->find();
         if (empty($info)){
-            $data['username']=$mobile;                //用户名
+//            $data['username']=$mobile;                //用户名
             $data['mobile']=$mobile;                  //手机号
             $data['last_login_ip']=$ip;            //最后一次登录IP
             $data['last_login_time']=time();           //最后一次登录时间
@@ -30,7 +30,7 @@ class UserModel extends Model
             HomeModel::createHome($info, "默认家庭",HomeModel::qaingzhiHandle());
             if ($info!=false){
                 $arr['token']=$data['token'];
-                $arr['username']= $data['username'];
+                $arr['username']= null;
                 return $arr;
             }else{
                 return 0;
